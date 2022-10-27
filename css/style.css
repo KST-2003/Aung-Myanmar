@@ -12,6 +12,12 @@
  
 }
 
+#broken{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
 .txtedit{
     display: none;
     width: 99%;
