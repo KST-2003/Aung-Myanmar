@@ -1,15 +1,16 @@
 var count = 1;
 var kount = 0;
 var hasrow = false;
+$('#return_date').html("2022/10/2");
 $('#hasBroken').change(function(){
     console.log($('#hasBroken').val());
     if($('#hasBroken').val() == 'false'){
-        $('#broken').addClass('isBroken');
+        $('#broken').hide();
         $('#moreForm').empty();
         kount = 0;
     }
     else
-        $('#broken').removeClass('isBroken');
+        $('#broken').show();
 })
 
 console.log(count);

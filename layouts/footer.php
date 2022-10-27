@@ -29,6 +29,8 @@
   <script src="js/emp_delete.js"></script>
   <script src="js/additem_edit.js"></script>
   <script src="js/additem_delete.js"></script>
+  <script src="js/category.js"></script>
+  <script src="js/item.js"></script>
   <script src="vendors/datatables.net/jquery.dataTables.js"></script>
   <!-- <script src="vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script> -->
 
