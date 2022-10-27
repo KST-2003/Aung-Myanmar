@@ -1,5 +1,4 @@
 <?php
-
 include_once __DIR__.'/controller/stockcontroller.php';
 
 $id=$_POST['pid'];

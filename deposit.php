@@ -1,7 +1,10 @@
+<?php 
+include_once __DIR__. "/includes/config.php";
+if(isset($_POST['submit'])){
+  
+}
+?>
 <?php
-
-
-
 include_once "layouts/header.php";
 ?>
       <!-- partial -->
@@ -42,6 +45,20 @@ include_once "layouts/header.php";
                          <div class="row">
                              <div class="col-md-6 mt-3">
                              <label for="">ဘောက်ချာနံပါတ်</label>
+                             <select name="inv_number" id="" class="form-control">
+                                <?php 
+                                    $selectquery1="select * from  lent "; 
+                                    $select_result1 = mysqli_query($con,$selectquery1); 
+                                                     
+                                                    
+                                               
+                                    while($output=mysqli_fetch_array($select_result1,MYSQLI_ASSOC)):; 
+                                    ?> 
+                                    <option value="<?php echo $output['id']; ?>"> 
+                                    <?php  echo $output['invoice_number'] ?> 
+                                    </option> 
+                                    <?php endwhile;?>  
+                                </select>
                              <input type="text" class="form-control" name="inv_number" id="" placeholder="ဘောက်ချာနံပါတ်">
                              </div>
                              <div class="col-md-6 mt-3">

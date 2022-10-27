@@ -293,6 +293,7 @@ $index0=0;
         $(label3).addClass('form-label');
 
         var name = document.createElement('select');
+        
         $(name).attr('type','text');
         var qty = document.createElement('input');
         $(qty).attr('type','number');
