@@ -58,7 +58,7 @@ $('#addbtn').click(function(e){
     $(label3).addClass('form-label');
 
     var selectbox = document.createElement('select');
-    var option1 = document.createElement('option')
+    var option1 = document.createElement('option');
     $(option1).html('ငြမ်း');
     var option2 = document.createElement('option');
     $(option2).html('အခင်းပြား');

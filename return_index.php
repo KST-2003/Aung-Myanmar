@@ -47,23 +47,28 @@ include_once "layouts/header.php";
                         <div class="row">
                         <div class="col-md-4 mt-3">
                             <label for="">Invoice No</label>
-                            <select name="lent_id" class='form-control' id='invoice_no' placeholder="ဘောင်ချာနံပါတ်">
+                            <select name="lent_id" class='form-control' id='invoice_no' placeholder="ဘောင်ချာနံပါတ်" id="">
+                                <option value="">Choose an Invoice Numver</option>
                                 <?php
                                     $selectquery="select * from  lent ";
                                     $select_result = mysqli_query($con,$selectquery);
                                     $outcome=null;
                                     while($outcome=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):;
                                 ?>
-                                <option value="<?php echo $outcome['customer_id']; ?>"><?php echo $outcome['invoice_no']; ?>
+                                <option value="<?php echo $outcome['customer_id']; ?>"><?php echo $outcome['invoice_number']; ?>
                                 </option>
                                 <?php 
                                     endwhile;
+                                    // $query = "select name from customer inner join lent on customer.id=
+                                    //           lent.customer_id inner join return_tb on lent.id=return_tb.lent_id";
+                                    // $result = mysqli_query($con,$query);
+                                    // $cus_name=mysqli_fetch_array($result);
                                 ?> 
                             </select>
                         </div>
                         <div class="col-md-4 mt-3">
                             <label for="">Customer Name</label>
-                            <input type="text" class="form-control" name="" id="customer" placeholder="ငှါးရမ်းသူအမည်" value='<?php echo $cus_name[0]; ?>'>
+                            <input type="text" class="form-control" name="" id="customer" placeholder="ငှါးရမ်းသူအမည်" value='<?php //echo $cus_name[0]; ?>'>
                         </div>
                         <div class="col-md-4 mt-3">
                             <label for="">Return Date</label>
