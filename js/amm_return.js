@@ -15,6 +15,17 @@ $('#hasBroken').change(function(){
 
 console.log(count);
 
+$('#invoice_no').change(function(){
+    $.ajax({
+        type:"post",
+        url:'return_script.php',
+        data:{id:$('#invoice_no').val()},
+        success:function(response){
+            $('#customer').val(response);
+        }
+    })
+})
+
 $('#addbtn').click(function(e){
     console.log('ok');
 
