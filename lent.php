@@ -145,20 +145,7 @@ include_once 'layouts/header.php';
                                 <div class="row">
                                 <div class="col-md-4 mt-3">
                                 <label for="">Item Name</label>
-                                <select name="item_name[]" id="" class="form-control">
-                                <?php 
-                                    $selectquery="select * from  item "; 
-                                    $select_result = mysqli_query($con,$selectquery); 
-                                                     
-                                                    
-                                               
-                                    while($x=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):; 
-                                    ?> 
-                                    <option value="<?php echo $x['id']; ?>"> 
-                                    <?php  echo $x['item_name'] ?> 
-                                    </option> 
-                                    <?php endwhile;?>  
-                                </select>
+                                <input type="text" class="form-control" name="item_name[]" id="" placeholder="">
                                 </div>
 
                                 <div class="col-md-3 mt-3">
@@ -215,7 +202,7 @@ include_once 'layouts/header.php';
                           </thead>
                           <tbody id="lent_table">
                           <?php 
-                          $query = "select customer.name, lent.* from customer join lent on customer_id = lent.customer_id";
+                          $query = "select customer.name, lent.* from customer join lent on customer.id = lent.customer_id";
                           $result = mysqli_query($con,$query);
                           $count = 1;
                           foreach($result as $row){ 
@@ -236,7 +223,7 @@ include_once 'layouts/header.php';
                         <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a href="lent_detail.php" class="btn btn-outline-primary">Detail</a></td> 
+                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary">Detail</a></td> 
                         </tr> 
                         <?php 
                         $count ++; 
@@ -252,6 +239,29 @@ include_once 'layouts/header.php';
                 </div>
               </div>
             </div>
+            <div class="modal fade" id="detail_model" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <table>
+                    <thead>
+                      <tr>
+                      <th>စဥ်</th>
+                      <th>ငှါးရမ်းသူအမည်	</th>
+                      <th>ဘောင်ချာနံပါတ်</th>
+                      <th>စုစုပေါင်းအရေအတွက်</th>
+                      <th>စပေါ်ငွေ</th>
+                      <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
         </div>
       </div>
@@ -261,6 +271,7 @@ include_once 'layouts/footer.php'
 <?php 
 $index0=0;
 ?>
+<!--js file here!-->
 <script>
   $(document).ready(function () { 
     $('.add').click(function(e){
@@ -296,7 +307,7 @@ $index0=0;
         $(label2).addClass('form-label');
         $(label3).addClass('form-label');
 
-        var name = document.createElement('select');
+        var name = document.createElement('input');
         
         $(name).attr('type','text');
         var qty = document.createElement('input');
