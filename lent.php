@@ -21,6 +21,10 @@ if(isset($_POST['submit'])){
   if(!empty($_POST['emp_name'])){
     $emp_name=$_POST['emp_name'];
   }
+  $query1 = "INSERT INTO lent (invoice_number,customer_id,lent_date,total_qty,deposit) VALUES ('$inv_number','$cus_name','$lent_date','$total_qty','$deposit')";
+  $query_run1 = mysqli_query($con, $query1);
+  $lent_id= mysqli_insert_id($con);
+
   $name=$_POST['item_name'];
   $unit_price=$_POST['unit_price'];
   $qty=$_POST['qty'];
@@ -28,19 +32,19 @@ if(isset($_POST['submit'])){
     $s_name=$names;
     $s_unit_price=$unit_price[$index];
     $s_qty=$qty[$index];
-    $query = "INSERT INTO lent_detail (item_name,unit_price,item_qty,emp_id) VALUES ('$s_name','$s_unit_price','$s_qty','$emp_name')";
+    $query = "INSERT INTO lent_detail (item_name,unit_price,item_qty,emp_id,lent_id) VALUES ('$s_name','$s_unit_price','$s_qty','$emp_name','$lent_id')";
     $query_run = mysqli_query($con, $query);
   }
-  $lent=$lentcontroller->addLent($inv_number,$lent_date,$cus_name,$deposit,$total_qty);
-  if($lent) 
-  { 
-      header('location:lent.php'); 
-  } 
-  else  
-  { 
-      echo "<div class='alert alert-danger'></div>"; 
-      echo "Unsuccessful"; 
-  } 
+  // $lent=$lentcontroller->addLent($inv_number,$lent_date,$cus_name,$deposit,$total_qty);
+  // if($lent) 
+  // { 
+  //     header('location:lent.php'); 
+  // } 
+  // else  
+  // { 
+  //     echo "<div class='alert alert-danger'></div>"; 
+  //     echo "Unsuccessful"; 
+  // } 
 }
 ?>
 <?php 
