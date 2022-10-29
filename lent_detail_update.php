@@ -1,6 +1,5 @@
 <?php 
-
-include_once __DIR__."/includes/db.php";
+include_once __DIR__."/includes/config.php";
 
 if(isset($_POST['field']) && isset($_POST['value']) && isset($_POST['id'])){
     $field = mysqli_real_escape_string($con,$_POST['field']); 

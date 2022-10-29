@@ -3,7 +3,7 @@ include_once __DIR__."/controller/lentcontroller.php";
 include_once __DIR__."/controller/lent_detail_controller.php";
 include_once __DIR__."/includes/config.php";
 $lentcontroller = new Lentcontroller();
-if(isset($_POST['submit'])){
+if(isset($_POST['upload'])){
   if(!empty($_POST['cus_name'])){
     $cus_name=$_POST['cus_name'];
   }
@@ -36,16 +36,7 @@ if(isset($_POST['submit'])){
     $query = "INSERT INTO lent_detail (item_name,unit_price,item_qty,emp_id,lent_id) VALUES ('$s_name','$s_unit_price','$s_qty','$emp_name','$lent_id')";
     $query_run = mysqli_query($con, $query);
   }
-  // $lent=$lentcontroller->addLent($inv_number,$lent_date,$cus_name,$deposit,$total_qty);
-  // if($lent) 
-  // { 
-  //     header('location:lent.php'); 
-  // } 
-  // else  
-  // { 
-  //     echo "<div class='alert alert-danger'></div>"; 
-  //     echo "Unsuccessful"; 
-  // } 
+
 }
 ?>
 <?php 
@@ -171,7 +162,7 @@ include_once 'layouts/header.php';
                       
                       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" name="upload" class="btn btn-primary">Submit</button>
       </div>
                 </form>
                 </div>
@@ -244,6 +235,11 @@ include_once 'layouts/header.php';
             <div class="modal fade" id="detail_model" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
+                  <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
                   <div class="modal-body">
                     <div class="table-responsive">
                     <table id="datatable" class="display expandable-table" style="width:100%">
@@ -274,6 +270,9 @@ include_once 'layouts/footer.php'
 <!--js file here!-->
 <script>
   $(document).ready(function () { 
+    if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
     $('.add').click(function(e){
         console.log('ok');
 
@@ -347,17 +346,17 @@ include_once 'layouts/footer.php'
         $('#content2').append(div);
         e.preventDefault();
     })
-    $('.detail').click(function () { 
+    $('.detail').click(function (e) { 
         var id = $(this).attr('id');
         $.ajax({
             type: 'post',
             url:  'lent_detail.php',
             data:{cid:id},
             success:function (response) { 
-                console.log(response);
                 $('#lent_detail_body').html(response);
              }
         })
+        e.preventDefault();
      })
          // Add Class
     $('.detail_edit').click(function(){
@@ -366,68 +365,7 @@ include_once 'layouts/footer.php'
     
     });
 
-    // Save data
-    $(".detail_edit").focusout(function(){
-        $(this).removeClass("editMode");
- 
-        var id = this.id;
-        var id1= this.id;
-        var split_id = id.split("_");
-        var split_id1=id1.split("_");
-        
-        if(split_id.length==2)
-        {
-            var field_name = split_id[0];
-            var edit_id = split_id[1];
-            console.log(field_name);
-
-            var value = $(this).text();
-        
-            $.ajax({
-                url: 'lent_detail_update.php',
-                type: 'post',
-                data: { field:field_name, value:value, id:edit_id },
-                success:function(response){
-                    if(response == 1){ 
-                        console.log('Save successfully'); 
-                        
-                    }else{ 
-                        console.log("Not saved."); 
-                        
-                    }             
-                }
-            });
-        }
-        else{
-            
-            var remove_last=split_id.pop();
-         //   console.log(remove_last); // 3
-         //   console.log(split);  // item name
-            var one =split_id[0];
-            var two = split_id[1];
-            var field_name = one.concat('_',two);
-            var edit_id = split_id1[2];
-            console.log(field_name);
-            console.log(edit_id);
-            
-            var value = $(this).text();
-        
-            $.ajax({
-                url: 'lent_detail_update.php',
-                type: 'post',
-                data: { field:field_name, value:value, id:edit_id },
-                success:function(response){
-                    if(response == 1){ 
-                        console.log('Save successfully'); 
-                        
-                    }else{ 
-                        console.log("Not saved."); 
-                        
-                    }             
-                }
-            });
-        }        
-    });
+    
 
  })
 </script>
