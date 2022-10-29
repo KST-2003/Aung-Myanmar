@@ -1,5 +1,6 @@
 <?php 
 include_once __DIR__."/controller/lentcontroller.php";
+include_once __DIR__."/controller/lent_detail_controller.php";
 include_once __DIR__."/includes/config.php";
 $lentcontroller = new Lentcontroller();
 if(isset($_POST['submit'])){
@@ -50,6 +51,7 @@ if(isset($_POST['submit'])){
 <?php 
 include_once 'layouts/header.php';
 ?>
+
       <div class="main-panel">
         <div class="content-wrapper">
             <div class="container-fluid">
@@ -223,7 +225,7 @@ include_once 'layouts/header.php';
                         <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary">Detail</a></td> 
+                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail" id="<?php echo $data_id?>">Detail</a></td> 
                         </tr> 
                         <?php 
                         $count ++; 
@@ -243,21 +245,22 @@ include_once 'layouts/header.php';
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-body">
-                    <table>
+                    <div class="table-responsive">
+                    <table id="datatable" class="display expandable-table" style="width:100%">
                     <thead>
                       <tr>
                       <th>စဥ်</th>
-                      <th>ငှါးရမ်းသူအမည်	</th>
-                      <th>ဘောင်ချာနံပါတ်</th>
-                      <th>စုစုပေါင်းအရေအတွက်</th>
-                      <th>စပေါ်ငွေ</th>
+                      <th>အမည်</th>
+                      <th>အရေအတွက်</th>
+                      <th>တစ်ရက်ငှါးရမ်းနှုန်း</th>
+                      <th>တာ၀န်ခံအမည်</th>
                       <th>Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-
+                    <tbody id="lent_detail_body">
                     </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -267,9 +270,6 @@ include_once 'layouts/header.php';
       </div>
 <?php 
 include_once 'layouts/footer.php'
-?>
-<?php 
-$index0=0;
 ?>
 <!--js file here!-->
 <script>
@@ -347,5 +347,17 @@ $index0=0;
         $('#content2').append(div);
         e.preventDefault();
     })
+    $('.detail').click(function () { 
+        var id = $(this).attr('id');
+        $.ajax({
+            type: 'post',
+            url:  'lent_detail.php',
+            data:{cid:id},
+            success:function (response) { 
+                console.log(response);
+                $('#lent_detail_body').html(response);
+             }
+        })
+     })
  })
 </script>
