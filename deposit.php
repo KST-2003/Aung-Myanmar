@@ -1,18 +1,18 @@
 <?php 
-include_once __DIR__. "/includes/config.php";
+include_once __DIR__."/includes/config.php";
 if(isset($_POST['submit'])){
   if(!empty($_POST['inv_number'])){
     $inv_number=$_POST['inv_number'];
   }
-  if(!empty($_POST['deposit'])){
-    $deposit=$_POST['deposit'];
-  }
+  // if(!empty($_POST['deposit'])){
+  //   $deposit=$_POST['deposit'];
+  // }
   if(!empty($_POST['description'])){
     $description=$_POST['description'];
   }
-  $status=false;
-  $query="INSERT INTO dep(deposit,descripton,condition,lent_id) VALUES ('$deposit','$description','$status','$inv_number')";
-  $query_run= mysqli_query($con,$query);
+  $status=0;
+  $query="INSERT INTO dep (comment,ranking,lent_id) VALUES ('$description`  ','$status','$inv_number')";
+  $query_run= mysqli_query($con, $query);
 }
 ?>
 <?php
@@ -114,13 +114,33 @@ include_once "layouts/header.php";
                                                     <th>စပေါ်ငွေ</th>
                                                     <th>မှတ်ချက်</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="dep_table">
                                                   <?php
-                                                  
-                                                  ?>                                               
+                                                  $query1="select lent.invoice_number AND lent.deposit, dep.*from lent join dep on lent.id = dep.lent_id";
+                                                  $results = mysqli_query($con,$query);
+                                                  $count=1;
+                                                  if(is_array($results) || is_object($results) || is_bool($results)){
+                                                    foreach($results as $result){
+                                                      $data_id=$result['id'];
+                                                      $invoice_num=$result['invoice_number'];
+                                                      $data_dep=$result['deposit'];
+                                                      $data_description=$result['description'];
+                                                      $data_status=$result['ranking'];
+                                                  ?>
+                                                    <tr>
+                                                    <td><?php echo $count?></td>
+                                                    <td> <div id='invoice_number_<?php echo $data_id; ?>'><?php echo $invoice_num; ?> </div> </td>
+                                                    <td> <div id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep; ?> </div> </td>
+                                                    <td> <div contentEditable='true' class='dep_edit' id='description_<?php echo $data_id; ?>'><?php echo $data_description; ?> </div> </td>
+                                                    <td><a class="btn btn-primary" id="<?php echo $data_status?>"value="">Done</a></td>
+                                                  </tr>
+                                                  <?php  
+                                                  $count++;
+                                                  }
+                                                }
+                                                  ?>                                              
                                                 </tbody>                                                                                                                                                                
                                             </table>
                                         </div>
