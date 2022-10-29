@@ -9,10 +9,10 @@ if($outcomes){
     foreach($outcomes as $outcome){
         $count++;
         $data.="<tr>";
-        $data.= "<td><div contentEditable='true' class='' id=''>".$count."</div></td>";
-        $data.= "<td><div contentEditable='true' class='' id=''>".$outcome['item_name']."</div></td>";
-        $data.= "<td><div contentEditable='true' class='' id=''>".$outcome['item_qty']."</div></td>";
-        $data.= "<td><div contentEditable='true' class='' id=''>".$outcome['unit_price']."</div></td>";   
+        $data.= "<td><div  class='' id=''>".$count."</div></td>";
+        $data.= "<td><div contentEditable='true' class='detail_edit' id=''>".$outcome['item_name']."</div></td>";
+        $data.= "<td><div contentEditable='true' class='detail_edit' id=''>".$outcome['item_qty']."</div></td>";
+        $data.= "<td><div contentEditable='true' class='detail_edit' id=''>".$outcome['unit_price']."</div></td>";   
         $data.= "<td><div contentEditable='true' class='' id=''>".$outcome['emp_id']."</div></td>";   
         $data.="<td><a href='' class='btn btn-danger m-2'> Delete </a></td>";
         $data.="</tr>";
