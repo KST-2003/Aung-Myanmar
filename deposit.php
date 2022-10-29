@@ -1,7 +1,18 @@
 <?php 
 include_once __DIR__. "/includes/config.php";
 if(isset($_POST['submit'])){
-  
+  if(!empty($_POST['inv_number'])){
+    $inv_number=$_POST['inv_number'];
+  }
+  if(!empty($_POST['deposit'])){
+    $deposit=$_POST['deposit'];
+  }
+  if(!empty($_POST['description'])){
+    $description=$_POST['description'];
+  }
+  $status=false;
+  $query="INSERT INTO dep(deposit,descripton,condition,lent_id) VALUES ('$deposit','$description','$status','$inv_number')";
+  $query_run= mysqli_query($con,$query);
 }
 ?>
 <?php
@@ -64,7 +75,7 @@ include_once "layouts/header.php";
                              </div>
                              <div class="col-md-6 mt-3">
                              <label for="">စပေါ်ငွေ</label>
-                             <input type="" class="form-control" name="" id="deposit" placeholder="စပေါ်ငွေ"> 
+                             <input type="" class="form-control" name="deposit" id="deposit" placeholder="စပေါ်ငွေ"> 
                              </div>
                              <div class="col-md-12 mt-3">
                              <label for="">မှတ်ချက်</label>
@@ -106,8 +117,11 @@ include_once "layouts/header.php";
                                                     <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                               
-                                                                                                                  
+                                                <tbody id="dep_table">
+                                                  <?php
+                                                  
+                                                  ?>                                               
+                                                </tbody>                                                                                                                                                                
                                             </table>
                                         </div>
                                     </div>
@@ -126,3 +140,16 @@ include_once "layouts/header.php";
 <?php 
 include_once "layouts/footer.php";
 ?>
+<script>
+  $('#inv_no').change(function(){
+    $.ajax({
+        type:'Post',
+        url: "deposit_script.php",
+        data:{id:$('#inv_no').val()},
+        success: function(response){
+            $('#deposit').val(response);
+        }
+    })
+})
+</script>
+
