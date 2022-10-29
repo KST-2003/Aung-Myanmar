@@ -15,6 +15,17 @@ $('#hasBroken').change(function(){
 
 console.log(count);
 
+$('#invoice_no').change(function(){
+    $.ajax({
+        type:"post",
+        url:'return_script.php',
+        data:{id:$('#invoice_no').val()},
+        success:function(response){
+            $('#customer').val(response);
+        }
+    })
+})
+
 $('#addbtn').click(function(e){
     console.log('ok');
 
@@ -47,7 +58,7 @@ $('#addbtn').click(function(e){
     $(label3).addClass('form-label');
 
     var selectbox = document.createElement('select');
-    var option1 = document.createElement('option')
+    var option1 = document.createElement('option');
     $(option1).html('ငြမ်း');
     var option2 = document.createElement('option');
     $(option2).html('အခင်းပြား');

@@ -45,9 +45,10 @@ include_once "layouts/header.php";
                          <div class="row">
                              <div class="col-md-6 mt-3">
                              <label for="">ဘောက်ချာနံပါတ်</label>
-                             <select name="inv_number" id="" class="form-control">
+                             <select name="inv_number" id="inv_no" class="form-control">
+                                <option value="">Select an invoice number</option>
                                 <?php 
-                                    $selectquery1="select * from  lent "; 
+                                    $selectquery1="select * from  lent ";
                                     $select_result1 = mysqli_query($con,$selectquery1); 
                                                      
                                                     
@@ -63,7 +64,7 @@ include_once "layouts/header.php";
                              </div>
                              <div class="col-md-6 mt-3">
                              <label for="">စပေါ်ငွေ</label>
-                             <input type="" class="form-control" name="deposit" id="" placeholder="စပေါ်ငွေ"> 
+                             <input type="" class="form-control" name="" id="deposit" placeholder="စပေါ်ငွေ"> 
                              </div>
                              <div class="col-md-12 mt-3">
                              <label for="">မှတ်ချက်</label>
