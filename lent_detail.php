@@ -20,6 +20,11 @@ if($outcomes){
 }
 ?>
 <script>
+    $('.detail_edit').click(function(){
+      console.log("click")
+        $(this).addClass('editMode');
+    
+    });
      $(".detail_edit").focusout(function(){
         $(this).removeClass("editMode");
  
