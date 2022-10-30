@@ -47,15 +47,17 @@ include_once "layouts/header.php";
                         <div class="row">
                         <div class="col-md-4 mt-3">
                             <label for="">Invoice No</label>
-                            <select name="lent_id" class='form-control' id='invoice_no' placeholder="ဘောင်ချာနံပါတ်" id="">
+                            <select name="lent_id" class='form-control' id='invoice_no' placeholder="ဘောင်ချာနံပါတ်">
                                 <option value="">Choose an Invoice Numver</option>
                                 <?php
                                     $selectquery="select * from  lent ";
                                     $select_result = mysqli_query($con,$selectquery);
                                     $outcome=null;
+                                    $ld_id=null;
                                     while($outcome=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):;
+                                    
                                 ?>
-                                <option value="<?php echo $outcome['customer_id']; ?>"><?php echo $outcome['invoice_number']; ?>
+                                <option value="<?php echo $outcome['customer_id']; ?>_<?php echo $ld_id=$outcome['id']; ?>"><?php echo $outcome['invoice_number']; ?>
                                 </option>
                                 <?php 
                                     endwhile;
@@ -79,9 +81,8 @@ include_once "layouts/header.php";
 
                       <div class="col-md-4 mt-3">
                           <label class="form-label">Return Item</label>
-                            <select class="form-control" name="lentDetail_id" id="return_item" placeholder="ပြန်အပ်သည့်ပစ္စည်း">
-                            <option value="">ငြမ်း</option>
-                            <option value="">အခင်းပြား</option>
+                            <select class="form-control" lentdetail="<?php echo $ld_id ?>" name="lentDetail_id" id="return_item" placeholder="ပြန်အပ်သည့်ပစ္စည်း">
+
                             </select>
                           </div>
                       <div class="col-md-2 mt-3">
@@ -90,7 +91,7 @@ include_once "layouts/header.php";
                             </div>
                             <div class="col-md-4 mt-3">
                                 <label for="" class="form-label">Unit Price</label>
-                                <input type="number" name="" class="form-control" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" id="lent_price">
+                                <input type="number" min="1" name="" class="form-control" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" id="unit_price">
                                 
                             </div>
                             <div class="col-md-2 mt-3">
