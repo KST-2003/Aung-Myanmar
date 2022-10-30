@@ -1,8 +1,9 @@
 <?php 
 include_once __DIR__."/controller/lentcontroller.php";
+include_once __DIR__."/controller/lent_detail_controller.php";
 include_once __DIR__."/includes/config.php";
 $lentcontroller = new Lentcontroller();
-if(isset($_POST['submit'])){
+if(isset($_POST['upload'])){
   if(!empty($_POST['cus_name'])){
     $cus_name=$_POST['cus_name'];
   }
@@ -35,21 +36,13 @@ if(isset($_POST['submit'])){
     $query = "INSERT INTO lent_detail (item_name,unit_price,item_qty,emp_id,lent_id) VALUES ('$s_name','$s_unit_price','$s_qty','$emp_name','$lent_id')";
     $query_run = mysqli_query($con, $query);
   }
-  // $lent=$lentcontroller->addLent($inv_number,$lent_date,$cus_name,$deposit,$total_qty);
-  // if($lent) 
-  // { 
-  //     header('location:lent.php'); 
-  // } 
-  // else  
-  // { 
-  //     echo "<div class='alert alert-danger'></div>"; 
-  //     echo "Unsuccessful"; 
-  // } 
+
 }
 ?>
 <?php 
 include_once 'layouts/header.php';
 ?>
+
       <div class="main-panel">
         <div class="content-wrapper">
             <div class="container-fluid">
@@ -169,7 +162,7 @@ include_once 'layouts/header.php';
                       
                       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" name="upload" class="btn btn-primary">Submit</button>
       </div>
                 </form>
                 </div>
@@ -223,7 +216,7 @@ include_once 'layouts/header.php';
                         <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary">Detail</a></td> 
+                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail" id="<?php echo $data_id?>">Detail</a></td> 
                         </tr> 
                         <?php 
                         $count ++; 
@@ -242,22 +235,28 @@ include_once 'layouts/header.php';
             <div class="modal fade" id="detail_model" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
+                  <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
                   <div class="modal-body">
-                    <table>
+                    <div class="table-responsive">
+                    <table id="datatable" class="display expandable-table" style="width:100%">
                     <thead>
                       <tr>
                       <th>စဥ်</th>
-                      <th>ငှါးရမ်းသူအမည်	</th>
-                      <th>ဘောင်ချာနံပါတ်</th>
-                      <th>စုစုပေါင်းအရေအတွက်</th>
-                      <th>စပေါ်ငွေ</th>
+                      <th>အမည်</th>
+                      <th>အရေအတွက်</th>
+                      <th>တစ်ရက်ငှါးရမ်းနှုန်း</th>
+                      <th>တာ၀န်ခံအမည်</th>
                       <th>Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-
+                    <tbody id="lent_detail_body">
                     </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -268,12 +267,12 @@ include_once 'layouts/header.php';
 <?php 
 include_once 'layouts/footer.php'
 ?>
-<?php 
-$index0=0;
-?>
 <!--js file here!-->
 <script>
   $(document).ready(function () { 
+    if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
     $('.add').click(function(e){
         console.log('ok');
 
@@ -347,5 +346,75 @@ $index0=0;
         $('#content2').append(div);
         e.preventDefault();
     })
+         // Add Class
+    $('.edit_lent').click(function(){
+      console.log("click")
+        $(this).addClass('editMode');
+    
+    });
+    $(".edit_lent").focusout(function(){
+        $(this).removeClass("editMode");
+ 
+        var id = this.id;
+        var id1= this.id;
+        var split_id = id.split("_");
+        var split_id1=id1.split("_");
+        
+        if(split_id.length==2)
+        {
+            var field_name = split_id[0];
+            var edit_id = split_id[1];
+            console.log(field_name);
+
+            var value = $(this).text();
+        
+            $.ajax({
+                url: 'lent_update.php',
+                type: 'post',
+                data: { field:field_name, value:value, id:edit_id },
+                success:function(response){
+                    if(response == 1){ 
+                        console.log('Save successfully'); 
+                        
+                    }else{ 
+                        console.log(response); 
+                        
+                    }             
+                }
+            });
+        }
+        else{
+            
+            var remove_last=split_id.pop();
+         //   console.log(remove_last); // 3
+         //   console.log(split);  // item name
+            var one =split_id[0];
+            var two = split_id[1];
+            var field_name = one.concat('_',two);
+            var edit_id = split_id1[2];
+            console.log(field_name);
+            console.log(edit_id);
+            
+            var value = $(this).text();
+        
+            $.ajax({
+                url: 'lent_update.php',
+                type: 'post',
+                data: { field:field_name, value:value, id:edit_id },
+                success:function(response){
+                    if(response == 1){ 
+                        console.log('Save successfully'); 
+                        
+                    }else{ 
+                        console.log(response); 
+                        
+                    }             
+                }
+            });
+        }        
+    });
+
+    
+
  })
 </script>

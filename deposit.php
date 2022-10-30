@@ -1,7 +1,18 @@
 <?php 
-include_once __DIR__. "/includes/config.php";
-if(isset($_POST['submit'])){
-  
+include_once __DIR__."/includes/config.php";
+if(isset($_POST['upload'])){
+  if(!empty($_POST['inv_number'])){
+    $inv_number=$_POST['inv_number'];
+  }
+  // if(!empty($_POST['deposit'])){
+  //   $deposit=$_POST['deposit'];
+  // }
+  if(!empty($_POST['description'])){
+    $description=$_POST['description'];
+  }
+  $status=0;
+  $query="INSERT INTO dep (comment,ranking,lent_id) VALUES ('$description`  ','$status','$inv_number')";
+  $query_run= mysqli_query($con, $query);
 }
 ?>
 <?php
@@ -64,7 +75,7 @@ include_once "layouts/header.php";
                              </div>
                              <div class="col-md-6 mt-3">
                              <label for="">စပေါ်ငွေ</label>
-                             <input type="" class="form-control" name="" id="deposit" placeholder="စပေါ်ငွေ"> 
+                             <input type="" class="form-control" name="deposit" id="deposit" placeholder="စပေါ်ငွေ"> 
                              </div>
                              <div class="col-md-12 mt-3">
                              <label for="">မှတ်ချက်</label>
@@ -75,7 +86,7 @@ include_once "layouts/header.php";
                  
              <div class="modal-footer">
      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-     <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+     <button type="submit" name="upload" class="btn btn-primary">Submit</button>
    </div>
              </form>
                    
@@ -103,11 +114,34 @@ include_once "layouts/header.php";
                                                     <th>စပေါ်ငွေ</th>
                                                     <th>မှတ်ချက်</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                               
-                                                                                                                  
+                                                <tbody id="dep_table">
+                                                  <?php
+                                                  $query1="select lent.invoice_number , lent.deposit, dep.*from lent join dep on lent.id = dep.lent_id WHERE ranking=0";
+                                                  $results = mysqli_query($con,$query1);
+                                                  $count=1;
+                                                  if(is_array($results) || is_object($results) || is_bool($results)){
+                                                    foreach($results as $result){
+                                                      $data_id=$result['id'];
+                                                      $invoice_num=$result['invoice_number'];
+                                                      $data_dep=$result['deposit'];
+                                                      $data_description=$result['comment'];
+                                                      $data_status=$result['ranking'];
+                                                  ?>
+                                                    <tr>
+                                                    <td><?php echo $count?></td>
+                                                    <td> <div id='invoice_number_<?php echo $data_id; ?>'><?php echo $invoice_num; ?> </div></td>
+                                                    <td> <div id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep; ?></div></td>
+                                                    <td> <div contentEditable='true' class='dep_edit' id="comment_<?php echo $data_id; ?>"><?php echo $data_description; ?> </div> </td>
+                                                    <td><a class="btn btn-primary done" id="<?php echo $data_status?>_<?php echo $data_id?>"value="">Done</a></td>
+                                                  </tr>
+                                                  <?php  
+                                                  $count++;
+                                                  }
+                                                }
+                                                  ?>                                              
+                                                </tbody>                                                                                                                                                                
                                             </table>
                                         </div>
                                     </div>
@@ -126,3 +160,109 @@ include_once "layouts/header.php";
 <?php 
 include_once "layouts/footer.php";
 ?>
+<script>
+  $('.done').click(function(){
+    var message= confirm("Are you sure to delete?")
+    if(message==true){
+      var id=this.id;
+      var split_id = id.split("_");
+      var row =$(this).parents('tr');
+        if(split_id.length==2){
+          var row_id = split_id[1];
+        }
+      $.ajax({
+        url:'status.php',
+        type: 'post',
+        data:{id:row_id},
+        success:function(response){
+          if(response == 1){ 
+            console.log(response);   
+            row.fadeOut('slow')                      
+          }else{ 
+          console.log("error");               
+          } 
+
+        }
+      })
+    }
+  })
+  $('#inv_no').change(function(){
+    $.ajax({
+        type:'Post',
+        url: "deposit_script.php",
+        data:{id:$('#inv_no').val()},
+        success: function(response){
+            $('#deposit').val(response);
+        }
+    })
+})
+$('.dep_edit').click(function(){
+      console.log("click")
+        $(this).addClass('editMode');
+    
+    });
+$(".dep_edit").focusout(function(){
+        $(this).removeClass("editMode");
+ 
+        var id = this.id;
+        var id1= this.id;
+        var split_id = id.split("_");
+        var split_id1=id1.split("_");
+        
+        if(split_id.length==2)
+        {
+            var field_name = split_id[0];
+            var edit_id = split_id[1];
+            console.log(field_name);
+
+            var value = $(this).text();
+        
+            $.ajax({
+                url: 'dep_update.php',
+                type: 'post',
+                data: { field:field_name, value:value, id:edit_id },
+                success:function(response){
+                    if(response == 1){ 
+                        console.log('Save successfully'); 
+                        
+                    }else{ 
+                        console.log(response); 
+                        
+                    }             
+                }
+            });
+        }
+        else{
+            
+            var remove_last=split_id.pop();
+         //   console.log(remove_last); // 3
+         //   console.log(split);  // item name
+            var one =split_id[0];
+            var two = split_id[1];
+            var field_name = one.concat('_',two);
+            var edit_id = split_id1[2];
+            console.log(field_name);
+            console.log(edit_id);
+            
+            var value = $(this).text();
+        
+            $.ajax({
+                url: 'dep_update.php',
+                type: 'post',
+                data: { field:field_name, value:value, id:edit_id },
+                success:function(response){
+                    if(response == 1){ 
+                        console.log('Save successfully'); 
+                        
+                    }else{ 
+                        console.log(response); 
+                        
+                    }             
+                }
+            });
+        }        
+    });
+
+
+</script>
+
