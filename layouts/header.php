@@ -29,6 +29,7 @@ if(!isset($_SESSION['email']))
   <link rel="shortcut icon" href="images/favicon.png" />
   <!-- <link rel="stylesheet" href="css/style.css"> -->
   <link rel="stylesheet" href="vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+  <link rel="stylesheet" href="css/style.css">
 
 </head>
 <body>
