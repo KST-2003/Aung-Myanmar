@@ -359,7 +359,7 @@ $(document).ready(function(){
 
 
 $('.deleteCustomer').click(function(){
-    var status = confirm("Are you sure to delete?");
+    var status = confirm("Are you sure you want to  delete?");
     if(status){
         var id=$(this).parents('td').attr('cid');
         var row = $(this).parents('tr');
@@ -371,6 +371,7 @@ $('.deleteCustomer').click(function(){
             success:function(response){
                 alert(response);
                 row.fadeOut('slow');
+                location.reload();
             }
         })
     }
