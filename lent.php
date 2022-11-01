@@ -216,7 +216,7 @@ include_once 'layouts/header.php';
                         <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail" id="<?php echo $data_id?>">Detail</a></td> 
+                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a></td> 
                         </tr> 
                         <?php 
                         $count ++; 
