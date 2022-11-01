@@ -250,7 +250,6 @@ include_once 'layouts/header.php';
                       <th>အရေအတွက်</th>
                       <th>တစ်ရက်ငှါးရမ်းနှုန်း</th>
                       <th>တာ၀န်ခံအမည်</th>
-                      <th>Action</th>
                       </tr>
                     </thead>
                     <tbody id="lent_detail_body">
@@ -357,6 +356,7 @@ include_once 'layouts/footer.php'
                     if(response == 1){ 
 
                     }else{ 
+                      console.log(response);
                       
                       $('#lent_detail_body').html(response)
                         
