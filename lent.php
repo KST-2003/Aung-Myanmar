@@ -216,7 +216,7 @@ include_once 'layouts/header.php';
                         <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail" id="<?php echo $data_id?>">Detail</a></td> 
+                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a></td> 
                         </tr> 
                         <?php 
                         $count ++; 
@@ -345,6 +345,24 @@ include_once 'layouts/footer.php'
         $(div).append(row);
         $('#content2').append(div);
         e.preventDefault();
+    })
+    $('.detail_lent').click(function(){
+      console.log('click')
+      var id = this.id
+      $.ajax({
+                url: 'lent_detail.php',
+                type: 'post',
+                data: {cid:id},
+                success:function(response){
+                    if(response == 1){ 
+
+                    }else{ 
+                      
+                      $('#lent_detail_body').html(response)
+                        
+                    }             
+                }
+            });
     })
          // Add Class
     $('.edit_lent').click(function(){
