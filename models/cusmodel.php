@@ -2,7 +2,7 @@
 include_once __DIR__."/../includes/db.php";
 class Customer{
 
-public function createCustomer($name,$nrc,$add,$ph,$work_add)
+public function createCustomer($name,$nrc,$add,$ph)
 {
     $cont=Database::connect();
 
@@ -46,15 +46,46 @@ public function delete($id){
       return false;
   }
 }
-public function createWork($work_add){
+public function createWorkId(){
+  
   $cont=Database::connect();
-  $sql="insert into workaddress(work_address) values(:work_add)";
+  $sql="select id from customer order by id DESC LIMIT 1;";
   $statement=$cont->prepare($sql);
-  $statement -> bindParam(':work_add',$work_add);
+  $statement->execute();
+  $result=$statement->fetch(PDO::FETCH_ASSOC);
+  return $result;
+
+  
+}
+public function createWork($newid,$work_detail){
+
+  $cont=Database::connect();
+  $sql="insert into workaddress(cus_id,work_address) values(:id,:work_add)";
+  $statement=$cont->prepare($sql);
+  $statement->bindParam(':id',$newid);
+  $statement->bindParam(':work_add',$work_detail);
   $statement->execute();
 }
 
+public function detail($id)
+{
+    $cont=Database::connect();
+    $sql="select * from `workaddress` where cus_id=:id";
+    $statement=$cont->prepare($sql);
+    $statement->bindParam(':id',$id);
+    $statement->execute();
+    $results=$statement->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+public function removeDetail($id1)
+{
+  $cont=Database::connect();
+  $sql="delete from workaddress where id=:id1";
+  $statement=$cont->prepare($sql);
+  $statement->bindParam(':id1',$id1);
+  $statement->execute();
 
+}
     
 } 
 

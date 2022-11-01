@@ -1,11 +1,12 @@
 <?php 
 include_once __DIR__."/controller/custcontroller.php";
-include_once "includes/config.php";
+include_once __DIR__."/includes/config.php";
+
+
 $customercontroller = new CustomerController();
+$ccontroller= new CustomerController();
 
-
-
-if(isset($_POST['submit']))
+if(isset($_POST['detail']))
 {
   if(!empty($_POST['name']))
   {
@@ -25,35 +26,34 @@ if(isset($_POST['submit']))
   }
   if(!empty($_POST['work_add']))
   {
-      $work_add=$_POST['work_add'];
+      $a_work_add=$_POST['work_add'];
+      $work_add=$a_work_add[0];
   }
 
 
-$result=$customercontroller->addCustomer($name,$nrc,$add,$ph,$work_add);
-  if($result){
-    header('location:customer.php');
-  }
-  else{
-    echo "error";
-  }
-  $work = $customercontroller->addWork($work_add);
-//   $customers=$customercontroller->getCustomers();
+$result=$customercontroller->addCustomer($name,$nrc,$add,$ph);
+$num = $ccontroller->getWorkId();
+$id=$num['id'];
+
+//$insert=$customercontroller->addWork($id,$work_add);
+foreach($a_work_add as $key=>$values)
+{
+    $s_work_add=$a_work_add[$key];
+   // print_r($s_work_add);
+    $query = "insert into workaddress(cus_id,work_address) values('$id','$s_work_add')";
+     $query_run = mysqli_query($con, $query);
+    if($query_run){
+        
+        header("Location:customer.php");
+    }    
+} 
+
 };
 
 
 
+
 ?>
-
-
-
-
-
-
-
-
-
-
-
 
 
 <?php 
@@ -93,15 +93,16 @@ include_once "layouts/header.php";
                     <div class="modal-body">
                     <h4>Customer</h4>
                     <p >ငှားရမ်းသူ</p>
+                 
                     
                                         <div class="row" id="">
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">Name</label>
-                                                <input type="text" name="name" id="" class="form-control" placeholder="အမည်">
+                                                <input type="text" name="name" id="" class="form-control" placeholder="အမည်" required>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">NRC</label>
-                                                <input type="text" name="nrc" id="" class="form-control" placeholder="မှတ်ပုံတင်နံပါတ်">
+                                                <input type="text" name="nrc" id="" class="form-control" placeholder="မှတ်ပုံတင်နံပါတ်" required>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">Ph No</label>
@@ -113,7 +114,7 @@ include_once "layouts/header.php";
                                             </div>
                                             <div class="col-md-11 mt-3">
                                                 <label for="" class="form-label">Work Address</label>
-                                                <input type="text" name="work_add" id="" class="form-control" placeholder="လုပ်ငန်းခွင်လိပ်စာ">
+                                                <input type="text" name="work_add[]" id="" class="form-control" placeholder="လုပ်ငန်းခွင်လိပ်စာ">
                                             </div>
                                             <div class="col-md-1 mt-5">
                                                 <button  class="btn btn-outline-primary new" id="" >+</button>
@@ -123,7 +124,7 @@ include_once "layouts/header.php";
                     </div>     
     <div class="modal-footer mt-3">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" name="detail" class="btn btn-primary">Submit</button>
       </div>
                 </form>
                 </div>
@@ -171,7 +172,7 @@ include_once "layouts/header.php";
                         <td> <div contentEditable='true' class='cust_edit' id='nrc_<?php echo $data_id; ?>'> <?php echo $data_nrc; ?></div> </td>
                         <td> <div contentEditable='true' class='cust_edit' id='address_<?php echo $data_id; ?>'><?php echo $data_add; ?> </div> </td>
                         <td> <div contentEditable='true' class='cust_edit' id='phone_number_<?php echo $data_id; ?>'><?php echo $data_ph; ?> </div> </td>
-                        <td> <div contentEditable='true' class='cust_edit' id='phone_number_<?php echo $data_id; ?>'><?php echo $data_ph; ?> </div> </td>
+                        <td  ><a class="btn btn-outline-primary detail"  id='<?php echo $data_id ?>' data-toggle="modal" data-target="#detail">Detail</a></td>
                         <td  cid='<?php echo $data_id; ?>'><a class='btn btn-danger deleteCustomer '> Delete</a></td>
                         </tr>
                         <?php
@@ -180,6 +181,13 @@ include_once "layouts/header.php";
                         ?> 
                                                 </tbody>
                                             </table>
+                                            <p><?php 
+                                        //     print_r($a_work_add);
+                                        //    echo "<br>";
+                                        //         print_r($num['id']);
+                                        //         echo "<br>";
+                                        //          print_r($s_work_add);
+                                            ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -189,23 +197,99 @@ include_once "layouts/header.php";
                 </div>
                 
             </div>
-     </div>  
+     </div> 
+     <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Customer Work Address</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                    <div class="row">
+      <div class="col-md-12">
+      <div class="table-responsive">
+                        <table id="datatable" class="display expandable-table no-footer" style="width:100%">
+                     
+                      <form action="#" method="post">
+                    <div class="row mb-3">
+                    <div class="col-md-5">
+                    <label for="" class="form-label"><h4>Add Work Address</h4></label>
+                    <input type="text" name="new_work" id="newwork" placeholder="Add New Work Address" class="form-control" required>                       
+                    </div>
+                    <div class="col-md-1 offset-md-5" >
+                   
+                    <button style="margin-top:35px" type="submit" name="work_detail" class="btn btn-outline-primary " id="workdetail">Submit</button>
+                    </div>
+                    </div>
+                   
+                       
+                        
+                </form>
+                  
+                <thead>
+                <tr>
+                <th>စဥ်</th>
+                <th>လုပ်ငန်းခွင်လိပ်စာ</th>
+                <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="cusdetail">                 
+               
+                
+                </tbody>
+            </table>        
+                        </div>
+      </div>
+      </div>
+      
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      
+                       
+            
+      </div>
+      
+      
+      
+    </div>
+                
+     </div>
+    </div>
+
+     
+
+
      </div>  
         
-        
+     
+    </div>
+
    
      
 
 <?php 
 include_once "layouts/footer.php";
 ?>
-
+<!-- <script src="js/addcus_detail.js"></script> -->
 <script>
-  $(document).ready(function(){
-  
+ 
+$(document).ready(function(){
     // Add Class
     $('.cust_edit').click(function(){
         $(this).addClass('editMode');
+        console.log('okay');
     
     });
 
@@ -256,7 +340,7 @@ include_once "layouts/footer.php";
             var value = $(this).text();
         
             $.ajax({
-                url: 'additem_update.php',
+                url: 'customer_update.php',
                 type: 'post',
                 data: { field:field_name, value:value, id:edit_id },
                 success:function(response){
@@ -272,7 +356,7 @@ include_once "layouts/footer.php";
         }        
     });
 
-});
+
 
 $('.deleteCustomer').click(function(){
     var status = confirm("Are you sure to delete?");
@@ -294,5 +378,91 @@ $('.deleteCustomer').click(function(){
 })
 
 
+
+
+    var index= 2;
+    $('.new').click(function (e) { 
+        console.log('ok');
+
+        // var div=document.createElement('div');
+        // $(div).attr('class','container-fluid mt-3');
+        var row=document.createElement('div');
+        $(row).attr('class','row');
+        var col1 = document.createElement('div');
+        $(col1).attr('class','col-md-11 mt-3');
+        var col2 = document.createElement('div');
+        $(col2).attr('class','col-md-1 mt-3');
+        var label= document.createElement('label');
+        $(label).html('Work address'+index);
+        $(label).attr('class','form-label');
+       
+        
+
+        var address = document.createElement('input');
+        $(address).attr('type','text');
+        $(address).attr('class','form-control'); 
+        $(address).attr('name','work_add[]');
+        $(address).attr('placeholder','လုပ်ငန်းခွင်လိပ်စာ');
+        var btn = document.createElement('button');
+        $(btn).addClass('btn btn-outline-danger mt-4');
+        $(btn).html('-');
+        col2.appendChild(btn)
+        col1.appendChild(label)
+        col1.appendChild(address)
+        $(btn).click(function(){
+            $(this).parent().parent().remove();
+            index--;
+        });
+        row.append(col1,col2)
+        // $(div).append(row);
+        $('.content').append(row);
+        index++;
+        e.preventDefault();
+
+     })
+
+     $('.detail').click(function(){
+
+            var id=$(this).attr('id');
+
+            console.log(id);
+            $.ajax({
+                    type: 'post',
+                    url:   'cus_detail.php',
+                    data: {did:id},                         // did = key, id= value;
+                    success: function (response){
+                        console.log(response);
+                    
+                    $('#cusdetail').html(response);
+                    },
+                    error: function (error){
+                        console.log(error);
+                    }
+                })
+
+
+$('#workdetail').click(function(){
+    var newwork = $('#newwork').val();
+console.log(id);
+$.ajax({
+    type: 'post',
+    url:  'cus.php',
+    data:  {newid:id,newwork:newwork},
+    success:function(response){
+      alert(response);
+      
+    }
+})
+})
+
+  
+});
+
+
+
+
+
+    
+});
 
 </script>
