@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__."/../models/Return.php";
+include_once __DIR__."/../models/ReturnModel.php";
 class ReturnController extends Returnn{
     public function addReturn($lent_id,$lentDetail_id,$return_qty,$return_date)
     {
