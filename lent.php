@@ -138,7 +138,21 @@ include_once 'layouts/header.php';
                                 <div class="row">
                                 <div class="col-md-4 mt-3">
                                 <label for="">Item Name</label>
-                                <input type="text" class="form-control" name="item_name[]" id="" placeholder="">
+                                <select name="item_name[]" id="" class="form-control">
+                                <?php 
+                                    $selectquery="select * from  item "; 
+                                    $select_result = mysqli_query($con,$selectquery); 
+                                                     
+                                                    
+                                               
+                                    while($select_data=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):; 
+                                    ?> 
+                                    <option value="<?php echo $select_data['id']; ?>"> 
+                                    <?php  echo $select_data['item_name'] ?> 
+                                    </option> 
+                                    <?php endwhile;?>  
+                                </select>
+                                <!-- <input type="text" class="form-control" name="item_name[]" id="" placeholder=""> -->
                                 </div>
 
                                 <div class="col-md-3 mt-3">
@@ -305,15 +319,23 @@ include_once 'layouts/footer.php'
         $(label2).addClass('form-label');
         $(label3).addClass('form-label');
 
-        var name = document.createElement('input');
-        
-        $(name).attr('type','text');
+        var name = document.createElement('select');
+        <?php 
+          $selectquery="select * from  item "; 
+          $select_result = mysqli_query($con,$selectquery);                                                                                                                                                    
+          while($select_data=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):; 
+          ?> 
+          var option="<option value='<?php echo $select_data['id']?>'><?php echo $select_data['item_name']?></option>";
+          name.innerHTML+=option;
+          <?php endwhile;?>
+
+        // $(name).attr('type','text');
         var qty = document.createElement('input');
         $(qty).attr('type','number');
         var unit_price = document.createElement('input');
         $(unit_price).attr('type','number');
 
-        $(name).attr('placeholder','ပစ္စည်းအမျိုးအမည်');
+        // $(name).attr('placeholder','ပစ္စည်းအမျိုးအမည်');
         $(qty).attr('placeholder','အရေအတွက်');
         $(unit_price).attr('placeholder','တစ်ရက်ငှါးရမ်းနှုန်း');
 
