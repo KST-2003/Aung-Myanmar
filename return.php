@@ -41,10 +41,10 @@ include_once "layouts/header.php";
         </button>
       </div>
         <form action="" method='post'>
-        <div class="modal-body">
+            <div class="modal-body">
                         <h4>Return List</h4>
                         <p>ပြန်အပ်စာရင်း</p>
-                        <div class="row">
+                    <div class="row">
                         <div class="col-md-4 mt-3">
                             <label for="">Invoice No</label>
                             <select name="lent_id" class='form-control' id='invoice_no' placeholder="ဘောင်ချာနံပါတ်">
@@ -79,74 +79,74 @@ include_once "layouts/header.php";
 
                                 
 
-                      <div class="col-md-4 mt-3">
+                        <div class="col-md-4 mt-3">
                           <label class="form-label">Return Item</label>
                             <select class="form-control" lentdetail="<?php echo $ld_id ?>" name="lentDetail_id" id="return_item" placeholder="ပြန်အပ်သည့်ပစ္စည်း">
 
                             </select>
-                          </div>
-                      <div class="col-md-2 mt-3">
+                        </div>
+                        <div class="col-md-2 mt-3">
                                 <label for="" class="form-label">Quantity</label>
                                 <input type="number" min="1" id="return_qty" class="form-control" placeholder="အ‌ရေအတွက်">
-                            </div>
-                            <div class="col-md-4 mt-3">
-                                <label for="" class="form-label">Unit Price</label>
-                                <input type="number" min="1" name="" class="form-control" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" id="unit_price">
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            <label for="" class="form-label">Unit Price</label>
+                            <input type="number" min="1" name="" class="form-control" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" id="unit_price">
                                 
-                            </div>
-                            <div class="col-md-2 mt-3">
-                                <label for="">&nbsp;</label>
-                                <button  class="btn btn-outline-primary mt-4" id="addbtn">+</button>
-                                </div>
+                        </div>
+                        <div class="col-md-2 mt-3">
+                            <label for="">&nbsp;</label>
+                            <button  class="btn btn-outline-primary mt-4" id="addbtn">+</button>
+                        </div>
 
                                 <!-- <div class="col-md-1 mt-3">
                                 <label for="">&nbsp;</label>
                                 <button  class="btn btn-outline-danger ">-</button>
                               </div> -->
-                            <div class="container-fluid" id="return_form">
+                        <div class="container-fluid" id="return_form">
 
-                            </div>
-                            <div class="col-md-6 mt-3">
-                                <label for="">Employee</label>
-                                <select name="" id="" class="form-control" id="employee" placeholder="လက်ခံပေးသည့်တာဝန်ခံ">
-                                    <option value="0">Ma Sabel</option>
-                                    <option value="1">Mg Toe</option>
-                                    <option value="2">Ma Thida</option>
-                                    <option value="3">Mg Kaung</option>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <label for="">Employee</label>
+                            <select name="" id="" class="form-control" id="employee" placeholder="လက်ခံပေးသည့်တာဝန်ခံ">
+                                <option value="0">Ma Sabel</option>
+                                <option value="1">Mg Toe</option>
+                                <option value="2">Ma Thida</option>
+                                <option value="3">Mg Kaung</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <label for="">Broken/Lost</label>
+                            <select name="" class="form-control" id="hasBroken" plcaeholder="ကျိုးပဲ့/ပျောက်ဆုံး" >
+                                <option value="true" selected>ရှိ</option>
+                                <option value="false">မရှိ</option>
+                            </select>
+                        </div>
+                        <div id='broken'>
+                            <div class="col-md-4 mt-3" id="">
+                                <label for="">Broken Item</label>
+                                <select name="" id="" class="form-control" placeholder="ကျိုးပဲ့သည့်ပစ္စည်း">
+                                    <option value="">ငြမ်း</option>
+                                    <option value="">အခင်းပြား</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 mt-3">
-                                <label for="">Broken/Lost</label>
-                                <select name="" class="form-control" id="hasBroken" plcaeholder="ကျိုးပဲ့/ပျောက်ဆုံး" >
-                                    <option value="true" selected>ရှိ</option>
-                                    <option value="false">မရှိ</option>
-                                </select>
+                            <div class="col-md-2 mt-3">
+                                <label for="">Quantity</label>
+                                <input type="number" class="form-control" min="1" name="" id="" placeholder="အရေအတွက်">
                             </div>
-                            <div id='broken'>
-                                <div class="col-md-4 mt-3" id="">
-                                    <label for="">Broken Item</label>
-                                    <select name="" id="" class="form-control" placeholder="ကျိုးပဲ့သည့်ပစ္စည်း">
-                                        <option value="">ငြမ်း</option>
-                                        <option value="">အခင်းပြား</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2 mt-3">
-                                    <label for="">Quantity</label>
-                                    <input type="number" class="form-control" min="1" name="" id="" placeholder="အရေအတွက်">
-                                </div>
-                                <div class="col-md-4 mt-3">
-                                    <label for="">Item Price</label>
-                                    <input type="number" class="form-control mb-3" min="1" name="" id="" placeholder="ကာလပေါက်ဈေး">
-                                </div>
-                                <div class="col-md-2 mt-3">
+                            <div class="col-md-4 mt-3">
+                                <label for="">Item Price</label>
+                                <input type="number" class="form-control mb-3" min="1" name="" id="" placeholder="ကာလပေါက်ဈေး">
+                            </div>
+                            <div class="col-md-2 mt-3">
                                 <label for="">&nbsp;</label>
                                 <button  class="btn btn-outline-primary mt-4" id="broken_add_row">+</button>
-                                </div>
-                            </div>
-                            <div id="moreForm" class="container-fluid">
-
                             </div>
                         </div>
+                        <div id="moreForm" class="container-fluid">
+
+                        </div>
+                    </div>
             </div>
             <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
