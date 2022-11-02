@@ -22,19 +22,14 @@ include_once "layouts/header.php"
                               <th>ပြန်အပ်သည့်အရေအတွက်</th>
                               <th>ကျိုးပဲ့/ပျောက်ဆုံးအရေအတွက်</th>
                               <th>ဆိုင်ရှိအရေအတွက်</th>
-                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
-                              <th>1</th>
-                              <th>Name</th>
-                              <th>Qty</th>
-                              <th>L_Qty</th>
-                              <th>R_Qty</th>
-                              <th>B_Qty</th>
-                              <th>S_Qty</th>
-                              <th><span><img src="images/pencil.png" alt="" width="30px" height="30px"></span><span><img src="images/trash-bin.png" alt="" width="30px" height="30px"></span></th>
+                              <?php
+                              
+                              ?>
+
                             </tr>
                           </tbody>
                       </table>
