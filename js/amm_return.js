@@ -42,6 +42,7 @@ $('#invoice_no').change(function(e){
         data: {lentdetail:lent_id},
         success:function(result){
             $('#return_item').html(result);
+            $('#broken_item').html(result);
         }
     })
     e.preventDefault();
@@ -78,6 +79,7 @@ $('#addbtn').click(function(e){
     $(label3).addClass('form-label');
 
     var selectbox = document.createElement('select');
+    $(selectbox).attr('name','lentDetail_id[]');
     // var option1 = document.createElement('option');
     // $(option1).html('ငြမ်း');
     // var option2 = document.createElement('option');
@@ -87,6 +89,7 @@ $('#addbtn').click(function(e){
 
     var qty = document.createElement('input');
     $(qty).attr('type','number');
+    $(qty).attr('name','return_qty[]');
     var return_date = document.createElement('input');
     $(return_date).attr('type','number');
 
@@ -139,7 +142,6 @@ $('#addbtn').click(function(e){
             type:'Post',
             url: "return_script.php",
             data:{ld_id:$(this).val()},
-            datatype: "JSON",
             success:function(result){
                 var splitt = result.split("_");
                 var r_qty = splitt[0];
@@ -163,7 +165,6 @@ $('#return_item').change(function(e){
         type:'Post',
         url: "return_script.php",
         data:{ld_id:$('#return_item').val()},
-        datatype: "JSON",
         success:function(result){
             var splitt = result.split("_");
             var qty = splitt[0];
@@ -175,6 +176,7 @@ $('#return_item').change(function(e){
         }
     })
 })
+
 $('#broken_add_row').click(function(e){
     var row=document.createElement('div');
     $(row).attr('class','row');
