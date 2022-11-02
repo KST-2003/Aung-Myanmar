@@ -5,7 +5,7 @@ class Item{
     {
         $cont=Database::connect();
     
-        $sql="insert into item(itemName,categoryId) values (:itemName,:categoryId)";
+        $sql="insert into item(item_name,category_id) values (:itemName,:categoryId)";
         $statement=$cont->prepare($sql);
     
         $statement->bindParam(':itemName',$itemName);
