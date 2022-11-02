@@ -209,6 +209,7 @@ include_once 'layouts/header.php';
                           </thead>
                           <tbody id="lent_table">
                           <?php 
+                          //asdasd
                           $query = "select customer.name, lent.* from customer join lent on customer.id = lent.customer_id";
                           $result = mysqli_query($con,$query);
                           $count = 1;
