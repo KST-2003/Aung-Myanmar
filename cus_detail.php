@@ -1,8 +1,39 @@
-$(document).ready(function(){
-    
+<?php
+include_once "controller/custcontroller.php";
+
+$id=$_POST['did'];   //did = key
+
+$ccontroller=new CustomerController();
+$result=$ccontroller->seeDetail($id);
+
+
+
+
+
+
+if($result){
+    $output='';
+    $count=0;
+    foreach($result as $data){
+        $count++;
+        $output.="<tr id=".$id.">";
+        $output.="<td>".$count."</td>";        
+        $output.="<td><div contentEditable='true' class='cust_edit' id='work_address_".$data['id']."' >".$data['work_address']."</div></td>";
+        $output.="<td  detail=".$data['id']."><a class='btn btn-danger ddetail '> Delete</a></td>";
+        $output.="</tr>";
+    }
+    echo $output;
+}
+
+
+//echo $data; //string or json_encode
+?>
+<script>
+    $(document).ready(function(){
     // Add Class
     $('.cust_edit').click(function(){
         $(this).addClass('editMode');
+        console.log('okay');
     
     });
 
@@ -12,6 +43,7 @@ $(document).ready(function(){
  
         var id = this.id;
         var id1= this.id;
+        console.log(id1)
         var split_id = id.split("_");
         var split_id1=id1.split("_");
         
@@ -24,7 +56,7 @@ $(document).ready(function(){
             var value = $(this).text();
         
             $.ajax({
-                url: 'customer_update.php',
+                url: 'cusdetail_update.php',
                 type: 'post',
                 data: { field:field_name, value:value, id:edit_id },
                 success:function(response){
@@ -53,7 +85,7 @@ $(document).ready(function(){
             var value = $(this).text();
         
             $.ajax({
-                url: 'additem_update.php',
+                url: 'cusdetail_update.php',
                 type: 'post',
                 data: { field:field_name, value:value, id:edit_id },
                 success:function(response){
@@ -69,25 +101,39 @@ $(document).ready(function(){
         }        
     });
 
+
+    $(".ddetail").click(function(){
+        var id0 = $(this).parents('td').parents('tr').attr('id');
+        console.log(id0);
+        var status = confirm("Are you sure you want to delete this address?");
+        if(status){
+            var id =$(this).parents('td').attr('detail');
+            console.log(id);
+            var row = $(this).parents('tr');
+            console.log(row);
+            $.ajax({
+                type:'post',
+                url: 'cusdetail_delete.php',
+                data:{did:id,id:id0},
+                success:function(response){
+                    alert("Successfully deleted");
+                   row.fadeOut('slow');
+                   location.reload();
+
+                }
+            })
+        }
+    })
+
+    $(".workdetail").click(function(){
+        var id = $(this).parents('td').parents('tr').attr('id');
+        console.log(id);
+    })
+
 });
 
-$('.deleteCustomer').click(function(){
-    var status = confirm("Are you sure to delete?");
-    if(status){
-        var id=$(this).parents('td').attr('cid');
-        var row = $(this).parents('tr');
-        console.log(id);
-        $.ajax({
-            type:'post',
-            url:'customer_delete.php',
-            data:{cid:id},
-            success:function(response){
-                alert(response);
-                row.fadeOut('slow');
-            }
-        })
-    }
-    return false;
-})
+
+
+</script>
 
 

@@ -138,7 +138,21 @@ include_once 'layouts/header.php';
                                 <div class="row">
                                 <div class="col-md-4 mt-3">
                                 <label for="">Item Name</label>
-                                <input type="text" class="form-control" name="item_name[]" id="" placeholder="">
+                                <select name="item_name[]" id="" class="form-control">
+                                <?php 
+                                    $selectquery="select * from  item "; 
+                                    $select_result = mysqli_query($con,$selectquery); 
+                                                     
+                                                    
+                                               
+                                    while($select_data=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):; 
+                                    ?> 
+                                    <option value="<?php echo $select_data['id']; ?>"> 
+                                    <?php  echo $select_data['item_name'] ?> 
+                                    </option> 
+                                    <?php endwhile;?>  
+                                </select>
+                                <!-- <input type="text" class="form-control" name="item_name[]" id="" placeholder=""> -->
                                 </div>
 
                                 <div class="col-md-3 mt-3">
@@ -216,7 +230,7 @@ include_once 'layouts/header.php';
                         <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail" id="<?php echo $data_id?>">Detail</a></td> 
+                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a></td> 
                         </tr> 
                         <?php 
                         $count ++; 
@@ -250,7 +264,6 @@ include_once 'layouts/header.php';
                       <th>အရေအတွက်</th>
                       <th>တစ်ရက်ငှါးရမ်းနှုန်း</th>
                       <th>တာ၀န်ခံအမည်</th>
-                      <th>Action</th>
                       </tr>
                     </thead>
                     <tbody id="lent_detail_body">
@@ -306,15 +319,23 @@ include_once 'layouts/footer.php'
         $(label2).addClass('form-label');
         $(label3).addClass('form-label');
 
-        var name = document.createElement('input');
-        
-        $(name).attr('type','text');
+        var name = document.createElement('select');
+        <?php 
+          $selectquery="select * from  item "; 
+          $select_result = mysqli_query($con,$selectquery);                                                                                                                                                    
+          while($select_data=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):; 
+          ?> 
+          var option="<option value='<?php echo $select_data['id']?>'><?php echo $select_data['item_name']?></option>";
+          name.innerHTML+=option;
+          <?php endwhile;?>
+
+        // $(name).attr('type','text');
         var qty = document.createElement('input');
         $(qty).attr('type','number');
         var unit_price = document.createElement('input');
         $(unit_price).attr('type','number');
 
-        $(name).attr('placeholder','ပစ္စည်းအမျိုးအမည်');
+        // $(name).attr('placeholder','ပစ္စည်းအမျိုးအမည်');
         $(qty).attr('placeholder','အရေအတွက်');
         $(unit_price).attr('placeholder','တစ်ရက်ငှါးရမ်းနှုန်း');
 
@@ -345,6 +366,25 @@ include_once 'layouts/footer.php'
         $(div).append(row);
         $('#content2').append(div);
         e.preventDefault();
+    })
+    $('.detail_lent').click(function(){
+      console.log('click')
+      var id = this.id
+      $.ajax({
+                url: 'lent_detail.php',
+                type: 'post',
+                data: {cid:id},
+                success:function(response){
+                    if(response == 1){ 
+
+                    }else{ 
+                      console.log(response);
+                      
+                      $('#lent_detail_body').html(response)
+                        
+                    }             
+                }
+            });
     })
          // Add Class
     $('.edit_lent').click(function(){

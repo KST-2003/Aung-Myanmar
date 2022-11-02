@@ -176,6 +176,7 @@ include_once "layouts/footer.php";
         data:{id:row_id},
         success:function(response){
           if(response == 1){ 
+            location.reload();
             console.log(response);   
             row.fadeOut('slow')                      
           }else{ 
@@ -265,4 +266,8 @@ $(".dep_edit").focusout(function(){
 
 
 </script>
-
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
