@@ -5,10 +5,10 @@ var parent = $('#return_item').parent();
 var qty_parent=$(parent).next();
 var qty_input = $(qty_parent).find('input');
 console.log(qty_input);
-$('#return_date').html("2022/10/2");
+
 $('#hasBroken').change(function(){
     console.log($('#hasBroken').val());
-    if($('#hasBroken').val() == 'false'){
+    if($('#hasBroken').val() == '0'){
         $('#broken').hide();
         $('#moreForm').empty();
         kount = 0;
@@ -62,7 +62,7 @@ $('#addbtn').click(function(e){
     $(col4).attr('class','col-md-2 mt-3');
     
     var btn = document.createElement('button');
-    $(btn).addClass('btn btn-danger mt-4');
+    $(btn).addClass('btn btn-outline-danger mt-4');
     $(btn).html('-');
     $(col4).append(btn);
 
@@ -146,7 +146,7 @@ $('#addbtn').click(function(e){
                 var splitt = result.split("_");
                 var r_qty = splitt[0];
                 var r_price=splitt[1];
-                $(qty_input).val(r_qty);
+                //$(qty_input).val(r_qty);
                 $(qty_input).attr('max',r_qty);
                 $(price_input).val(r_price);
                 $(price_input).attr('max',r_price);
@@ -190,8 +190,8 @@ $('#broken_add_row').click(function(e){
     $(col4).attr('class','col-md-2 mt-3');
     
     var btn = document.createElement('button');
-    $(btn).addClass('btn btn-danger mt-4');
-    $(btn).html('Delete');
+    $(btn).addClass('btn btn-outline-danger mt-4');
+    $(btn).html('-');
     $(col4).append(btn);
 
     var label1= document.createElement('label');
