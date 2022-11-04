@@ -17,24 +17,32 @@ if(isset($_POST['submit'])){
     }else{
         $error_date="Please choose date";
     }
+
     $response = null;
+
     if(!empty($_POST['lentDetail_id'])){
         $lentDetail_id=$_POST['lentDetail_id'];
     }else{
         $error_item="Please select an item";
     }
-    if(!empty($_POST['return-qty'])){
+
+    if(!empty($_POST['return_qty'])){
         $qty=$_POST['return_qty'];
     }else{
         $error_qty="Please enter a number";
     }
-    if(empty($error_invoice && $error_date && $error_item && $error_qty)){
+    
+    if(!empty($_POST['has_broken'])){
+        $broken = $_POST['has_broken'];
+    }
+
+    if(empty($error_invoice) && empty($error_date) && empty($error_item) && empty($error_qty)){
         foreach($lentDetail_id as $index => $iDs){
             $arr_id=$iDs;
             $arr_qty=$qty[$index];
-            $query= "INSERT INTO return_tb (lent_id, lentDetail_id, return_qty,return_date)
+            $query= "INSERT INTO return_tb (lent_id, lentDetail_id, return_qty,return_date,has_broken)
             VALUES
-            ('$lent_id','$arr_id','$arr_qty','$return_date')";
+            ('$lent_id','$arr_id','$arr_qty','$return_date','$broken')";
             $response=mysqli_query($con,$query);
 
         }
@@ -161,9 +169,9 @@ include_once "layouts/header.php";
                         </div>
                         <div class="col-md-6 mt-3">
                             <label for="">Broken/Lost</label>
-                            <select name="" class="form-control" id="hasBroken" plcaeholder="ကျိုးပဲ့/ပျောက်ဆုံး" >
-                                <option value="true" selected>ရှိ</option>
-                                <option value="false">မရှိ</option>
+                            <select name="has_broken" class="form-control" id="hasBroken" plcaeholder="ကျိုးပဲ့/ပျောက်ဆုံး" >
+                                <option value="1" selected>ရှိ</option>
+                                <option value="0">မရှိ</option>
                             </select>
                         </div>
                         <div id='broken'>
@@ -234,9 +242,9 @@ include_once "layouts/header.php";
                                                         $count=0;
                                                         echo "<tr>";
                                                         echo ($count);
-                                                        $query2="SELECT lent.invoice_number,customer.name,lent.total_qty,sum(return_qty),lent.lent_date,max(return_date),lent.deposit
-                                                        FROM customer INNER JOIN lent ON customer.id=lent.customer_id INNER JOIN return_tb on lent.id=return_tb.lent_id
-                                                        WHERE return_tb.lent_id=".$q_id." ORDER BY return_tb.id DESC limit 1";
+                                                        $query2="SELECT lent.invoice_number,customer.name,lent.total_qty,sum(return_qty),lent.lent_date,max(return_date),lent.deposit,
+                                                        max(has_broken) FROM customer INNER JOIN lent ON customer.id=lent.customer_id INNER JOIN return_tb on lent.id=return_tb.lent_id
+                                                        WHERE return_tb.lent_id=".$q_id." limit 1";
                                                         $result2 = mysqli_query($con,$query2);
                                                         
                                                         while($outcome2=mysqli_fetch_array($result2)){
@@ -249,8 +257,19 @@ include_once "layouts/header.php";
                                                             echo "<td>".$outcome2['sum(return_qty)']."</td>";
                                                             echo "<td>100000</td>";
                                                             echo "<td>".$outcome2['deposit']."</td>";
-                                                            echo "<td>မရှိ</td>";
-                                                            echo "<td><button class='btn btn-danger'>Delete</button><a href='return_detail.php' class='btn btn-primary'>Detail</a></td>";
+                                                            if($outcome2['max(has_broken)']==1)
+                                                                echo "<td><a href='broken.php' class='text-black'>ရှိ</a></td>";
+                                                            else{
+                                                                echo "<td>မရှိ</a></td>";
+                                                            }echo "<td><button class='btn btn-danger'>Delete</button><a href='return_detail.php' class='btn btn-primary'>Detail</a></td>";
+                                                            // $date1 = new DateTime("2007-03-24");
+                                                            // $date2 = new DateTime("2010-03-26");
+                                                            // $interval = $date1->diff($date2);
+                                                            // echo "difference " . $interval->y . " years, " . $interval->m
+                                                            // ." months, ".$interval->d." days ***************"; 
+                                                            // $total_days = ($interval->y*365)+($interval->m*30)+($interval->d);
+                                                            // echo $total_days;
+                                                            
                                                         }
                                                         echo "</tr>";
                                                         $count++;
