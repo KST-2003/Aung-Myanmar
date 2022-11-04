@@ -138,7 +138,7 @@ include_once 'layouts/header.php';
                                 <div class="row">
                                 <div class="col-md-4 mt-3">
                                 <label for="">Item Name</label>
-                                <select name="item_name[]" id="" class="form-control">
+                                <select name="item_name[]" id="" class="form-control" value="">
                                 <?php 
                                     $selectquery="select * from  item "; 
                                     $select_result = mysqli_query($con,$selectquery); 

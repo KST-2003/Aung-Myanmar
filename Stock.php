@@ -1,5 +1,9 @@
+<?php
+include_once __DIR__."/includes/config.php";
+include_once __DIR__."/controller";
+?>
 <?php 
-include_once "layouts/header.php"
+include_once "layouts/header.php";
 ?>
       <div class="main-panel">
         <div class="content-wrapper">
@@ -25,12 +29,31 @@ include_once "layouts/header.php"
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <?php
-                              
-                              ?>
+                          <?php 
+                          //asdasd
+                          // $query = "select customer.name, lent.* from customer join lent on customer.id = lent.customer_id";
+                          // $result = mysqli_query($con,$query);
+                          // $count = 1;
+                          // foreach($result as $row){ 
+                                                      
+                          //   $cus_name=$row['name']; 
+                          
+                          //   $data_id = $row['id']; 
+                          //   $data_inv = $row['invoice_number']; 
+                             
+                          //   $data_date = $row['lent_date']; 
+                          //   $data_qty = $row['total_qty']; 
+                          //   $data_dep = $row['deposit'];  
+                             
+                        ?> 
+                        <tr> 
 
-                            </tr>
+                        </tr> 
+                        <?php 
+                        // $count ++; 
+                        // } 
+                        
+                        ?>
                           </tbody>
                       </table>
                       </div>
