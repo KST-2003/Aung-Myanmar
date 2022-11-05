@@ -1,45 +1,9 @@
 <?php
 include_once __DIR__."/includes/config.php";
 include_once __DIR__."/includes/db.php";
-if(isset($_POST['upload']) || isset($_POST['submit'])){
-  if(!empty($_POST['dep_yearly'])){
-    $year=$_POST['dep_yearly'];
-    $query="SELECT
-    COUNT(id),
-    DATE_FORMAT(lent_date, '%Y-%m-%d') AS DAY,
-    DATE_FORMAT(lent_date, '%Y-%m') AS MONTH,
-    DATE_FORMAT(lent_date, '%Y') AS YEAR,
-    sum(deposit) AS deposit
-  
-    FROM
-    lent
-    WHERE
-    YEAR(lent_date) = ".$year."
-    GROUP BY
-    DATE_FORMAT(lent_date, '%Y ');";
-    $query_run = mysqli_query($con, $query);
-    $output=mysqli_fetch_array($query_run,MYSQLI_ASSOC);
-  }
-  if(!empty($_POST['qty_yearly'])){
-    $qty_year=$_POST['qty_yearly'];
-    $query1="SELECT
-    COUNT(id),
-    DATE_FORMAT(lent_date, '%Y-%m-%d') AS DAY,
-    DATE_FORMAT(lent_date, '%Y-%m') AS MONTH,
-    DATE_FORMAT(lent_date, '%Y') AS YEAR,
-    sum(total_qty) AS Qty
-  
-    FROM
-    lent
-    WHERE
-    YEAR(lent_date) = ".$qty_year."
-    GROUP BY
-    DATE_FORMAT(lent_date, '%Y ');";
-    $query_run1 = mysqli_query($con, $query1);
-    $output1=mysqli_fetch_array($query_run1,MYSQLI_ASSOC);
+// if(isset($_POST['submit'])){
 
-  }
-}
+// }
 ?>
 <?php
 include_once __DIR__."/layouts/header.php";
@@ -58,48 +22,32 @@ include_once __DIR__."/layouts/header.php";
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6 grid-margin transparent">
+            <div class="col-md-12 grid-margin transparent">
               <div class="row">
-                <div class="col-md-6 mb-4 stretch-card">
+                <div class="col-md-4 stretch-card">
                 <form method="POST">
                   <label class="form-label">Enter Year</label>
-                  <input type="text" name="dep_yearly" class="form-control" required>
-                  <button name="upload" type="submit" class="btn btn-primary mt-2">Submit</button>
+                  <input type="text" name="yearly" class="form-control" id="input" required>
                 </form>
                 </div>
-                <div class="col-md-6 mb-4 stretch-card transparent">
+                <div class="col-md-4  stretch-card transparent">
                   <div class="card card-dark-blue">
                     <div class="card-body">
                       <p class="mb-4">Total Deposit</p>
-                      <p class="fs-30 mb-2"><?php if(isset($_POST['upload']))
-                      echo $output['deposit'];
-                      ?></p>
+                      <p class="fs-30 mb-2" id="here"></p>
                       <p>Yearly</p>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-md-6 grid-margin transparent">
-            <div class="row">
-                <div class="col-md-6 stretch-card transparent">
-                  <form method="POST">
-                    <label class="form-label">Enter Year</label>
-                    <input type="text" name="qty_yearly" class="form-control" required>
-                    <button name="submit" type="submit" class="btn btn-primary mt-2">Submit</button>
-                  </form>
-                </div>
-                <div class="col-md-6 stretch-card transparent">
+                <div class="col-md-4 stretch-card transparent">
                   <div class="card card-light-danger">
                     <div class="card-body">
                       <p class="mb-4">Total Qty of item(lented)</p>
-                      <p class="fs-30 mb-2"><?php if(isset($_POST['submit']))
-                      echo $output1['Qty'];
-                      ?></p>
+                      <p class="fs-30 mb-2" id="there"></p>
+                        <p>Yearly</p>
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
           </div>
           <div class="row">
@@ -664,4 +612,6 @@ include_once __DIR__."/layouts/header.php";
 <?php
 include_once __DIR__."/layouts/footer.php";
 ?>
+<script>
 
+</script>
