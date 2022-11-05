@@ -3,6 +3,7 @@ include_once "includes/config.php";
 include_once "controller/ReturnController.php";
 $returnController = new ReturnController();
 if(isset($_POST['submit'])){
+    
     if(!empty($_POST['lent_id'])){
         $input = $_POST['lent_id'];
         $explode_id=explode('_',$input);
@@ -36,22 +37,66 @@ if(isset($_POST['submit'])){
         $broken = $_POST['has_broken'];
     }
 
-    if(empty($error_invoice) && empty($error_date) && empty($error_item) && empty($error_qty)){
+    if(!empty($_POST['broken_qty'])){
+        $broken_qty = $_POST['broken_qty'];
+    }else{
+        $broken_qty=0;
+    }
+
+    if(!empty($_POST['actual_price'])){
+        $price = $_POST['actual_price'];
+    }else{
+        $price = 0;
+    }
+
+    if(!empty($_POST['emp_id'])){
+        $emp_id=$_POST['emp_id'];
+    }else{
+        $error_emp = "Please choose an employee";
+    }
+
+    if(!empty($_POST['discount'])){
+        $discount = $_POST['discount'];
+    }else{
+        $discount = 0;
+    }
+    $checker_query="Select * from lent where lent.id=".$lent_id;
+    $query_execute = mysqli_query($con,$checker_query);
+    while($checker_result = mysqli_fetch_row($query_execute)){
+        $checker = $checker_result['checker'];
+    }
+    if($checker==0){
+        $checker_update = $returnController->updateChecker($lent_id);
+    }
+
+    if(empty($error_invoice) && empty($error_date) && empty($error_item) && empty($error_qty) && empty($error_emp)){
         foreach($lentDetail_id as $index => $iDs){
             $arr_id=$iDs;
             $arr_qty=$qty[$index];
-            $query= "INSERT INTO return_tb (lent_id, lentDetail_id, return_qty,return_date,has_broken)
+            $arr_broken = $broken[$index];
+            $arr_bQty = $broken_qty[$index];
+            $arr_price = $price[$index];
+            $query= "INSERT INTO return_tb (lent_id, lentDetail_id, return_qty,return_date,has_broken,emp_id,broken_qty,price,discount)
             VALUES
-            ('$lent_id','$arr_id','$arr_qty','$return_date','$broken')";
+            ('$lent_id','$arr_id','$arr_qty','$return_date','$arr_broken','$emp_id','$arr_bQty','$arr_price','0')";
             $response=mysqli_query($con,$query);
 
         }
         if($response){
-            header('location:return.php');
+            $cuery = "select max(id) from return_tb";
+            $outcome = mysqli_query($con,$cuery);
+            $event = mysqli_fetch_row($outcome);
+            $last_id = $event[0];
+            echo "<br><br>********".$last_id;
+            $upd_dis = $returnController->updateDiscount($last_id,$discount);
+            if($upd_dis){
+                header('location:return.php');
+            }
+            
         }
-        else{
-            echo "<br><br><br>Error";
-        }
+    }
+    else{
+        echo "error";
     }
 }
 ?>
@@ -150,6 +195,21 @@ include_once "layouts/header.php";
                             <label for="">&nbsp;</label>
                             <button  class="btn btn-outline-primary mt-4" id="addbtn">+</button>
                         </div>
+                        <div class="col-md-4 mt-3">
+                            <label for="">Broken/Lost</label>
+                            <select name="has_broken[]" class="form-control" id="hasBroken" plcaeholder="ကျိုးပဲ့/ပျောက်ဆုံး" >
+                                <option value="1" >ရှိ</option>
+                                <option value="0" selected>မရှိ</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 mt-3">
+                            <label for="">Broken Qty</label>
+                            <input type="number" class='form-control' id='broken_qty' name='broken_qty[]' placeholder='ကျိုးပဲ့အရေအတွက်'>
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            <label for="">Actual Price</label>
+                            <input type="number" class='form-control' id='actual_price' name='actual_price[]' placeholder='ကာလပေါက်စျေး'>
+                        </div>
 
                                 <!-- <div class="col-md-1 mt-3">
                                 <label for="">&nbsp;</label>
@@ -160,21 +220,25 @@ include_once "layouts/header.php";
                         </div>
                         <div class="col-md-6 mt-3">
                             <label for="">Employee</label>
-                            <select name="" id="" class="form-control" id="employee" placeholder="လက်ခံပေးသည့်တာဝန်ခံ">
-                                <option value="0">Ma Sabel</option>
-                                <option value="1">Mg Toe</option>
-                                <option value="2">Ma Thida</option>
-                                <option value="3">Mg Kaung</option>
+                            <select name="emp_id" class="form-control" id="employee" placeholder="လက်ခံပေးသည့်တာဝန်ခံ">
+                                <option>လက်ခံသူအမည်ကို ရွေးပါ</option>
+                                <?php
+                                    $selectquery="select * from  employee ";
+                                    $select_result = mysqli_query($con,$selectquery);
+                                    while($outcome=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):;
+                                ?>
+                                <option value="<?php echo $outcome['id']; ?>">
+                                    <?php echo $outcome['name']; ?>
+                                </option>
+                                <?php endwhile; ?> 
                             </select>
+                            <span class='text-danger'><?php if(isset($error_emp)) echo $error_emp; ?></span>
                         </div>
                         <div class="col-md-6 mt-3">
-                            <label for="">Broken/Lost</label>
-                            <select name="has_broken" class="form-control" id="hasBroken" plcaeholder="ကျိုးပဲ့/ပျောက်ဆုံး" >
-                                <option value="1" selected>ရှိ</option>
-                                <option value="0">မရှိ</option>
-                            </select>
+                            <label for="">Discount</label>
+                            <input type="number" name="discount" class='form-control' placeholder='Discount'>
                         </div>
-                        <div id='broken'>
+                        <!-- <div id='broken'>
                             <div class="col-md-4 mt-3" id="">
                                 <label for="">Broken Item</label>
                                 <select name="" id="broken_item" class="form-control" placeholder="ကျိုးပဲ့သည့်ပစ္စည်း">
@@ -196,7 +260,7 @@ include_once "layouts/header.php";
                         </div>
                         <div id="moreForm" class="container-fluid">
 
-                        </div>
+                        </div> -->
                     </div>
             </div>
             <div class="modal-footer">
@@ -235,7 +299,7 @@ include_once "layouts/header.php";
                                                 </thead>
                                                 <tbody q_id="return_table">
                                                 <?php
-                                                    $query1="Select id from lent";
+                                                    $query1="Select id from lent where lent.checker>0";
                                                     $result1 = mysqli_query($con,$query1);
                                                     while($outcome1 = mysqli_fetch_array($result1)){
                                                         $q_id=$outcome1['id'];
@@ -258,10 +322,10 @@ include_once "layouts/header.php";
                                                             echo "<td>100000</td>";
                                                             echo "<td>".$outcome2['deposit']."</td>";
                                                             if($outcome2['max(has_broken)']==1)
-                                                                echo "<td><a href='broken.php' class='text-black'>ရှိ</a></td>";
+                                                                echo "<td><a href='broken.php?id=".$q_id."' class='text-black'>ရှိ</a></td>";
                                                             else{
-                                                                echo "<td>မရှိ</a></td>";
-                                                            }echo "<td><button class='btn btn-danger'>Delete</button><a href='return_detail.php' class='btn btn-primary'>Detail</a></td>";
+                                                                echo "<td>မရှိ</td>";
+                                                            }echo "<td><button class='btn btn-danger'>Delete</button><a href='return_detail.php?id=".$q_id."' class='btn btn-primary'>Detail</a></td>";
                                                             // $date1 = new DateTime("2007-03-24");
                                                             // $date2 = new DateTime("2010-03-26");
                                                             // $interval = $date1->diff($date2);

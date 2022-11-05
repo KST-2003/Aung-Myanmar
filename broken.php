@@ -1,14 +1,15 @@
 <?php 
-include_once 'layouts/header.php'
+include_once "includes/config.php";
+include_once 'layouts/header.php';
 ?>
       <div class="main-panel">
         <div class="content-wrapper">
             <div class="container-fluid">
               <!-- Form Modal Button -->
             <div class="row mb-4">
-              <div class="col text-left">
+              <!-- <div class="col text-left">
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#largeModal"><b>Add Broken Item</b></a>
-              </div>
+              </div> -->
                <!-- Search Button -->
               <div class="input-group col-md-4">
               <input type="text" class="form-control" name="" id="" placeholder="ပစ္စည်းအမည်">
@@ -21,7 +22,7 @@ include_once 'layouts/header.php'
             </div>
 
             <!-- large modal for Broken Item Registration Form-->
-<div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+<!-- <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -67,7 +68,7 @@ include_once 'layouts/header.php'
       
     </div>
   </div>
-</div>     
+</div>      -->
             </div>
 
             <!-- Broken Table -->
@@ -94,7 +95,37 @@ include_once 'layouts/header.php'
                             </tr>
                           </thead>
                           <tbody id="broken_table">
-                            
+                            <?php
+                              $query="";
+                              if(!empty($_GET['id'])){
+                                $id= $_GET['id'];
+                                echo "*************".$id;
+                                $query="SELECT lent.invoice_number,lent_detail.item_name,return_tb.* FROM return_tb 
+                                INNER JOIN lent on return_tb.lent_id=lent.id INNER JOIN lent_detail on 
+                                lent_detail.id=return_tb.LentDetail_id where lent.id=".$id."and has_broken=1" ;
+                              }
+                              else{
+                                $query="SELECT lent.invoice_number,lent_detail.item_name,return_tb.* FROM return_tb 
+                                INNER JOIN lent on return_tb.lent_id=lent.id INNER JOIN lent_detail on 
+                                lent_detail.id=return_tb.LentDetail_id WHERE return_tb.has_broken=1";
+                              }
+                              $count=1;
+                              $query_execute = mysqli_query($con,$query);
+                              while($result = mysqli_fetch_array($query_execute)){
+                                echo "<tr>";
+                                echo "<td>".$count."</td>";
+                                echo "<td>".$result['invoice_number']."</td>";
+                                echo "<td>".$result['item_name']."</td>";
+                                echo "<td>".$qty=$result['broken_qty']."</td>";
+                                echo "<td>".$price=intval($result['price'])."</td>";
+                                $cost = intval($qty)*intval($price);
+                                echo "<td>".$cost."</td>";
+                                echo "<td>blah blah</td>";
+                                echo "</tr>";
+                                $count++;
+                              }
+                              
+                            ?>
                           </tbody>
                       </table>
                       </div>
