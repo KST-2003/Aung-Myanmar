@@ -1,20 +1,17 @@
 var count = 1;
-var kount = 0;
-var hasrow = false;
-var parent = $('#return_item').parent();
-var qty_parent=$(parent).next();
-var qty_input = $(qty_parent).find('input');
-console.log(qty_input);
+$('#broken_qty').parent().hide();
+$('#actual_price').parent().hide();
 
 $('#hasBroken').change(function(){
     console.log($('#hasBroken').val());
     if($('#hasBroken').val() == '0'){
-        $('#broken').hide();
-        $('#moreForm').empty();
-        kount = 0;
+        $('#broken_qty').parent().hide();
+        $('#actual_price').parent().hide();
     }
-    else
-        $('#broken').show();
+    else{
+        $('#broken_qty').parent().show();
+        $('#actual_price').parent().show();
+    }
 })
 
 console.log(count);
@@ -50,33 +47,55 @@ $('#invoice_no').change(function(e){
 $('#addbtn').click(function(e){
     console.log('ok');
     console.log('inside + button '+lent_id);
+    //creating row
     var row=document.createElement('div');
     $(row).attr('class','row mt-3');
+
+    //creating columns
     var col1 = document.createElement('div');
-    $(col1).attr('class','col-md-4 mt-3 something');
+    $(col1).attr('class','col-md-4 mt-3');
     var col2 = document.createElement('div');
     $(col2).attr('class','col-md-2 mt-3');
     var col3 = document.createElement('div');
     $(col3).attr('class','col-md-4 mt-3');
     var col4 = document.createElement('div');
     $(col4).attr('class','col-md-2 mt-3');
+    var col5 = document.createElement('div');
+    $(col5).attr('class','col-md-4 mt-3');
+    var col6 = document.createElement('div');
+    $(col6).attr('class','col-md-2 mt-3');
+    var col7 = document.createElement('div');
+    $(col7).attr('class','col-md-4 mt-3');
     
+    //creating delete btn
     var btn = document.createElement('button');
     $(btn).addClass('btn btn-outline-danger mt-4');
     $(btn).html('-');
     $(col4).append(btn);
 
+    //creating label for all columns
     var label1= document.createElement('label');
     var label2= document.createElement('label');
     var label3= document.createElement('label');
-
+    var label4= document.createElement('label');
+    var label5= document.createElement('label');
+    var label6= document.createElement('label');
+    
+    //html for all labels
     $(label1).html('Return Item');
     $(label2).html('Quantity');
     $(label3).html('Unit Price');
+    $(label4).html('Broken/Lost');
+    $(label5).html('Broken Quantity');
+    $(label6).html('Actual Price');
 
+    //adding class in all labels
     $(label1).addClass('form-label');
     $(label2).addClass('form-label');
     $(label3).addClass('form-label');
+    $(label4).addClass('form-label');
+    $(label5).addClass('form-label');
+    $(label6).addClass('form-label');
 
     var selectbox = document.createElement('select');
     $(selectbox).attr('name','lentDetail_id[]');
@@ -90,19 +109,46 @@ $('#addbtn').click(function(e){
     var qty = document.createElement('input');
     $(qty).attr('type','number');
     $(qty).attr('name','return_qty[]');
+
     var return_date = document.createElement('input');
     $(return_date).attr('type','number');
 
-    $(selectbox).attr('placeholder','ပစ္စည်းအမျိုးအမည်');
+    var selectbox2 = document.createElement('select');
+    var option1 = document.createElement('option');
+    var option2 = document.createElement('option');
+    $(option1).html("ရှိ")
+    $(option2).html('မရှိ');
+    $(option1).attr('value','1');
+    $(option2).attr('value','0');
+    $(selectbox2).append(option1,option2);
+    $(selectbox2).attr('name','has_broken[]');
+
+    var broken_qty = document.createElement('input');
+    $(broken_qty).attr('type','number');
+    $(broken_qty).attr('name','broken_qty[]');
+
+    var actual_price = document.createElement('input');
+    $(actual_price).attr('type','number');
+    $(actual_price).attr('name','actual_price[]');
+
+    //adding placeholder except for 2 select box
     $(qty).attr('placeholder','အရေအတွက်');
     $(return_date).attr('placeholder','တစ်ရက်ငှါးနှုန်း');
+    $(broken_qty).attr('placeholder','ကျိုးပဲ့အရေအတွက်');
+    $(actual_price).attr('placeholder','ကာလပေါက်စျေး');
 
-    $(selectbox).attr('class','form-control lent_item');
+    $(selectbox).attr('class','form-control');
     $(selectbox).attr('lentdetail',lent_id);
-    $(qty).attr('class','form-control lent_qty');
+    $(qty).attr('class','form-control');
     $(qty).attr("min",'0');
-    $(return_date).attr('class','form-control lent_price');
+    $(return_date).attr('class','form-control');
     $(return_date).attr('min','0');
+    $(selectbox2).attr('class','form-control');
+    $(broken_qty).attr('class','form-control');
+    $(broken_qty).attr("min",'0');
+    $(actual_price).attr('class','form-control');
+    $(actual_price).attr('min','0');
+
 
     $.ajax({
         type:"Post",
@@ -122,13 +168,24 @@ $('#addbtn').click(function(e){
     col3.appendChild(label3);
     col3.appendChild(return_date);
 
+    col5.appendChild(label4);
+    col5.appendChild(selectbox2);
 
+    col6.appendChild(label5);
+    col6.appendChild(broken_qty);
+
+    col7.appendChild(label6);
+    col7.appendChild(actual_price);
+
+    
+
+    //delete row
     $(btn).click(function(){
         $(this).parent().parent().remove();
         count--;
     });
 
-    $(row).append(col1,col2,col3,col4);
+    $(row).append(col1,col2,col3,col4,col5,col6,col7);
     $('#return_form').append(row);
 
     $(selectbox).change(function(e){
@@ -146,7 +203,7 @@ $('#addbtn').click(function(e){
                 var splitt = result.split("_");
                 var r_qty = splitt[0];
                 var r_price=splitt[1];
-                //$(qty_input).val(r_qty);
+                $(qty_input).val(r_qty);
                 $(qty_input).attr('max',r_qty);
                 $(price_input).val(r_price);
                 $(price_input).attr('max',r_price);
@@ -154,12 +211,25 @@ $('#addbtn').click(function(e){
         })
     })
     
+    //switch for broken qty and actual price
+    $(selectbox2).change(function(){
+        console.log($(selectbox2).val());
+        if($(selectbox2).val() == '0'){
+            $(col6).hide();
+            $(col7).hide();
+        }
+        else{
+            $(col6).show();
+            $(col7).show();
+        }
+    })
 
     count++;
     hasrow = true;
     console.log(count);
     e.preventDefault();
 })
+
 $('#return_item').change(function(e){
     $.ajax({
         type:'Post',
@@ -176,148 +246,4 @@ $('#return_item').change(function(e){
         }
     })
 })
-
-$('#broken_add_row').click(function(e){
-    var row=document.createElement('div');
-    $(row).attr('class','row');
-    var col1 = document.createElement('div');
-    $(col1).attr('class','col-md-4 mt-3');
-    var col2 = document.createElement('div');
-    $(col2).attr('class','col-md-2 mt-3');
-    var col3 = document.createElement('div');
-    $(col3).attr('class','col-md-4 mt-3');
-    var col4 = document.createElement('div');
-    $(col4).attr('class','col-md-2 mt-3');
-    
-    var btn = document.createElement('button');
-    $(btn).addClass('btn btn-outline-danger mt-4');
-    $(btn).html('-');
-    $(col4).append(btn);
-
-    var label1= document.createElement('label');
-    var label2= document.createElement('label');
-    var label3= document.createElement('label');
-
-    $(label1).html('Item name');
-    $(label2).html('Qty');
-    $(label3).html('Actual Price');
-
-    $(label1).addClass('form-label');
-    $(label2).addClass('form-label');
-    $(label3).addClass('form-label');
-
-    var selectbox = document.createElement('select');
-    var option1 = document.createElement('option')
-    $(option1).html('ငြမ်း');
-    var option2 = document.createElement('option');
-    $(option2).html('အခင်းပြား');
-    $(selectbox).append(option1,option2);
-
-    var qty = document.createElement('input');
-    $(qty).attr('type','number');
-    var return_date = document.createElement('input');
-    $(return_date).attr('type','number');
-
-    $(selectbox).attr('placeholder','ပစ္စည်းအမျိုးအမည်');
-    $(qty).attr('placeholder','အရေအတွက်');
-    $(return_date).attr('placeholder','ကာလပေါက်စျေး');
-
-    $(selectbox).attr('class','form-control');
-    $(qty).attr('class','form-control borken-qty');
-    $(return_date).attr('class','form-control actual-price');
-
-    col1.appendChild(label1);
-    col1.appendChild(selectbox);
-
-    col2.appendChild(label2);
-    col2.appendChild(qty);
-
-    col3.appendChild(label3);
-    col3.appendChild(return_date);
-
-
-    $(btn).click(function(){
-        $(this).parent().parent().remove();
-    });
-
-
-    $(row).append(col1,col2,col3,col4);
-    $('#moreForm').append(row);
-    kount++; 
-    e.preventDefault(); 
-})
-
-// var thing = document.getElementsByClassName('thing');
-// var amount = document.getElementsByClassName('amount');
-// var time = document.getElementsByClassName('time');
-// var submit = document.getElementById('submit');
-// var return_table = document.getElementById('return_table');
-// var broken_qty = document.getElementsByClassName('broken-qty');
-// var actual_price= document.getElementsByClassName('actual-price')
-// var content = '';
-// var broken_table_content = '';
-
-// submit.onclick= function submitForm(e){
-//     console.log("added row length is "+thing.length)
-//     for(var index = 0; index < thing.length; index++){
-//         console.log(thing[index].value);
-//     }
-//     if($('#customer').val().length >0 && $('#invoice').val().length >0 && $('#return_qty').val().length >0 && $('#return_date').val().length >0)
-//     {
-//         console.log('hello');
-//         tableData();
-//         console.log('count more than once')
-//         if(hasrow){
-//             for(var index = 0; index<thing.length;index++){
-//                 content+='<tr>';
-//                 content+='<td>'+time[index].value+'</td>';
-//                 content+='<td>ငြမ်း</td>';
-//                 content+='<td>'+amount[index].value+'</td>';
-//                 content+='</tr>';
-//             }
-//         }
-//         $('#return_table').html(content);
-//         if($('#hasBroken').val() == 'true'){
-//             for(var index = 0; index<= broken_qty.length; index++){
-//                 broken_table_content+='<tr>';
-//                 broken_table_content+='<td>'+2+"</td>";
-//                 broken_table_content+='<td>'+$('#invoice').val()+"</td>";
-//                 broken_table_content+='<td>ငြမ်း</td>';
-//                 broken_table_content+='<td>'+broken_qty[index].value+"</td>";
-//                 broken_table_content+='<td>'+actual_price[index].value+"</td>";
-//                 broken_table_content+='<td>'+((broken_qty[index].value)*(actual_price[index].value))+"</td>";
-//                 broken_table_content+='<td>action</td>';
-//                 broken_table_content+='</tr>';
-//             }
-//             broken_table.innerHTML=broken_table_content;
-//         }
-
-
-//     }
-//     $('#customer').val(null);
-//     $('#invoice').val(null);
-//     $("#return_qty").val(null);
-//     $('#return_date').val(null);
-//     $('#hasBroken').val("false");
-//     // $('#return').empty();
-//     count = 1;
-//     e.preventDefault();
-// }
-// function tableData(){
-//     content+="<tr>";
-//     content+="<td rowspan = '"+count+"'>1</td>";
-//     content+="<td rowspan = '"+count+"'>"+$("#invoice").val()+"</td>";
-//     content+="<td rowspan = '"+count+"'>"+$('#customer').val()+"</td>";
-//     content+="<td>"+$('#return_date').val()+"</td>";
-//     content+="<td>"+$('#return_item :selected').text()+"</td>";
-//     content+="<td>"+$("#return_qty").val()+"</td>";
-//     content+="<td rowspan = '"+count+"'>"+100000+"</td>";
-//     content+="<td rowspan = '"+count+"'>"+$('#employee :selected').text()+"</td>";
-//     content+="<td rowspan = '"+count+"'>"+10000+"</td>";
-//     content+="<td rowspan = '"+count+"'>"+$('#hasBroken :selected').text()+"</td>";
-//     content+="<td rowspan = '"+count+"'>blah</td>";
-//     content+="<td rowspan = '"+count+"'>blah</td>";
-//     content+="<td rowspan = '"+count+"'>blah</td>";
-//     content+="</tr>";  
-// }
 
