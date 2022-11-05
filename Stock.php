@@ -1,5 +1,9 @@
+<?php
+include_once __DIR__."/includes/config.php";
+include_once __DIR__."/controller";
+?>
 <?php 
-include_once "layouts/header.php"
+include_once "layouts/header.php";
 ?>
       <div class="main-panel">
         <div class="content-wrapper">
@@ -22,20 +26,34 @@ include_once "layouts/header.php"
                               <th>ပြန်အပ်သည့်အရေအတွက်</th>
                               <th>ကျိုးပဲ့/ပျောက်ဆုံးအရေအတွက်</th>
                               <th>ဆိုင်ရှိအရေအတွက်</th>
-                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <th>1</th>
-                              <th>Name</th>
-                              <th>Qty</th>
-                              <th>L_Qty</th>
-                              <th>R_Qty</th>
-                              <th>B_Qty</th>
-                              <th>S_Qty</th>
-                              <th><span><img src="images/pencil.png" alt="" width="30px" height="30px"></span><span><img src="images/trash-bin.png" alt="" width="30px" height="30px"></span></th>
-                            </tr>
+                          <?php 
+                          //asdasd
+                          // $query = "select customer.name, lent.* from customer join lent on customer.id = lent.customer_id";
+                          // $result = mysqli_query($con,$query);
+                          // $count = 1;
+                          // foreach($result as $row){ 
+                                                      
+                          //   $cus_name=$row['name']; 
+                          
+                          //   $data_id = $row['id']; 
+                          //   $data_inv = $row['invoice_number']; 
+                             
+                          //   $data_date = $row['lent_date']; 
+                          //   $data_qty = $row['total_qty']; 
+                          //   $data_dep = $row['deposit'];  
+                             
+                        ?> 
+                        <tr> 
+
+                        </tr> 
+                        <?php 
+                        // $count ++; 
+                        // } 
+                        
+                        ?>
                           </tbody>
                       </table>
                       </div>
