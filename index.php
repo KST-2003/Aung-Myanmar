@@ -27,7 +27,7 @@ include_once __DIR__."/layouts/header.php";
                 <div class="col-md-4 stretch-card">
                 <form method="POST">
                   <label class="form-label">Enter Year</label>
-                  <input type="number" class="form-control" id="input" required>
+                  <input type="text" class="form-control" id="input" >
                 </form>
                 </div>
                 <div class="col-md-4  stretch-card transparent">

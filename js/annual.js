@@ -8,11 +8,10 @@
 // });
 var input = document.getElementById('input')
 input.addEventListener("keypress",function(event){
-    var value=input.value;
         if(event.key == "Enter"){
+            console.log("Enter");
+            var value=input.value;
             if(value !==""){
-                console.log("Enter");
-
                 console.log(value);
                 event.preventDefault();
                 $.ajax({
@@ -35,9 +34,9 @@ input.addEventListener("keypress",function(event){
                             
                         }             
                     }
-                })               
-            }
+                })  
+            }             
+            
         }        
     
-    event.preventDefault();
 })
