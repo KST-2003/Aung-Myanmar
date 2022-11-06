@@ -100,17 +100,21 @@ include_once 'layouts/header.php';
                               if(!empty($_GET['id'])){
                                 $id= $_GET['id'];
                                 echo "*************".$id;
-                                $query="SELECT lent.invoice_number,lent_detail.item_name,return_tb.* FROM return_tb 
+                                $query="SELECT lent.*,lent_detail.*,return_tb.* FROM return_tb 
                                 INNER JOIN lent on return_tb.lent_id=lent.id INNER JOIN lent_detail on 
-                                lent_detail.id=return_tb.LentDetail_id where lent.id=".$id."and has_broken=1" ;
+                                lent_detail.id=return_tb.LentDetail_id WHERE return_tb.has_broken=1 and return_tb.lent_id=".$id;
+
+                                $query1="Select * from lent";
                               }
                               else{
-                                $query="SELECT lent.invoice_number,lent_detail.item_name,return_tb.* FROM return_tb 
+                                $query="SELECT lent.*,lent_detail.*,return_tb.* FROM return_tb 
                                 INNER JOIN lent on return_tb.lent_id=lent.id INNER JOIN lent_detail on 
                                 lent_detail.id=return_tb.LentDetail_id WHERE return_tb.has_broken=1";
                               }
+                              echo $query;
                               $count=1;
                               $query_execute = mysqli_query($con,$query);
+                              print_r($query_execute);
                               while($result = mysqli_fetch_array($query_execute)){
                                 echo "<tr>";
                                 echo "<td>".$count."</td>";
