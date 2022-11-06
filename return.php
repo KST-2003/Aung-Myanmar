@@ -306,7 +306,7 @@ include_once "layouts/header.php";
                                                         $count=0;
                                                         echo "<tr>";
                                                         echo ($count);
-                                                        $query2="SELECT lent.invoice_number,customer.name,lent.total_qty,sum(return_qty),lent.lent_date,max(return_date),lent.deposit,
+                                                        $query2="SELECT lent.*,customer.name,sum(return_qty),max(return_date),sum(broken_qty),
                                                         max(has_broken) FROM customer INNER JOIN lent ON customer.id=lent.customer_id INNER JOIN return_tb on lent.id=return_tb.lent_id
                                                         WHERE return_tb.lent_id=".$q_id." limit 1";
                                                         $result2 = mysqli_query($con,$query2);
@@ -318,7 +318,8 @@ include_once "layouts/header.php";
                                                             echo "<td>".$outcome2['lent_date'];
                                                             echo "<td>".$outcome2['max(return_date)']."</td>";
                                                             echo "<td>".$outcome2['total_qty']."</td>";
-                                                            echo "<td>".$outcome2['sum(return_qty)']."</td>";
+                                                            $return_qty=intval($outcome2['sum(return_qty)'])+intval($outcome2['sum(broken_qty)']);
+                                                            echo "<td>".$return_qty."</td>";
                                                             echo "<td>100000</td>";
                                                             echo "<td>".$outcome2['deposit']."</td>";
                                                             if($outcome2['max(has_broken)']==1)
