@@ -1,7 +1,7 @@
 <?php
 include_once __DIR__."/includes/config.php";
-if(isset($_POST['year'])){
-    $year=$_POST['year'];
+    if(isset($_POST['year'])){
+      $year=$_POST['year'];
       $query="SELECT
       COUNT(id),
       DATE_FORMAT(lent_date, '%Y-%m-%d') AS DAY,
@@ -36,9 +36,6 @@ if(isset($_POST['year'])){
     //   echo json_encode($output1,$output);
          
     echo $output['deposit']."_".$output1['Qty'];
-
-}
-else{
-    echo 00;
-}
+    }
+  
 ?>

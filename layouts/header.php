@@ -108,7 +108,7 @@ if(!isset($_SESSION['email']))
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#category" aria-expanded="false" aria-controls="category">
               <i class="icon-columns menu-icon"></i>
-              <span class="menu-title">Category</span>
+              <span class="menu-title">ပစ္စည်းစာရင်း</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="category">
@@ -121,7 +121,7 @@ if(!isset($_SESSION['email']))
           <li class="nav-item">
             <a class="nav-link" href="customer.php">
               <i class="icon-head menu-icon"></i>
-              <span class="menu-title">Customer</span>
+              <span class="menu-title">ငှားရမ်းသူ</span>
             </a>
           </li>
           <li class="nav-item">
@@ -146,21 +146,21 @@ if(!isset($_SESSION['email']))
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#stock" aria-expanded="false" aria-controls="category">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Stock</span>
+              <span class="menu-title">စတော့</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="stock">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="stock.php">စာရင်းစာအုပ်</a></li>
-                <li class="nav-item"> <a class="nav-link" href="additem.php">Add item</a></li>
-                <li class="nav-item"> <a class="nav-link" href="deposit.php">Deposit</a></li>
+                <li class="nav-item"> <a class="nav-link" href="additem.php">အသစ်ရောက်ပစ္စည်းစာရင်း</a></li>
+                <li class="nav-item"> <a class="nav-link" href="deposit.php">စပေါ်ငွေ</a></li>
               </ul>
             </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="employee.php">
               <i class="icon-head menu-icon"></i>
-              <span class="menu-title">Employees</span>
+              <span class="menu-title">အလုပ်သမားများ</span>
             </a>
           </li>
         </ul>

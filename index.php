@@ -1,9 +1,6 @@
 <?php
 include_once __DIR__."/includes/config.php";
 include_once __DIR__."/includes/db.php";
-// if(isset($_POST['submit'])){
-
-// }
 ?>
 <?php
 include_once __DIR__."/layouts/header.php";
@@ -27,7 +24,14 @@ include_once __DIR__."/layouts/header.php";
                 <div class="col-md-4 stretch-card">
                 <form method="POST">
                   <label class="form-label">Enter Year</label>
+                  <div class="row">
+                  <div class="col-md-10">
                   <input type="text" class="form-control" id="input" >
+                  </div>
+                  <div class="col-md-2 d-flex justify-content-center align-items-center">
+                  <a  id="search" href="#"><i class="mdi mdi-magnify mdi-36px"></i></a>
+                  </div>
+                  </div>
                 </form>
                 </div>
                 <div class="col-md-4  stretch-card transparent">
