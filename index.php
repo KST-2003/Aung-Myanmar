@@ -1,6 +1,42 @@
 <?php
 include_once __DIR__."/includes/config.php";
 include_once __DIR__."/includes/db.php";
+if(isset($_POST['search'])){
+  if(!empty($_POST['year'])){
+    $year=$_POST['year'];
+    $query="SELECT
+    COUNT(id),
+    DATE_FORMAT(lent_date, '%Y-%m-%d') AS DAY,
+    DATE_FORMAT(lent_date, '%Y-%m') AS MONTH,
+    DATE_FORMAT(lent_date, '%Y') AS YEAR,
+    sum(deposit) AS deposit
+  
+    FROM
+    lent
+    WHERE
+    YEAR(lent_date) = ".$year."
+    GROUP BY
+    DATE_FORMAT(lent_date, '%Y ');";
+    $query_run = mysqli_query($con, $query);
+    $output=mysqli_fetch_array($query_run,MYSQLI_ASSOC);
+    ///
+    $query1="SELECT
+    COUNT(id),
+    DATE_FORMAT(lent_date, '%Y-%m-%d') AS DAY,
+    DATE_FORMAT(lent_date, '%Y-%m') AS MONTH,
+    DATE_FORMAT(lent_date, '%Y') AS YEAR,
+    sum(total_qty) AS Qty
+  
+    FROM
+    lent
+    WHERE
+    YEAR(lent_date) = ".$year."
+    GROUP BY
+    DATE_FORMAT(lent_date, '%Y ');";
+    $query_run1 = mysqli_query($con, $query1);
+    $output1=mysqli_fetch_array($query_run1,MYSQLI_ASSOC);
+  }
+}
 ?>
 <?php
 include_once __DIR__."/layouts/header.php";
@@ -26,10 +62,10 @@ include_once __DIR__."/layouts/header.php";
                   <label class="form-label">Enter Year</label>
                   <div class="row">
                   <div class="col-md-10">
-                  <input type="text" class="form-control" id="input" >
+                  <input type="text" class="form-control" name="year">
                   </div>
                   <div class="col-md-2 d-flex justify-content-center align-items-center">
-                  <a  id="search" href="#"><i class="mdi mdi-magnify mdi-36px"></i></a>
+                  <button class="btn btn-primary" type="submit" name="search"><i class="mdi mdi-magnify mdi-18px"></i></button>
                   </div>
                   </div>
                 </form>
@@ -38,7 +74,13 @@ include_once __DIR__."/layouts/header.php";
                   <div class="card card-dark-blue">
                     <div class="card-body">
                       <p class="mb-4">Total Deposit</p>
-                      <p class="fs-30 mb-2" id="here"></p>
+                      <p class="fs-30 mb-2">
+                        <?php
+                          if(isset($_POST['year'])){
+                          print_r($output['deposit']);
+                          }                       
+                        ?>
+                      </p>
                       <p>Yearly</p>
                     </div>
                   </div>
@@ -47,7 +89,13 @@ include_once __DIR__."/layouts/header.php";
                   <div class="card card-light-danger">
                     <div class="card-body">
                       <p class="mb-4">Total Qty of item(lented)</p>
-                      <p class="fs-30 mb-2" id="there"></p>
+                      <p class="fs-30 mb-2">
+                        <?php
+                        if(isset($_POST['year'])){
+                          print_r($output1['Qty']);
+                        }
+                        ?>
+                      </p>
                         <p>Yearly</p>
                     </div>
                   </div>
