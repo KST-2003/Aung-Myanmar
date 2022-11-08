@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2022 at 07:57 AM
+-- Generation Time: Nov 08, 2022 at 10:33 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -51,7 +51,7 @@ CREATE TABLE `customer` (
   `name` varchar(255) NOT NULL,
   `NRC` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
-  `phone_number` int(11) NOT NULL
+  `phone_number` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -59,8 +59,10 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `name`, `NRC`, `address`, `phone_number`) VALUES
-(1, 'Kaung Si Thu', ' 0843EYUII', '62st ', 875433),
-(2, ' Aung Myat Thu', ' 631GHJKL', '62st', 2345623);
+(1, 'Kaung Si Thu', ' 0843EYUII', '62st ', '875433'),
+(2, ' Aung Myat Thu', ' 631GHJKL', '62st', '2345623'),
+(3, 'U Aye', '111111', '11111', '2147483647'),
+(4, 'kyaw kyaw', '111111', '65', '2147483647');
 
 -- --------------------------------------------------------
 
@@ -81,7 +83,8 @@ CREATE TABLE `dep` (
 
 INSERT INTO `dep` (`id`, `comment`, `ranking`, `lent_id`) VALUES
 (9, 'hi`  ', 1, 14),
-(10, '', 0, 13);
+(10, '', 1, 13),
+(11, 'hello`  ', 1, 15);
 
 -- --------------------------------------------------------
 
@@ -113,7 +116,7 @@ INSERT INTO `employee` (`id`, `name`, `address`, `phone_number`) VALUES
 
 CREATE TABLE `item` (
   `id` int(11) NOT NULL,
-  `item_name` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `category_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -121,10 +124,10 @@ CREATE TABLE `item` (
 -- Dumping data for table `item`
 --
 
-INSERT INTO `item` (`id`, `item_name`, `category_id`) VALUES
+INSERT INTO `item` (`id`, `name`, `category_id`) VALUES
 (1, '၁၀ပေငြမ်း', 1),
-(2, 'qwer', 1),
-(3, ' 10nyan', 1);
+(2, 'asdf', 1),
+(3, 'jkl;', 1);
 
 -- --------------------------------------------------------
 
@@ -138,17 +141,20 @@ CREATE TABLE `lent` (
   `customer_id` int(11) NOT NULL,
   `lent_date` date NOT NULL,
   `total_qty` int(11) NOT NULL,
-  `deposit` int(11) NOT NULL
+  `deposit` int(11) NOT NULL,
+  `checker` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `lent`
 --
 
-INSERT INTO `lent` (`id`, `invoice_number`, `customer_id`, `lent_date`, `total_qty`, `deposit`) VALUES
-(13, '1234567 ', 1, '2022-10-28', 10, 30000),
-(14, '111111', 2, '2022-11-01', 10, 5656),
-(15, '77777', 1, '2022-11-02', 10, 100000);
+INSERT INTO `lent` (`id`, `invoice_number`, `customer_id`, `lent_date`, `total_qty`, `deposit`, `checker`) VALUES
+(13, '1234567 ', 1, '2022-10-28', 10, 30000, 0),
+(14, '111111', 2, '2022-11-01', 10, 5656, 0),
+(15, '77777', 1, '2022-11-02', 10, 100000, 0),
+(16, '1283', 1, '0000-00-00', 30, 1200, 0),
+(17, '9888888', 1, '2021-07-04', 10, 150000, 0);
 
 -- --------------------------------------------------------
 
@@ -171,7 +177,10 @@ CREATE TABLE `lent_detail` (
 
 INSERT INTO `lent_detail` (`id`, `emp_id`, `item_qty`, `unit_price`, `item_name`, `lent_id`) VALUES
 (24, 28, 5, 700, 1, 15),
-(25, 28, 5, 1000, 2, 15);
+(25, 28, 5, 1000, 2, 15),
+(26, 26, 0, 700, 1, 16),
+(27, 26, 5, 700, 2, 17),
+(28, 26, 5, 1000, 1, 17);
 
 -- --------------------------------------------------------
 
@@ -207,7 +216,9 @@ CREATE TABLE `stock` (
 
 INSERT INTO `stock` (`id`, `item_id`, `income_date`, `qty`, `actual_price`, `lent_price`) VALUES
 (1, 1, '2022-10-15', 10, 50000, 1000),
-(2, 1, '2022-10-24', 13, 50000, 800);
+(2, 1, '2022-10-24', 13, 50000, 800),
+(3, 1, '2022-11-02', 7, 80000, 800),
+(4, 2, '2022-11-02', 7, 80000, 800);
 
 -- --------------------------------------------------------
 
@@ -246,7 +257,9 @@ CREATE TABLE `workaddress` (
 
 INSERT INTO `workaddress` (`id`, `cus_id`, `work_address`) VALUES
 (1, 1, '30st'),
-(2, 2, '35st');
+(2, 2, '35st'),
+(3, 3, '35st'),
+(4, 4, 'sdfsdf');
 
 --
 -- Indexes for dumped tables
@@ -341,13 +354,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `dep`
 --
 ALTER TABLE `dep`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `employee`
@@ -365,13 +378,13 @@ ALTER TABLE `item`
 -- AUTO_INCREMENT for table `lent`
 --
 ALTER TABLE `lent`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `lent_detail`
 --
 ALTER TABLE `lent_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `return_tb`
@@ -383,7 +396,7 @@ ALTER TABLE `return_tb`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -395,7 +408,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `workaddress`
 --
 ALTER TABLE `workaddress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
