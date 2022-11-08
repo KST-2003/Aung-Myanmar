@@ -6,5 +6,13 @@ class ReturnController extends Returnn{
         $result = $this->createReturn($lent_id,$lentDetail_id,$return_qty,$return_date);
         return $result;
     }
+    public function updateDiscount($id,$discount){
+        $response = $this->changeDiscount($id,$discount);
+        return $response;
+    }
+    public function updateChecker($id){
+        $response = $this->changeChecker($id);
+        return $response;
+    }
 }
 ?>

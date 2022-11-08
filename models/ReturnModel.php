@@ -19,6 +19,29 @@ class Returnn{
         else
         return false;
     }
+    public function changeDiscount($id,$discount){
+        $cont = Database::connect();
+        $sql = "update return_tb set discount=:discount where id=:id";
+        $statement = $cont->prepare($sql);
+
+        $statement->bindParam(':discount',$discount);
+        $statement->bindParam(':id',$id);
+        if($statement->execute())
+            return true;
+        else
+            return false;
+    }
+    public function changeChecker($id){
+        $cont=Database::connect();
+        $sql = "update lent set checker = 1 where id=:id";
+        $statement=$cont->prepare($sql);
+
+        $statement->bindParam(':id',$id);
+        if($statement->execute())
+        return true;
+        else 
+        return false;
+    }
 }
 
 ?>
