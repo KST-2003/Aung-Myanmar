@@ -20,18 +20,31 @@ if(isset($_POST['detail']))
   {
       $add=$_POST['add'];
   }
-  if(!empty($_POST['ph']))
-  {
-      $ph=$_POST['ph'];
-  }
+if (!isset($_POST['ph']) || $_POST['ph'] == '' ) {
+    $ph = null;
+   
+}else {
+    $ph = $_POST['ph'];
+}
+//   if(($_POST['ph']) && $_POST['ph'] != 0)
+//   {
+//       $ph=$_POST['ph'];
+//   }
+//   else {
+//     $ph_error = "Please enter correct phone number!!";
+//   }
   if(!empty($_POST['work_add']))
   {
       $a_work_add=$_POST['work_add'];
       $work_add=$a_work_add[0];
   }
 
-
+if(!empty($_POST['ph'])){
 $result=$customercontroller->addCustomer($name,$nrc,$add,$ph);
+}
+else{
+    $ph_error ="Please enter valid phone number!!";
+}
 $num = $ccontroller->getWorkId();
 $id=$num['id'];
 
@@ -91,29 +104,30 @@ include_once "layouts/header.php";
       </div>
                     <form action="" method="post">
                     <div class="modal-body">
-                    <h4>Customer</h4>
-                    <p >ငှားရမ်းသူ</p>
+                    <h4>ငှားရမ်းသူ</h4>
+                   
                  
                     
                                         <div class="row" id="">
                                             <div class="col-md-6 mt-3">
-                                                <label for="" class="form-label">Name</label>
+                                                <label for="" class="form-label">အမည်</label>
                                                 <input type="text" name="name" id="" class="form-control" placeholder="အမည်" required>
                                             </div>
                                             <div class="col-md-6 mt-3">
-                                                <label for="" class="form-label">NRC</label>
+                                                <label for="" class="form-label">မှတ်ပုံတင်နံပါတ်</label>
                                                 <input type="text" name="nrc" id="" class="form-control" placeholder="မှတ်ပုံတင်နံပါတ်" required>
                                             </div>
                                             <div class="col-md-6 mt-3">
-                                                <label for="" class="form-label">Ph No</label>
-                                                <input type="text" name="ph" id="" class="form-control" placeholder="ဖုန်းနံပါတ်">
+                                                <label for="" class="form-label">ဖုန်းနံပါတ်</label>
+                                                <input type="text" name="ph" id="phone" class="form-control" placeholder="ဖုန်းနံပါတ်" required>
+                                                <!-- <span class="text-danger" id="here"><?php //if(isset($ph_error)) {echo $ph_error;} ?>  </span> -->
                                             </div>
                                             <div class="col-md-6 mt-3">
-                                                <label for="" class="form-label">Address</label>
+                                                <label for="" class="form-label">နေရပ်လိပ်စာ</label>
                                                 <input type="text" name="add" id="" class="form-control" placeholder="နေရပ်လိပ်စာ">
                                             </div>
                                             <div class="col-md-11 mt-3">
-                                                <label for="" class="form-label">Work Address</label>
+                                                <label for="" class="form-label">လုပ်ငန်းခွင်လိပ်စာ</label>
                                                 <input type="text" name="work_add[]" id="" class="form-control" placeholder="လုပ်ငန်းခွင်လိပ်စာ">
                                             </div>
                                             <div class="col-md-1 mt-5">
@@ -150,7 +164,7 @@ include_once "layouts/header.php";
                                                     <th>နေရပ်လိပ်စာ</th>
                                                     <th>ဖုန်းနံပါတ်</th>
                                                     <th>လုပ်ငန်းခွင်လိပ်စာ</th>
-                                                    <th>Action</th>
+                                                    <th>လုပ်ဆောင်ချက်</th>
                                                     
                                                     </tr>
                                                 </thead>
@@ -199,7 +213,7 @@ include_once "layouts/header.php";
             </div>
      </div> 
      <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="myModalLabel">Customer Work Address</h4>
@@ -222,11 +236,11 @@ include_once "layouts/header.php";
                     <div class="row mb-3">
                     <div class="col-md-5">
                     <label for="" class="form-label"><h4>Add Work Address</h4></label>
-                    <input type="text" name="new_work" id="newwork" placeholder="Add New Work Address" class="form-control" required>                       
+                    <input type="text" name="new_work" id="newwork" placeholder="Work Address" class="form-control" required>                       
                     </div>
-                    <div class="col-md-1 offset-md-5" >
+                    <div class="col-md-1 offset-md-3" >
                    
-                    <button style="margin-top:35px" type="submit" name="work_detail" class="btn btn-outline-primary " id="workdetail">Submit</button>
+                    <button style="margin-top:35px" type="submit" name="work_detail" class="btn btn-outline-primary btn-md " id="workdetail">Submit</button>
                     </div>
                     </div>
                    
@@ -238,7 +252,7 @@ include_once "layouts/header.php";
                 <tr>
                 <th>စဥ်</th>
                 <th>လုပ်ငန်းခွင်လိပ်စာ</th>
-                <th>Action</th>
+                <th>လုပ်ဆောင်ချက်</th>
                 </tr>
                 </thead>
                 <tbody id="cusdetail">                 
@@ -286,6 +300,18 @@ include_once "layouts/footer.php";
 <script>
  
 $(document).ready(function(){
+
+    $('#phone').keyup(function(){
+        if($(this).val().length<9){
+       $('#here').html('Please enter valid phone number');}
+       else 
+       $('#here').remove();
+       
+     
+    })
+        
+    
+
     // Add Class
     $('.cust_edit').click(function(){
         $(this).addClass('editMode');
