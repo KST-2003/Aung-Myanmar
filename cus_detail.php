@@ -19,7 +19,7 @@ if($result){
         $output.="<tr id=".$id.">";
         $output.="<td>".$count."</td>";        
         $output.="<td><div contentEditable='true' class='cust_edit' id='work_address_".$data['id']."' >".$data['work_address']."</div></td>";
-        $output.="<td  detail=".$data['id']."><a class='btn btn-danger ddetail '> Delete</a></td>";
+        $output.="<td  detail=".$data['id']."><a class='btn btn-danger btn-sm ddetail  '> Delete</a></td>";
         $output.="</tr>";
     }
     echo $output;
