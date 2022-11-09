@@ -30,6 +30,7 @@ if(!isset($_SESSION['email']))
   <!-- <link rel="stylesheet" href="css/style.css"> -->
   <link rel="stylesheet" href="vendors/datatables.net-bs4/dataTables.bootstrap4.css">
   <link rel="stylesheet" href="css/style.css">
+  <linK rel="stylesheet" href="css/detail_form.css">
 
 </head>
 <body>

@@ -102,7 +102,6 @@ include_once "layouts/header.php";
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <p class="card-title">Deposit</p>
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
@@ -113,7 +112,7 @@ include_once "layouts/header.php";
                                                     <th>ဘောက်ချာနံပါတ်</th>
                                                     <th>စပေါ်ငွေ</th>
                                                     <th>မှတ်ချက်</th>
-                                                    <th>Status</th>
+                                                    <th>လုပ်ဆောင်ချက်</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="dep_table">

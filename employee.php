@@ -102,7 +102,6 @@ include_once 'layouts/header.php';
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">Employees Table</p>
                   <div class="row">
                     <div class="col-12">
                       <div class="table-responsive">
@@ -113,7 +112,7 @@ include_once 'layouts/header.php';
                               <th>အမည်</th>
                               <th>ဖုန်းနံပါတ်</th>
                               <th>နေရပ်လိပ်စာ</th>
-                              <th>Action</th>
+                              <th>လုပ်ဆောင်ချက်</th>
                             </tr>
                           </thead>
                           <tbody id="emp_table">

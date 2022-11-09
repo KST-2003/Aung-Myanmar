@@ -13,16 +13,13 @@ if(isset($_POST['upload'])){
   if(!empty($_POST['lent_date'])){
     $lent_date=$_POST['lent_date'];
   }
-  if(!empty($_POST['total_qty'])){
-    $total_qty=$_POST['total_qty'];
-  }
   if(!empty($_POST['deposit'])){
     $deposit=$_POST['deposit'];
   }
   if(!empty($_POST['emp_name'])){
     $emp_name=$_POST['emp_name'];
   }
-  $query1 = "INSERT INTO lent (invoice_number,customer_id,lent_date,total_qty,deposit) VALUES ('$inv_number','$cus_name','$lent_date','$total_qty','$deposit')";
+  $query1 = "INSERT INTO lent (invoice_number,customer_id,lent_date,total_qty,deposit) VALUES ('$inv_number','$cus_name','$lent_date','','$deposit')";
   $query_run1 = mysqli_query($con, $query1);
   $lent_id= mysqli_insert_id($con);
 
@@ -79,7 +76,7 @@ include_once 'layouts/header.php';
                            
                             <div class="row" id="content2">
 
-                                <div class="col-md-6 mt-3">
+                                <div class="col-md-4 mt-3">
                                 <label for="">Customer Name</label>
                                 <select name="cus_name" id="" class="form-control">
                                 <?php 
@@ -97,19 +94,14 @@ include_once 'layouts/header.php';
                                 </select>
                                 </div>
 
-                                <div class="col-md-6 mt-3">
+                                <div class="col-md-4 mt-3">
                                 <label for="">Invoice No</label>
                                 <input type="text" class="form-control" name="inv_number" id="" placeholder="ဘောင်ချာနံပါတ်">
                                 </div>
 
-                                <div class="col-md-6 mt-3">
+                                <div class="col-md-4 mt-3">
                                 <label for="">Lent Date</label>
                                 <input type="date" class="form-control" name="lent_date">
-                                </div>
-
-                                <div class="col-md-6 mt-3">
-                                <label for="">Total Qty</label>
-                                <input type="text" class="form-control" name="total_qty" id="" placeholder="စုစုပေါင်းအရေအတွက်">
                                 </div>
 
                                 <div class="col-md-6 mt-3">
@@ -191,7 +183,6 @@ include_once 'layouts/header.php';
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">Lent Table</p>
                   <div class="row">
                     <div class="col-12">
                       <div class="table-responsive">
@@ -200,11 +191,11 @@ include_once 'layouts/header.php';
 
                             <tr>
                               <th>စဥ်</th>
-                              <th>ငှါးရမ်းသူအမည်	</th>
+                              <th>ငှါးရမ်းသူအမည်</th>
                               <th>ဘောင်ချာနံပါတ်</th>
                               <th>စုစုပေါင်းအရေအတွက်</th>
-                              <th>စပေါ်ငွေ	</th>
-                              <th>Action</th>
+                              <th>စပေါ်ငွေ</th>
+                              <th>လုပ်ဆောင်ချက်</th>
                             </tr>
                           </thead>
                           <tbody id="lent_table">
@@ -231,7 +222,9 @@ include_once 'layouts/header.php';
                         <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a></td> 
+                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a>
+                            <a class="btn btn-danger delete_lent" id="">Delete</a>
+                       </td> 
                         </tr> 
                         <?php 
                         $count ++; 
@@ -256,21 +249,73 @@ include_once 'layouts/header.php';
                   </button>
                   </div>
                   <div class="modal-body">
-                    <div class="table-responsive">
-                    <table id="datatable" class="display expandable-table" style="width:100%">
-                    <thead>
-                      <tr>
-                      <th>စဥ်</th>
-                      <th>အမည်</th>
-                      <th>အရေအတွက်</th>
-                      <th>တစ်ရက်ငှါးရမ်းနှုန်း</th>
-                      <th>တာ၀န်ခံအမည်</th>
-                      </tr>
-                    </thead>
-                    <tbody id="lent_detail_body">
-                    </tbody>
-                    </table>
-                    </div>
+                                            
+<div class="receipt-content">
+    <div class="container bootstrap snippets bootdey">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="invoice-wrapper">
+					<div class="intro">
+          အမည်:&nbsp;<strong>John McClane</strong>
+					</div>
+
+					<div class="payment-info">
+						<div class="row">
+							<div class="col-md-6">
+								<span>ဘောင်ချာနံပါတ်</span>
+								<strong>434334343</strong>
+							</div>
+							<div class="col-md-6 text-right">
+								<span>ငှားရမ်းသည့်ရက်စွဲ</span>
+								<strong>Jul 09, 2014 - 12:20 pm</strong>
+							</div>
+						</div>
+					</div>
+
+					<div class="line-items">
+						<div class="headers clearfix">
+							<div class="row">
+								<div class="col-md-4">အမည်</div>
+								<div class="col-md-3">အရေအတွက်</div>
+								<div class="col-md-5 text-right">တစ်ရက်ငှားရမ်းနှုန်း</div>
+							</div>
+						</div>
+						<div class="items" id="lent_detail_table">
+							<!-- <div class="row item">
+								<div class="col-md-4 desc">
+									Bootstrap snippet
+								</div>
+								<div class="col-md-3 qty">
+									1
+								</div>
+								<div class="col-md-5 amount text-right">
+									$20.00
+								</div>
+							</div> -->
+							<div class="row item">
+								<div class="col-md-4 desc">
+									Snippets on bootdey 
+								</div>
+								<div class="col-md-3 qty">
+									2
+								</div>
+								<div class="col-md-5 amount text-right">
+									$18.00
+								</div>
+							</div>
+						</div>
+						<div class="print">
+							<a href="#">
+								<i class="fa fa-print"></i>
+								Print this receipt
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>                    
                   </div>
                 </div>
               </div>
@@ -381,7 +426,7 @@ include_once 'layouts/footer.php'
                     }else{ 
                       console.log(response);
                       
-                      $('#lent_detail_body').html(response)
+                      // $('#lent_detail_body').html(response)
                         
                     }             
                 }

@@ -156,7 +156,7 @@ include_once "layouts/header.php";
                                                     <th>အသစ်ရောက်အရေအတွက်</th>
                                                     <th>ပစ္စည်းတန်ဖိုး</th>
                                                     <th>တစ်ရက်ငှားရမ်းနှုန်း</th>
-                                                    <th>Action</th>
+                                                    <th>လုပ်ဆောင်ချက်</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="stock">

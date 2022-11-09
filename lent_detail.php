@@ -4,17 +4,14 @@ $id=$_POST['cid'];
 $lent_detail_controller = new Detail();
 $outcomes=$lent_detail_controller->getDetail($id);
 $data="";
-$count=0;
 if($outcomes){
     foreach($outcomes as $outcome){
-        $count++;
-        $data.="<tr>";
-        $data.= "<td><div  class='' id=''>".$count."</div></td>";
-        $data.= "<td><div  id='item_name_".$outcome['id']."'>".$outcome['item_name']."</div></td>";
-        $data.= "<td><div contentEditable='true' class='detail_edit' id='item_qty_".$outcome['id']."'>".$outcome['item_qty']."</div></td>";
-        $data.= "<td><div contentEditable='true' class='detail_edit' id='unit_price_".$outcome['id']."'>".$outcome['unit_price']."</div></td>";   
-        $data.= "<td><div  class='' id=''>".$outcome['name']."</div></td>";   
-        $data.="</tr>";
+        $data.="<div class='row item'>";
+        $data.="<div class='col-md-4 desc'>".$outcome['name']."</div>";
+        $data.="<div class='col-md-3 qty'>".$outcome['item_qty']."</div>";
+        $data.="<div class='col-md-5 amount text-right'>".$outcome['unit_price']."</div>";
+        $data.="</div>";
+
     }
     echo $data;
 }
