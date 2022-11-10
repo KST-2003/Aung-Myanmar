@@ -326,6 +326,9 @@ include_once 'layouts/header.php';
               <div class="col-md-4" id="tot_qty">
                 
               </div>
+              <div class="col-md-4 mt-2">
+              တာဝန်ခံအမည် <p id="emp"></p>
+              </div>
             </div>
 						<div class="print">
 							<a href="#">
@@ -455,11 +458,14 @@ include_once 'layouts/footer.php'
                       var lent_date = split_resp[3];
                       var t_qty = split_resp[4];
                       var depo = split_resp[5];
+                      var emp = split_resp[6];
                       var inv_number = document.getElementById('invoice_num')
                       var customer_name = document.getElementById('customer_name')
                       var l_date = document.getElementById('lented_date')
                       var qty = document.getElementById('tot_qty')
                       var dep = document.getElementById('depo')
+                      var emp_name = document.getElementById('emp')
+                      emp_name.innerHTML=emp
                       inv_number.innerHTML=inv;
                       customer_name.innerHTML=cus_name;
                       l_date.innerHTML=lent_date;

@@ -18,13 +18,13 @@ $data="";
     }
     foreach($outcomes as $outcome){
         $data.="<div class='row item'>";
-        // $data.="<div class='col-md-4 desc'>".$outcome['emp_name']."</div>";
+        $data.="<div class='col-md-4 desc'>".$outcome['item_qty']."</div>"; //change this place after query item_qty as item_name
         $data.="<div class='col-md-3 qty'>".$outcome['item_qty']."</div>";
         $data.="<div class='col-md-5 amount text-right'>".$outcome['unit_price']."</div>";
         $data.="</div>";
 
     }
-    echo $data."_".$cus_name."_".$data_inv."_".$data_date."_".$data_qty."_".$data_dep;
+    echo $data."_".$cus_name."_".$data_inv."_".$data_date."_".$data_qty."_".$data_dep."_".$outcome['emp_name'];
 
 ?>
 <script>
