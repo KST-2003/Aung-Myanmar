@@ -1,20 +1,31 @@
 <?php 
 include_once __DIR__."/controller/lent_detail_controller.php";
+include_once __DIR__."/includes/config.php";
 $id=$_POST['cid'];
 $lent_detail_controller = new Detail();
 $outcomes=$lent_detail_controller->getDetail($id);
 $data="";
-if($outcomes){
+    $query = "select customer.cus_name, lent.* from customer join lent on customer.id = lent.customer_id WHERE lent.id='$id'";
+    $row = mysqli_query($con,$query);
+    foreach($row as $result){
+        $cus_name=$result['cus_name']; 
+                           
+        $data_inv = $result['invoice_number']; 
+         
+        $data_date = $result['lent_date']; 
+        $data_qty = $result['total_qty']; 
+        $data_dep = $result['deposit']; 
+    }
     foreach($outcomes as $outcome){
         $data.="<div class='row item'>";
-        $data.="<div class='col-md-4 desc'>".$outcome['name']."</div>";
+        // $data.="<div class='col-md-4 desc'>".$outcome['emp_name']."</div>";
         $data.="<div class='col-md-3 qty'>".$outcome['item_qty']."</div>";
         $data.="<div class='col-md-5 amount text-right'>".$outcome['unit_price']."</div>";
         $data.="</div>";
 
     }
-    echo $data;
-}
+    echo $data."_".$cus_name."_".$data_inv."_".$data_date."_".$data_qty."_".$data_dep;
+
 ?>
 <script>
     $('.detail_edit').click(function(){

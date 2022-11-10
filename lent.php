@@ -279,18 +279,18 @@ include_once 'layouts/header.php';
 			<div class="col-md-12">
 				<div class="invoice-wrapper">
 					<div class="intro">
-          အမည်:&nbsp;<strong>John McClane</strong>
+          အမည်:&nbsp;<strong><p id="customer_name"></p></strong>
 					</div>
 
 					<div class="payment-info">
 						<div class="row">
 							<div class="col-md-6">
 								<span>ဘောင်ချာနံပါတ်</span>
-								<strong>434334343</strong>
+								<strong><p id="invoice_num"></p></strong>
 							</div>
 							<div class="col-md-6 text-right">
 								<span>ငှားရမ်းသည့်ရက်စွဲ</span>
-								<strong>Jul 09, 2014 - 12:20 pm</strong>
+								<strong><p id="lented_date"></p></strong>
 							</div>
 						</div>
 					</div>
@@ -304,29 +304,29 @@ include_once 'layouts/header.php';
 							</div>
 						</div>
 						<div class="items" id="lent_detail_table">
-							<!-- <div class="row item">
-								<div class="col-md-4 desc">
-									Bootstrap snippet
-								</div>
-								<div class="col-md-3 qty">
-									1
-								</div>
-								<div class="col-md-5 amount text-right">
-									$20.00
-								</div>
-							</div> -->
-							<div class="row item">
-								<div class="col-md-4 desc">
-									Snippets on bootdey 
-								</div>
-								<div class="col-md-3 qty">
-									2
-								</div>
-								<div class="col-md-5 amount text-right">
-									$18.00
-								</div>
-							</div>
 						</div>
+            <div class="row mb-2">
+              <div class="col-md-4">
+              စပေါ်ငွေ
+              </div>
+              <div class="col-md-4">
+                
+              </div>
+              <div class="col-md-4" id="depo">
+                
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+              စုစုပေါင်းအရေအတွက်
+              </div>
+              <div class="col-md-4">
+                
+              </div>
+              <div class="col-md-4" id="tot_qty">
+                
+              </div>
+            </div>
 						<div class="print">
 							<a href="#">
 								<i class="fa fa-print"></i>
@@ -346,6 +346,7 @@ include_once 'layouts/header.php';
         </div>
         </div>
       </div>
+    </div>
 <?php 
 include_once 'layouts/footer.php'
 ?>
@@ -447,9 +448,30 @@ include_once 'layouts/footer.php'
                     if(response == 1){ 
 
                     }else{ 
-                      console.log(response);
+                      var split_resp = response.split("_");
+                      var tabel =  split_resp[0];
+                      var cus_name = split_resp[1];
+                      var inv = split_resp[2];
+                      var lent_date = split_resp[3];
+                      var t_qty = split_resp[4];
+                      var depo = split_resp[5];
+                      var inv_number = document.getElementById('invoice_num')
+                      var customer_name = document.getElementById('customer_name')
+                      var l_date = document.getElementById('lented_date')
+                      var qty = document.getElementById('tot_qty')
+                      var dep = document.getElementById('depo')
+                      inv_number.innerHTML=inv;
+                      customer_name.innerHTML=cus_name;
+                      l_date.innerHTML=lent_date;
+                      qty.innerHTML=t_qty;
+                      dep.innerHTML=depo;
                       
-                      // $('#lent_detail_body').html(response)
+
+                      
+                      console.log(response);
+
+                      
+                      $('#lent_detail_table').html(tabel)
                         
                     }             
                 }
