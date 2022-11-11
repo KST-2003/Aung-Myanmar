@@ -1,9 +1,11 @@
 <?php
 include_once __DIR__."/includes/config.php";
 include_once __DIR__."/includes/db.php";
+session_start();
 if(isset($_POST['search'])){
   if(!empty($_POST['year'])){
     $year=$_POST['year'];
+   $_SESSION['year']=$year;
     $query="SELECT
     COUNT(id),
     DATE_FORMAT(lent_date, '%Y-%m-%d') AS DAY,
@@ -19,6 +21,7 @@ if(isset($_POST['search'])){
     DATE_FORMAT(lent_date, '%Y ');";
     $query_run = mysqli_query($con, $query);
     $output=mysqli_fetch_array($query_run,MYSQLI_ASSOC);
+   
     ///
     $query1="SELECT
     COUNT(id),
@@ -41,6 +44,11 @@ if(isset($_POST['search'])){
 <?php
 include_once __DIR__."/layouts/header.php";
 ?>
+<style>
+  .page-body-wrapper {
+    padding-top: 0px;
+  }
+</style>
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
@@ -74,7 +82,7 @@ include_once __DIR__."/layouts/header.php";
                   <div class="card card-dark-blue">
                     <div class="card-body">
                       <p class="mb-4">Total Deposit</p>
-                      <p class="fs-30 mb-2">
+                      <p class="fs-30 mb-2" id="number">
                         <?php
                           if(isset($_POST['year'])){
                           print_r($output['deposit']);
@@ -89,9 +97,10 @@ include_once __DIR__."/layouts/header.php";
                   <div class="card card-light-danger">
                     <div class="card-body">
                       <p class="mb-4">Total Qty of item(lented)</p>
-                      <p class="fs-30 mb-2">
+                      <p class="fs-30 mb-2" id="number1">
                         <?php
                         if(isset($_POST['year'])){
+                          
                           print_r($output1['Qty']);
                         }
                         ?>
@@ -127,39 +136,21 @@ include_once __DIR__."/layouts/header.php";
               </div>
             </div>
           </div>
-         
-         
-          
           <div class="row">
-            <div class="col-md-12 grid-margin stretch-card">
+            <div class="col-md-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">Advanced Table</p>
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="table-responsive">
-                        <table id="example" class="display expandable-table" style="width:100%">
-                          <thead>
-                            <tr>
-                              <th>Quote#</th>
-                              <th>Product</th>
-                              <th>Business type</th>
-                              <th>Policy holder</th>
-                              <th>Premium</th>
-                              <th>Status</th>
-                              <th>Updated at</th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                      </table>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
+                  <p class="card-title">Total Price(Monthly)</p>
+                  <p class="font-weight-500">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                 
+                  <canvas id="monthly-price"></canvas>
                 </div>
               </div>
             </div>
-        </div>
+         
+         
+          
+          
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
 <?php
@@ -172,6 +163,11 @@ include_once __DIR__."/layouts/footer.php";
  
         //  location.reload();
 
+        $(document).ready(function () {
+            showGraph();
+            showGraph2();
+            showGraph3();
+    
 
 
         var input = document.getElementById('input')
@@ -184,89 +180,6 @@ include_once __DIR__."/layouts/footer.php";
                     if(value !==""){
                         console.log(value);
                         event.preventDefault();
-                        $.ajax({
-                            url:"dashdata.php",
-                            type:"post",
-                            data:{year:value},
-                            success:function(response){
-                              console.log(response);   //350
-                              
-                              var months = [];
-                              var deposits = [];
-
-                              for (var i in response) {
-                                
-                                  months.push(response[i].month);
-                                  deposits.push(response[i].deposit);
-                              }
-                              console.log(months);    //358
-                              var chartdata = {
-                                  labels: months,
-                                    datasets: [
-                                        {
-                                            label: 'Monthly Deposit',
-                                            backgroundColor: 'coral',
-                                            borderColor: '#46d5f1',
-                                            hoverBackgroundColor: 'aqua',
-                                            hoverBorderColor: 'yellow',
-                                            data: deposits
-                                        }
-                                    ]
-                              };
-
-                              var graphTarget = $("#monthly-deposit");
-
-                              var barGraph = new Chart(graphTarget, {
-                                  type: 'bar',
-                                  data: chartdata
-                              });     
-                              barGraph.destroy();  
-                              barGraph = new Chart(graphTarget, {
-                                  type: 'bar',
-                                  data: chartdata
-                              });    
-                            }//success
-                        }) ; //ajax
-
-
-                        $.ajax({
-                            url:"dashdata2.php",
-                            type:"post",
-                            data:{year:value},
-                            success:function(response1){
-                              console.log(response1);   //
-                              var months = [];
-                              var total_qty = [];
-
-                              for (var x in response1) {
-                                
-                                  months.push(response1[x].month);
-                                  total_qty.push(response1[x].total_qty);
-                              }
-                              console.log(months);    //
-                              var chartdata2 = {
-                                  labels: months,
-                              datasets: [
-                                  {
-                                      label: 'Lent Qty(Monthly)',
-                                      backgroundColor: 'coral',
-                                      borderColor: '#46d5f1',
-                                      hoverBackgroundColor: 'aqua',
-                                      hoverBorderColor: 'yellow',
-                                      data: total_qty
-                                  }
-                              ]
-                              };
-
-                              var graphTarget1 = $("#monthly-lent");
-
-                              var barGraph1 = new Chart(graphTarget1, {
-                                  type: 'bar',
-                                  data: chartdata2
-                              });                              
-                            }//success
-                        })  //ajax
-
 
                         $.ajax({
                     url:"test.php",
@@ -299,5 +212,163 @@ include_once __DIR__."/layouts/footer.php";
 })
 
 
+
+
+
+        function showGraph()
+        {
+            {
+                $.post("dashdata/dashdata.php",
+                function (datas)
+                {
+                    console.log(datas);
+                     var months = [];
+                    var deposits = [];
+
+                    for (var i in datas) {
+                        months.push(datas[i].month);
+                        deposits.push(datas[i].deposit);
+                    }
+                    console.log(months);
+                    console.log(deposits);
+                    var chartdata = {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: 'Monthly Deposit',
+                                backgroundColor: 'coral',
+                                borderColor: '#46d5f1',
+                                hoverBackgroundColor: 'aqua',
+                                hoverBorderColor: 'yellow',
+                                data: deposits
+                            }
+                        ]
+                    };
+
+                    var graphTarget = $("#monthly-deposit");
+
+                    var barGraph = new Chart(graphTarget, {
+                        type: 'bar',
+                        data: chartdata
+                    });
+                });
+            }
+        }
+
+
+
+        function showGraph2()
+        {
+            {
+                $.post("dashdata/dashdata2.php",
+                function (data)
+                {
+                    console.log(data);
+                     var months = [];
+                    var qty = [];
+
+                    for (var i in data) {
+                        months.push(data[i].month);
+                        qty.push(data[i].total_qty);
+                    }
+                    console.log(months);
+                    console.log(qty);
+                    var chartdata = {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: 'Lent Qty(Monthly)',
+                                backgroundColor: 'coral',
+                                borderColor: '#46d5f1',
+                                hoverBackgroundColor: 'aqua',
+                                hoverBorderColor: 'yellow',
+                                data: qty
+                            }
+                        ]
+                    };
+
+                    var graphTarget = $("#monthly-lent");
+
+                    var barGraph = new Chart(graphTarget, {
+                        type: 'bar',
+                        data: chartdata
+                    });
+                });
+            }
+        }
+
+
+        function showGraph3()
+        {
+            {
+                $.post("dashdata/dashdata3.php",
+                function (data)
+                {
+                    console.log(data);
+                     var months = [];
+                    var price = [];
+
+                    for (var i in data) {
+                        months.push(data[i].MONTH);
+                        price.push(data[i].total_price);
+                    }
+                    console.log(months);
+                    console.log(price);
+                    var chartdata = {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: 'Total Price(Monthly)',
+                                backgroundColor: 'coral',
+                                borderColor: '#46d5f1',
+                                hoverBackgroundColor: 'aqua',
+                                hoverBorderColor: 'yellow',
+                                data: price
+                            }
+                        ]
+                    };
+
+                    var graphTarget = $("#monthly-price");
+
+                    var barGraph = new Chart(graphTarget, {
+                        type: 'bar',
+                        data: chartdata
+                    });
+                });
+            }
+        }
+
+      });
+
+     var good = $('#number').html();
+     var num = parseInt(good);
+     console.log(num);
+     if (Number.isInteger(num)) {
+      // $('#number').html(good)
+      console.log(num)
+  }
+  else 
+{
+//  $('#number').html("This year doesn't exist in databse")
+$('#number').html('No Data')
+}
+
+
+var good1 = $('#number1').html();
+     var num1 = parseInt(good1);
+     console.log(num1);
+     if (Number.isInteger(num1)) {
+      // $('#number').html(good)
+      console.log(num1)
+  }
+  else 
+{
+//  $('#number').html("This year doesn't exist in databse")
+$('#number1').html('No Data');
+$('#number1').css('font-size','');
+}
+  
+
+    //  console.log(good)
 
 </script>
