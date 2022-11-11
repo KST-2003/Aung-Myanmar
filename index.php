@@ -135,8 +135,7 @@ include_once __DIR__."/layouts/header.php";
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
+            <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
@@ -147,10 +146,12 @@ include_once __DIR__."/layouts/header.php";
                 </div>
               </div>
             </div>
+          </div>
          
          
           
-          
+        
+        </div>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
 <?php
