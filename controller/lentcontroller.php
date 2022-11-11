@@ -8,5 +8,13 @@ class Lentcontroller extends Lent
         $result=$this->createLent($inv_number,$lent_date,$cus_name,$deposit,$total_qty);
         return $result;
     }
+    public function deleteLent($id){
+        $result=$this->delete($id);
+        return $result;
+    }
+    public function getLent(){
+        $results=$this->retrieveLent();
+        return $results;
+    }
 }
 ?>

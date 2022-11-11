@@ -15,7 +15,7 @@ if($result){
        
         $output.="<tr>";
         $output.= "<td><div contentEditable='true' class='' id=''>".$data['id']."</div></td>";
-        $output.= "<td><div contentEditable='true' class='cust_edit' id=''>".$data['name']."</div></td>";
+        $output.= "<td><div contentEditable='true' class='cust_edit' id=''>".$data['cus_name']."</div></td>";
         $output.= "<td><div contentEditable='true' class='cust_edit' id=''>".$data['NRC']."</div></td>";
         $output.= "<td><div contentEditable='true' class='cust_edit' id=''>".$data['address']."</div></td>";
         $output.= "<td><div contentEditable='true' class='cust_edit' id=''>".$data['phone_number']."</div></td>";   

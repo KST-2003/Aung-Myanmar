@@ -21,6 +21,29 @@ class Lent{
         else
         return false;
     }
+    public function delete($id){
+        $cont=Database::connect();
+        $sql="delete from lent where id=:id";
+        $statement=$cont->prepare($sql);
+        $statement->bindParam(':id',$id); 
+        if($statement->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public function retrieveLent(){
+        $cont=Database::connect();
+        $sql="select customer.cus_name, lent.* from customer join lent on customer.id = lent.customer_id";
+        $statement=$cont->prepare($sql);
+    
+        $statement->execute();
+        $results=$statement->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
 }
 
 

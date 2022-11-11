@@ -5,6 +5,7 @@ $id=$_POST['cid'];
 $lent_detail_controller = new Detail();
 $outcomes=$lent_detail_controller->getDetail($id);
 $data="";
+if($outcomes){
     $query = "select customer.cus_name, lent.* from customer join lent on customer.id = lent.customer_id WHERE lent.id='$id'";
     $row = mysqli_query($con,$query);
     foreach($row as $result){
@@ -18,13 +19,15 @@ $data="";
     }
     foreach($outcomes as $outcome){
         $data.="<div class='row item'>";
-        $data.="<div class='col-md-4 desc'>".$outcome['item_qty']."</div>"; //change this place after query item_qty as item_name
+        $data.="<div class='col-md-4 desc'>".$outcome['item_name']."</div>"; //change this place after query item_qty as item_name
         $data.="<div class='col-md-3 qty'>".$outcome['item_qty']."</div>";
         $data.="<div class='col-md-5 amount text-right'>".$outcome['unit_price']."</div>";
         $data.="</div>";
 
     }
     echo $data."_".$cus_name."_".$data_inv."_".$data_date."_".$data_qty."_".$data_dep."_".$outcome['emp_name'];
+}
+
 
 ?>
 <script>

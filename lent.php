@@ -30,7 +30,7 @@ if(isset($_POST['upload'])){
     $s_name=$names;
     $s_unit_price=$unit_price[$index];
     $s_qty=$qty[$index];
-    $query = "INSERT INTO lent_detail (item_name,unit_price,item_qty,emp_id,lent_id) VALUES ('$s_name','$s_unit_price','$s_qty','$emp_name','$lent_id')";
+    $query = "INSERT INTO lent_detail (item_id,unit_price,item_qty,emp_id,lent_id) VALUES ('$s_name','$s_unit_price','$s_qty','$emp_name','$lent_id')";
     $query_run = mysqli_query($con, $query);
   }
 
@@ -88,7 +88,7 @@ include_once 'layouts/header.php';
                                     while($output=mysqli_fetch_array($select_result1,MYSQLI_ASSOC)):; 
                                     ?> 
                                     <option value="<?php echo $output['id']; ?>"> 
-                                    <?php  echo $output['name'] ?> 
+                                    <?php  echo $output['cus_name'] ?> 
                                     </option> 
                                     <?php endwhile;?>  
                                 </select>
@@ -121,7 +121,7 @@ include_once 'layouts/header.php';
                                     while($ans=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):; 
                                     ?> 
                                     <option value="<?php echo $ans['id']; ?>"> 
-                                    <?php  echo $ans['name'] ?> 
+                                    <?php  echo $ans['emp_name'] ?> 
                                     </option> 
                                     <?php endwhile;?>  
                                 </select>
@@ -224,7 +224,7 @@ include_once 'layouts/header.php';
                         <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
                         <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
                         <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a>
-                            <a class="btn btn-danger delete_lent" id="">Delete</a>
+                            <a class="btn btn-danger delete_lent" id="<?php echo $data_id?>">Delete</a>
                        </td> 
                         </tr> 
                         <?php 
@@ -359,6 +359,8 @@ include_once 'layouts/footer.php'
     if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
+
+    
     $('.add').click(function(e){
         console.log('ok');
 
@@ -439,6 +441,23 @@ include_once 'layouts/footer.php'
         $(div).append(row);
         $('#content2').append(div);
         e.preventDefault();
+    })
+    $('.delete_lent').click(function(event){
+      var message = confirm("Are you sure to delete?")
+      if(message==true){
+        var id = $(this).attr('id')
+        var row = $(this).parent().parent()
+      $.ajax({
+        url:'lent_delete.php',
+        type:'post',
+        data:{pid:id},
+        success:function(response){
+          $(row).fadeOut('slow');
+          
+        }
+      })
+      }
+event.preventDefault();
     })
     $('.detail_lent').click(function(){
       console.log('click')

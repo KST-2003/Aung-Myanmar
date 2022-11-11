@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2022 at 10:33 AM
+-- Generation Time: Nov 11, 2022 at 09:06 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -48,7 +48,7 @@ INSERT INTO `category` (`id`, `name`, `parent_name`) VALUES
 
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `cus_name` varchar(255) NOT NULL,
   `NRC` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `phone_number` varchar(255) NOT NULL
@@ -58,8 +58,7 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`id`, `name`, `NRC`, `address`, `phone_number`) VALUES
-(1, 'Kaung Si Thu', ' 0843EYUII', '62st ', '875433'),
+INSERT INTO `customer` (`id`, `cus_name`, `NRC`, `address`, `phone_number`) VALUES
 (2, ' Aung Myat Thu', ' 631GHJKL', '62st', '2345623'),
 (3, 'U Aye', '111111', '11111', '2147483647'),
 (4, 'kyaw kyaw', '111111', '65', '2147483647');
@@ -82,9 +81,7 @@ CREATE TABLE `dep` (
 --
 
 INSERT INTO `dep` (`id`, `comment`, `ranking`, `lent_id`) VALUES
-(9, 'hi`  ', 1, 14),
-(10, '', 1, 13),
-(11, 'hello`  ', 1, 15);
+(9, 'hi`  ', 1, 14);
 
 -- --------------------------------------------------------
 
@@ -94,7 +91,7 @@ INSERT INTO `dep` (`id`, `comment`, `ranking`, `lent_id`) VALUES
 
 CREATE TABLE `employee` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `emp_name` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `phone_number` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -103,7 +100,7 @@ CREATE TABLE `employee` (
 -- Dumping data for table `employee`
 --
 
-INSERT INTO `employee` (`id`, `name`, `address`, `phone_number`) VALUES
+INSERT INTO `employee` (`id`, `emp_name`, `address`, `phone_number`) VALUES
 (26, ' mgmg', '38st  ', '9887767 '),
 (28, 'kst', '35st', '9887767 '),
 (29, 'dfghjkl', 'qtrtyhuj', '09782648924');
@@ -116,7 +113,7 @@ INSERT INTO `employee` (`id`, `name`, `address`, `phone_number`) VALUES
 
 CREATE TABLE `item` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `item_name` varchar(255) NOT NULL,
   `category_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -124,7 +121,7 @@ CREATE TABLE `item` (
 -- Dumping data for table `item`
 --
 
-INSERT INTO `item` (`id`, `name`, `category_id`) VALUES
+INSERT INTO `item` (`id`, `item_name`, `category_id`) VALUES
 (1, '၁၀ပေငြမ်း', 1),
 (2, 'asdf', 1),
 (3, 'jkl;', 1);
@@ -150,11 +147,9 @@ CREATE TABLE `lent` (
 --
 
 INSERT INTO `lent` (`id`, `invoice_number`, `customer_id`, `lent_date`, `total_qty`, `deposit`, `checker`) VALUES
-(13, '1234567 ', 1, '2022-10-28', 10, 30000, 0),
-(14, '111111', 2, '2022-11-01', 10, 5656, 0),
-(15, '77777', 1, '2022-11-02', 10, 100000, 0),
-(16, '1283', 1, '0000-00-00', 30, 1200, 0),
-(17, '9888888', 1, '2021-07-04', 10, 150000, 0);
+(14, '111111', 2, '2022-11-01', 10, 5656, 1),
+(22, '77777', 2, '2022-12-08', 5, 30000, 1),
+(24, '9876543', 3, '2022-11-11', 0, 100000, 0);
 
 -- --------------------------------------------------------
 
@@ -167,7 +162,7 @@ CREATE TABLE `lent_detail` (
   `emp_id` int(11) NOT NULL,
   `item_qty` int(11) NOT NULL,
   `unit_price` int(11) NOT NULL,
-  `item_name` int(11) NOT NULL,
+  `item_id` int(11) NOT NULL,
   `lent_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -175,12 +170,11 @@ CREATE TABLE `lent_detail` (
 -- Dumping data for table `lent_detail`
 --
 
-INSERT INTO `lent_detail` (`id`, `emp_id`, `item_qty`, `unit_price`, `item_name`, `lent_id`) VALUES
-(24, 28, 5, 700, 1, 15),
-(25, 28, 5, 1000, 2, 15),
-(26, 26, 0, 700, 1, 16),
-(27, 26, 5, 700, 2, 17),
-(28, 26, 5, 1000, 1, 17);
+INSERT INTO `lent_detail` (`id`, `emp_id`, `item_qty`, `unit_price`, `item_id`, `lent_id`) VALUES
+(29, 26, 10, 700, 1, 14),
+(32, 28, 5, 700, 1, 22),
+(35, 26, 10, 700, 1, 24),
+(36, 26, 10, 700, 1, 24);
 
 -- --------------------------------------------------------
 
@@ -256,7 +250,6 @@ CREATE TABLE `workaddress` (
 --
 
 INSERT INTO `workaddress` (`id`, `cus_id`, `work_address`) VALUES
-(1, 1, '30st'),
 (2, 2, '35st'),
 (3, 3, '35st'),
 (4, 4, 'sdfsdf');
@@ -311,7 +304,7 @@ ALTER TABLE `lent_detail`
   ADD PRIMARY KEY (`id`),
   ADD KEY `emp_id` (`emp_id`),
   ADD KEY `lent_id` (`lent_id`),
-  ADD KEY `item_name` (`item_name`);
+  ADD KEY `item_name` (`item_id`);
 
 --
 -- Indexes for table `return_tb`
@@ -378,13 +371,13 @@ ALTER TABLE `item`
 -- AUTO_INCREMENT for table `lent`
 --
 ALTER TABLE `lent`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `lent_detail`
 --
 ALTER TABLE `lent_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `return_tb`
@@ -438,7 +431,7 @@ ALTER TABLE `lent`
 ALTER TABLE `lent_detail`
   ADD CONSTRAINT `lent_detail_ibfk_2` FOREIGN KEY (`emp_id`) REFERENCES `employee` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `lent_detail_ibfk_3` FOREIGN KEY (`lent_id`) REFERENCES `lent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `lent_detail_ibfk_4` FOREIGN KEY (`item_name`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `lent_detail_ibfk_4` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `return_tb`
