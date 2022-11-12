@@ -11,11 +11,11 @@ if(!empty($_POST['id'])){
 }
 if(!empty($_POST['lentdetail'])){
     $id = $_POST['lentdetail'];
-    $query = "SELECT lent_detail.id,lent_detail.item_name FROM lent_detail WHERE lent_detail.lent_id=".$id;
+    $query = "SELECT lent_detail.item_name as i,item.item_name FROM item inner join lent_detail on lent_detail.item_name=item.id WHERE lent_detail.lent_id=".$id;
     $result = mysqli_query($con,$query);
     $option="<option>Choose Return Item</option>";
     while($outcome=mysqli_fetch_array($result,MYSQLI_ASSOC)):;
-        $option.="<option value = ".$outcome['id'].">".$outcome['item_name']."</option>";
+        $option.="<option value = ".$outcome['i'].">".$outcome['item_name']."</option>";
     endwhile;
     echo $option; 
 }

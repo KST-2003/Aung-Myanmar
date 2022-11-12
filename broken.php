@@ -96,30 +96,30 @@ include_once 'layouts/header.php';
                           </thead>
                           <tbody id="broken_table">
                             <?php
-                              $query="";
+                              
                               if(!empty($_GET['id'])){
                                 $id= $_GET['id'];
                                 echo "*************".$id;
-                                $query="SELECT lent.*,lent_detail.*,return_tb.* FROM return_tb 
-                                INNER JOIN lent on return_tb.lent_id=lent.id INNER JOIN lent_detail on 
-                                lent_detail.id=return_tb.LentDetail_id WHERE return_tb.has_broken=1 and return_tb.lent_id=".$id;
-
-                                $query1="Select * from lent";
+                                $query="select lent.*,return_detail.* from lent inner join return_detail on 
+                                lent.id=return_detail.lent_id where return_detail.return_id=".$id;;
                               }
                               else{
-                                $query="SELECT lent.*,lent_detail.*,return_tb.* FROM return_tb 
-                                INNER JOIN lent on return_tb.lent_id=lent.id INNER JOIN lent_detail on 
-                                lent_detail.id=return_tb.LentDetail_id WHERE return_tb.has_broken=1";
+                                $query="select lent.*,return_detail.* from lent inner join return_detail on 
+                                lent.id=return_detail.lent_id where return_detail.has_broken=1";
                               }
-                              echo $query;
                               $count=1;
                               $query_execute = mysqli_query($con,$query);
-                              print_r($query_execute);
                               while($result = mysqli_fetch_array($query_execute)){
                                 echo "<tr>";
                                 echo "<td>".$count."</td>";
                                 echo "<td>".$result['invoice_number']."</td>";
-                                echo "<td>".$result['item_name']."</td>";
+                                $ld_id=$result['LentDetail_id'];
+                                $query2="Select item.item_name from item inner join lent_detail on 
+                                lent_detail.item_name=item.id where lent_detail.id=".$ld_id;
+                                $query2_execute=mysqli_query($con,$query2);
+                                while($response=mysqli_fetch_array($query2_execute)){
+                                  echo "<td>".$response['item_name']."</td>";
+                                }
                                 echo "<td>".$qty=$result['broken_qty']."</td>";
                                 echo "<td>".$price=intval($result['price'])."</td>";
                                 $cost = intval($qty)*intval($price);
