@@ -122,7 +122,7 @@ include_once 'layouts/header.php';
                           $count = 1;
                           while($row = mysqli_fetch_array($result) ){
                           $data_id = $row['id'];
-                          $data_name = $row['name'];
+                          $data_name = $row['emp_name'];
                           $data_add = $row['address'];
                           $data_ph = $row['phone_number'];
                           ?>
