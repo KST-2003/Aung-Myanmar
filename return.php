@@ -8,7 +8,7 @@ if(isset($_POST['submit'])){
         $input = $_POST['lent_id'];
         $explode_id=explode('_',$input);
         $lent_id=$explode_id[1];
-        echo $lent_id;
+        echo "lent id is ".$lent_id;
     }else{
         $error_invoice="Please select an invoice number";
     }
@@ -36,7 +36,6 @@ if(isset($_POST['submit'])){
     if(!empty($_POST['has_broken'])){
         $broken = $_POST['has_broken'];
     }
-
     if(!empty($_POST['broken_qty'])){
         $broken_qty = $_POST['broken_qty'];
     }else{
@@ -62,7 +61,7 @@ if(isset($_POST['submit'])){
     }
     $checker_query="Select * from lent where lent.id=".$lent_id;
     $query_execute = mysqli_query($con,$checker_query);
-    while($checker_result = mysqli_fetch_row($query_execute)){
+    while($checker_result = mysqli_fetch_array($query_execute)){
         $checker = $checker_result['checker'];
     }
     if($checker==0){
@@ -70,29 +69,26 @@ if(isset($_POST['submit'])){
     }
 
     if(empty($error_invoice) && empty($error_date) && empty($error_item) && empty($error_qty) && empty($error_emp)){
-        foreach($lentDetail_id as $index => $iDs){
-            $arr_id=$iDs;
-            $arr_qty=$qty[$index];
-            $arr_broken = $broken[$index];
-            $arr_bQty = $broken_qty[$index];
-            $arr_price = $price[$index];
-            $query= "INSERT INTO return_tb (lent_id, lentDetail_id, return_qty,return_date,has_broken,emp_id,broken_qty,price,discount)
-            VALUES
-            ('$lent_id','$arr_id','$arr_qty','$return_date','$arr_broken','$emp_id','$arr_bQty','$arr_price','0')";
-            $response=mysqli_query($con,$query);
 
-        }
-        if($response){
+        $addReturn= $returnController->addReturn($lent_id,$return_date,$emp_id,$discount);
+        if($addReturn){
             $cuery = "select max(id) from return_tb";
             $outcome = mysqli_query($con,$cuery);
             $event = mysqli_fetch_row($outcome);
             $last_id = $event[0];
-            echo "<br><br>********".$last_id;
-            $upd_dis = $returnController->updateDiscount($last_id,$discount);
-            if($upd_dis){
-                header('location:return.php');
+            echo $last_id;
+            foreach($lentDetail_id as $index => $iDs){
+                $arr_id=$iDs;
+                $arr_qty=$qty[$index];
+                $arr_broken = $broken[$index];
+                $arr_bQty = $broken_qty[$index];
+                $arr_price = $price[$index];
+                $rDetail_data= $returnController->addReturnDetail($last_id,$lent_id,$arr_id,$arr_qty,$arr_broken,$arr_bQty,$arr_price);
+
+                if($rDetail_data){
+                    header('location:return.php');
+                }
             }
-            
         }
     }
     else{
@@ -154,10 +150,6 @@ include_once "layouts/header.php";
                                 </option>
                                 <?php 
                                     endwhile;
-                                    // $query = "select name from customer inner join lent on customer.id=
-                                    //           lent.customer_id inner join return_tb on lent.id=return_tb.lent_id";
-                                    // $result = mysqli_query($con,$query);
-                                    // $cus_name=mysqli_fetch_array($result);
                                 ?> 
                             </select>
                             <span class='text-danger'><?php if(isset($error_invoice)) echo $error_invoice; ?></span>
@@ -238,29 +230,6 @@ include_once "layouts/header.php";
                             <label for="">Discount</label>
                             <input type="number" name="discount" class='form-control' placeholder='Discount'>
                         </div>
-                        <!-- <div id='broken'>
-                            <div class="col-md-4 mt-3" id="">
-                                <label for="">Broken Item</label>
-                                <select name="" id="broken_item" class="form-control" placeholder="ကျိုးပဲ့သည့်ပစ္စည်း">
-                                    
-                                </select>
-                            </div>
-                            <div class="col-md-2 mt-3">
-                                <label for="">Quantity</label>
-                                <input type="number" class="form-control" min="1" name="" id="" placeholder="အရေအတွက်">
-                            </div>
-                            <div class="col-md-4 mt-3">
-                                <label for="">Item Price</label>
-                                <input type="number" class="form-control mb-3" min="1" name="" id="" placeholder="ကာလပေါက်ဈေး">
-                            </div>
-                            <div class="col-md-2 mt-3">
-                                <label for="">&nbsp;</label>
-                                <button  class="btn btn-outline-primary mt-4" id="broken_add_row">+</button>
-                            </div>
-                        </div>
-                        <div id="moreForm" class="container-fluid">
-
-                        </div> -->
                     </div>
             </div>
             <div class="modal-footer">
@@ -284,61 +253,65 @@ include_once "layouts/header.php";
                                             <table id="example" class="display expandable-table" style="width:100%">
                                                 <thead>
                                                     <tr>
-                                                        <!-- <th>စဥ်</th> -->
-                                                        <th>ဘောင်ချာနံပါတ်</th>
+                                                        <th>စဥ်</th>
+                                                        <th>ဘောင်ချာ <br> နံပါတ်</th>
                                                         <th>ငှားရမ်းသူအမည်</th>
-                                                        <th>ငှါးထားသည့်ရက်စွဲ</th>
-                                                        <th>ပြန်အပ်သည့်ရက်စွဲ</th>
-                                                        <th>ငှားရမ်းအရေအတွက်</th>
-                                                        <th>ပြန်အပ်အရေအတွက်</th>
+                                                        <th>ငှါးထားသည့် <br> ရက်စွဲ</th>
+                                                        <th>ပြန်အပ်သည့် <br> ရက်စွဲ</th>
+                                                        <th>ပြန်အပ်ပစ္စည်း</th>
                                                         <th>စုစုပေါင်းကျသင့်ငွေ</th>
+                                                        <th>ကျိုးပဲ့/ <br> ပျောက်ဆုံး</th>
                                                         <th>စပေါ်‌ငွေ</th>
-                                                        <th>ကျိုးပဲ့/ပျောက်ဆုံး</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody q_id="return_table">
                                                 <?php
-                                                    $query1="Select id from lent where lent.checker>0";
-                                                    $result1 = mysqli_query($con,$query1);
-                                                    while($outcome1 = mysqli_fetch_array($result1)){
-                                                        $q_id=$outcome1['id'];
-                                                        $count=0;
+                                                    $query1="Select customer.name,lent.*,return_tb.* from customer inner
+                                                    join lent on customer.id=lent.customer_id inner join return_tb on 
+                                                    lent.id=return_tb.lent_id";
+                                                    $query1_execute=mysqli_query($con,$query1);
+                                                    $count=1;
+                                                    while($result1=mysqli_fetch_array($query1_execute)){
                                                         echo "<tr>";
-                                                        echo ($count);
-                                                        $query2="SELECT lent.*,customer.name,sum(return_qty),max(return_date),sum(broken_qty),
-                                                        max(has_broken) FROM customer INNER JOIN lent ON customer.id=lent.customer_id INNER JOIN return_tb on lent.id=return_tb.lent_id
-                                                        WHERE return_tb.lent_id=".$q_id." limit 1";
-                                                        $result2 = mysqli_query($con,$query2);
-                                                        
-                                                        while($outcome2=mysqli_fetch_array($result2)){
-                                                            // echo "<td>0</td>";
-                                                            echo "<td>".$outcome2['invoice_number']."</td>";
-                                                            echo "<td>".$outcome2['name']."</td>";
-                                                            echo "<td>".$outcome2['lent_date'];
-                                                            echo "<td>".$outcome2['max(return_date)']."</td>";
-                                                            echo "<td>".$outcome2['total_qty']."</td>";
-                                                            $return_qty=intval($outcome2['sum(return_qty)'])+intval($outcome2['sum(broken_qty)']);
-                                                            echo "<td>".$return_qty."</td>";
-                                                            echo "<td>100000</td>";
-                                                            echo "<td>".$outcome2['deposit']."</td>";
-                                                            if($outcome2['max(has_broken)']==1)
-                                                                echo "<td><a href='broken.php?id=".$q_id."' class='text-black'>ရှိ</a></td>";
-                                                            else{
-                                                                echo "<td>မရှိ</td>";
-                                                            }echo "<td><button class='btn btn-danger'>Delete</button><a href='return_detail.php?id=".$q_id."' class='btn btn-primary'>Detail</a></td>";
-                                                            // $date1 = new DateTime("2007-03-24");
-                                                            // $date2 = new DateTime("2010-03-26");
-                                                            // $interval = $date1->diff($date2);
-                                                            // echo "difference " . $interval->y . " years, " . $interval->m
-                                                            // ." months, ".$interval->d." days ***************"; 
-                                                            // $total_days = ($interval->y*365)+($interval->m*30)+($interval->d);
-                                                            // echo $total_days;
-                                                            
+                                                        echo "<td>".$count."</td>";
+                                                        echo "<td>".$result1['invoice_number']."</td>";
+                                                        echo "<td>".$result1['name']."</td>";
+                                                        echo "<td>".$result1['lent_date']."</td>";
+                                                        echo "<td>".$result1['return_date']."</td>";
+
+                                                        //preparing for calTotalCost
+                                                        $initial_date=new DateTime($result1['lent_date']);
+                                                        $final_date=new DateTime($result1['return_date']);
+                                                        $dis=intval($result1['discount']);
+
+                                                        //get id for 2nd query
+                                                        $ret_id=$result1['id'];
+                                                        //2nd query
+                                                        $query2="Select *,count(return_id),lent_detail.* from lent_detail inner 
+                                                        join return_detail on lent_detail.id=return_detail.LentDetail_id 
+                                                        where return_detail.return_id=".$ret_id;
+                                                        $query2_execute=mysqli_query($con,$query2);
+                                                        while($result2=mysqli_fetch_array($query2_execute)){
+                                                            echo "<td>".$result2['count(return_id)']."</td>";
+                                                            //preparing for calTotalCost
+                                                            $r_qty=intval($result2['return_qty']);
+                                                            $price=intval($result2['unit_price']);
+                                                            $broken_qty=intval($result2['broken_qty']);
+                                                            $actual_price=intval($result2['price']);
+                                                            $cost=$returnController->calTotalCost($initial_date,$final_date,$r_qty,$price,$broken_qty,$actual_price,$dis);
+                                                            echo "<td>".$cost."</td>";
+                                                            if($result2['has_broken']==1)
+                                                            echo "<td><a href='broken.php?id=".$ret_id."' class='text-black'>ရှိ</a></td>";
+                                                            else
+                                                            echo "<td>မရှိ</td>";
                                                         }
+                                                        echo "<td>".$result1['deposit']."</td>";
+                                                        echo "<td><a href='return_detail.php?id=".$ret_id."' class='btn btn-primary'>အသေးစိတ်</a></td>";
                                                         echo "</tr>";
                                                         $count++;
                                                     }
+                                                    
                                                 ?>
                                                 </tbody>
                                               
