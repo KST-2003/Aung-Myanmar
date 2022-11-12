@@ -30,9 +30,6 @@ table {
     border-radius:3px;
 }
 
-table tr:nth-child(1){
-    background-color:dodgerblue;
-}
 table tr:nth-child(1) th{
     color:white;
     padding:10px 0px;
