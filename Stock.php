@@ -1,6 +1,5 @@
 <?php
 include_once __DIR__."/includes/config.php";
-include_once __DIR__."/controller";
 ?>
 <?php 
 include_once "layouts/header.php";
