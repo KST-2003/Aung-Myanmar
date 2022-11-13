@@ -19,17 +19,20 @@ if(isset($_POST['upload'])){
   if(!empty($_POST['emp_name'])){
     $emp_name=$_POST['emp_name'];
   }
-  $query1 = "INSERT INTO lent (invoice_number,customer_id,lent_date,total_qty,deposit) VALUES ('$inv_number','$cus_name','$lent_date','','$deposit')";
+  $qty=$_POST['qty'];
+  $total_qty=array_sum($qty);
+  $query1 = "INSERT INTO lent (invoice_number,customer_id,lent_date,total_qty,deposit) VALUES ('$inv_number','$cus_name','$lent_date','$total_qty','$deposit')";
   $query_run1 = mysqli_query($con, $query1);
   $lent_id= mysqli_insert_id($con);
 
   $name=$_POST['item_name'];
   $unit_price=$_POST['unit_price'];
-  $qty=$_POST['qty'];
+
   foreach($name as $index => $names){
     $s_name=$names;
     $s_unit_price=$unit_price[$index];
     $s_qty=$qty[$index];
+
     $query = "INSERT INTO lent_detail (item_id,unit_price,item_qty,emp_id,lent_id) VALUES ('$s_name','$s_unit_price','$s_qty','$emp_name','$lent_id')";
     $query_run = mysqli_query($con, $query);
   }
