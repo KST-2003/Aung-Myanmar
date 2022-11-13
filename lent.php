@@ -19,17 +19,20 @@ if(isset($_POST['upload'])){
   if(!empty($_POST['emp_name'])){
     $emp_name=$_POST['emp_name'];
   }
-  $query1 = "INSERT INTO lent (invoice_number,customer_id,lent_date,total_qty,deposit) VALUES ('$inv_number','$cus_name','$lent_date','','$deposit')";
+  $qty=$_POST['qty'];
+  $total_qty=array_sum($qty);
+  $query1 = "INSERT INTO lent (invoice_number,customer_id,lent_date,total_qty,deposit) VALUES ('$inv_number','$cus_name','$lent_date','$total_qty','$deposit')";
   $query_run1 = mysqli_query($con, $query1);
   $lent_id= mysqli_insert_id($con);
 
   $name=$_POST['item_name'];
   $unit_price=$_POST['unit_price'];
-  $qty=$_POST['qty'];
+
   foreach($name as $index => $names){
     $s_name=$names;
     $s_unit_price=$unit_price[$index];
     $s_qty=$qty[$index];
+
     $query = "INSERT INTO lent_detail (item_id,unit_price,item_qty,emp_id,lent_id) VALUES ('$s_name','$s_unit_price','$s_qty','$emp_name','$lent_id')";
     $query_run = mysqli_query($con, $query);
   }
@@ -204,56 +207,61 @@ include_once 'layouts/header.php';
                           $query = "select customer.cus_name, lent.* from customer join lent on customer.id = lent.customer_id";
                           $result = mysqli_query($con,$query);
                           $count = 1;
-                          foreach($result as $row){ 
-                            if($row['checker']==0){
-                                                                                    
+                          if(!empty($result)){
+                            foreach($result as $row){ 
+                              if($row['checker']==0){
+                                                                                      
+                              $cus_name=$row['cus_name']; 
+                            
+                              $data_id = $row['id']; 
+                              $data_inv = $row['invoice_number']; 
+                               
+                              $data_date = $row['lent_date']; 
+                              $data_qty = $row['total_qty']; 
+                              $data_dep = $row['deposit'];  
+                               
+                          ?> 
+                          <tr> 
+                          <td><?php echo $count; ?></td> 
+                          <td> <div  class='' id='name_<?php echo $data_id; ?>'> <?php echo $cus_name; ?></div> </td> 
+                          <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
+                          <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
+                          <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
+                          <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a>
+                              <a class="btn btn-danger delete_lent" id="<?php echo $data_id?>">Delete</a>
+                         </td> 
+                          </tr> 
+                          <?php 
+                          $count ++; 
+                          }
+                          else{
                             $cus_name=$row['cus_name']; 
-                          
+                            
                             $data_id = $row['id']; 
                             $data_inv = $row['invoice_number']; 
                              
                             $data_date = $row['lent_date']; 
                             $data_qty = $row['total_qty']; 
-                            $data_dep = $row['deposit'];  
-                             
-                        ?> 
-                        <tr> 
-                        <td><?php echo $count; ?></td> 
-                        <td> <div  class='' id='name_<?php echo $data_id; ?>'> <?php echo $cus_name; ?></div> </td> 
-                        <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
-                        <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
-                        <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a>
-                            <a class="btn btn-danger delete_lent" id="<?php echo $data_id?>">Delete</a>
-                       </td> 
-                        </tr> 
-                        <?php 
-                        $count ++; 
+                            $data_dep = $row['deposit']; 
+                            ?>
+                          <tr> 
+                          <td><?php echo $count; ?></td> 
+                          <td> <div  class='' id='name_<?php echo $data_id; ?>'> <?php echo $cus_name; ?></div> </td> 
+                          <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
+                          <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
+                          <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
+                          <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a></td> 
+                          </tr>                          
+                            <?php
+                          $count ++; 
+                          }
                         }
-                        else{
-                          $cus_name=$row['cus_name']; 
-                          
-                          $data_id = $row['id']; 
-                          $data_inv = $row['invoice_number']; 
-                           
-                          $data_date = $row['lent_date']; 
-                          $data_qty = $row['total_qty']; 
-                          $data_dep = $row['deposit']; 
-                          ?>
-                        <tr> 
-                        <td><?php echo $count; ?></td> 
-                        <td> <div  class='' id='name_<?php echo $data_id; ?>'> <?php echo $cus_name; ?></div> </td> 
-                        <td> <div contentEditable='true' class='edit_lent' id='invoice_number_<?php echo $data_id; ?>'><?php echo $data_inv; ?> </div> </td> 
-                        <td> <div contentEditable='true' class='edit_lent' id='total_qty_<?php echo $data_id; ?>'><?php echo $data_qty; ?> </div> </td> 
-                        <td> <div contentEditable='true' class='edit_lent' id='deposit_<?php echo $data_id; ?>'><?php echo $data_dep ?> </div> </td> 
-                        <td><a data-toggle="modal" data-target="#detail_model" class="btn btn-outline-primary detail_lent" id="<?php echo $data_id?>">Detail</a></td> 
-                        </tr>                          
-                          <?php
-                        $count ++; 
-                        }
-                      }
-                        ?>                             
-                           
+
+                          }
+                          else{
+                            
+                          }
+                        ?>                                                       
                           </tbody>
                       </table>
                       </div>

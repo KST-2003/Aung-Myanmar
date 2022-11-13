@@ -1,5 +1,22 @@
 <?php
 include_once "includes/config.php";
+include_once "controller/ReturnController.php";
+$returnController = new ReturnController();
+$id=$_GET['id'];
+$query="Select customer.cus_name,lent.*,return_tb.* from customer inner join lent on lent.customer_id=customer.id inner
+join return_tb on return_tb.lent_id=lent.id where return_tb.id=".$id;
+$query_execute=mysqli_query($con,$query);
+while($result=mysqli_fetch_array($query_execute)){
+    $cus_name=$result['name'];
+    $invoice_no = $result['invoice_number'];
+    $lent_date = ($result['lent_date']);
+    $return_date = ($result['return_date']);
+    $initial_date = new DateTime($lent_date);
+    $final_date = new DateTime($return_date);
+    $duration=$returnController->calDuration($initial_date,$final_date);
+    $deposit=intval($result['deposit']);
+    $discount=intval($result['discount']);
+}
 include_once 'layouts/header.php';
 ?>
     <div class="main-panel">
@@ -7,88 +24,133 @@ include_once 'layouts/header.php';
 
         <div class="container-fluid">
      <!-- Form Modal Button -->
-     <div class="row mb-4">
-              <div class="col text-left">
+        <div class="row mb-4">
+            <div class="col text-left">
                 <a href="" class="btn btn-success"><b>Export Excel File</b></a>
-              </div>
-    <div class="container-fluid">
-        <div class="row" id="scrollbar">
-                    <?php
-                        $id=$_GET['id'];
-                        $query1 = "Select customer.name,lent.* from customer INNER join lent on customer.id=lent.customer_id 
-                        where lent.id=".$id;
-                        $query1_execute=mysqli_query($con,$query1);
-                        while($result1=mysqli_fetch_array($query1_execute)):;
-                    ?>
-                    <div class='col-md-4 mt-5'>
-                        <h3><?php echo $result1['invoice_number']; ?></h3>
-                    </div>
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4 mt-5">
-                        <h3><?php echo $result1['name']; endwhile ?></h3>
-                    </div>
-                    <div class="col-md-12 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="table-responsive">
-                                            <table class="display expandable-table" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ငှါးထားသည့်ရက်စွဲ</th>
-                                                        <th>ပြန်အပ်သည့်ရက်စွဲ</th>
-                                                        <th>ငှါးထားသည့်ပစ္စည်း</th>
-                                                        <th>ကြာချိန်(ရက်)</th>
-                                                        <th>ပြန်အပ်အရေအတွက်</th>
-                                                        <th>တစ်ရက်ငှါးရမ်းနှုန်း/<br>ကာလပေါက်စျေး</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id='return_detail_content'>
-                                                    <?php
-                                                        $query2 = "Select lent.*,lent_detail.*,return_tb.* from lent
-                                                        inner join lent_detail on lent.id=lent_detail.lent_id inner join return_tb
-                                                        on return_tb.LentDetail_id=lent_detail.id where return_tb.lent_id=".$id." and lent.checker>0";
-                                                        $query2_execute=mysqli_query($con,$query2);
-                                                        while($result2 = mysqli_fetch_array($query2_execute)){
-                                                            $date1 = new DateTime($result2['lent_date']);
-                                                            $date2 = new DateTime($result2['return_date']);
-                                                            // echo $date2;
-                                                            $interval = date_diff($date2,$date1);
-                                                            $total_days = ($interval->y*365)+($interval->m*30)+($interval->d);
-                                                            $lent_price = intval($result2['unit_price']);
-                                                            $return_qty = intval($result2['return_qty']);
-                                                            $cost = $total_days*$return_qty*$lent_price;
-                                                            echo "<tr>";
-                                                            echo "<td>".$result2['lent_date']."</td>";
-                                                            echo "<td>".$result2['return_date']."</td>";
-                                                            echo "<td>".$result2['item_name']."</td>";
-                                                            echo "<td>".intval($total_days)."</td>";
-                                                            echo "<td>".$result2['return_qty']."</td>";
-                                                            echo "<td>".$result2['unit_price']."</td>";
-                                                            echo "<td>".$cost."</td>";
-                                                            echo "</tr>";
-                                                            if($result2['has_broken']==1){
-                                                                echo "<tr>";
-                                                                echo "<td colspan='4'>ကျိုးပဲ့/ပျောက်ဆုံး</td>";
-                                                                echo "<td>".$result2['broken_qty']."</td>";
-                                                                echo "<td>".$result2['price']."</td>";
-                                                                $broken_qty=intval($result2['broken_qty']);
-                                                                $price=intval($result2['price']);
-                                                                echo "<td>".$damage_price=$broken_qty*$price."<td>";
-                                                                echo "</tr>";
-                                                            }
-                                                        }
-                                                    ?>
-                                                </tbody>
-                                            </table>  
-                                    
-                                        </div>
-                                    </div>
+            </div>
+        </div>
+        <div class="receipt-content">
+            <div class="container bootstrap snippets bootdey">
+		        <div class="row">
+			        <div class="col-md-12">
+				        <div class="invoice-wrapper">
+					        <div class="intro">
+                                အမည်:&nbsp;<strong><p id="customer_name"><?php echo $cus_name; ?></p></strong>
+					        </div>
+
+					        <div class="payment-info">
+						    <div class="row">
+							    <div class="col-md-4">
+								    <span>ဘောင်ချာနံပါတ်</span>
+								    <strong><p id="invoice_num"><?php echo $invoice_no; ?></p></strong>
+							    </div>
+							    <div class="col-md-4">
+								    <span>ငှားရမ်းသည့်ရက်စွဲ</span>
+								    <strong><p id="lented_date"><?php echo $lent_date; ?></p></strong>
+							    </div>
+                                <div class="col-md-4 text-right">
+                                    <span>ပြန်အပ်သည့်ရက်စွဲ</span>
+                                    <strong><p><?php echo $return_date; ?></p></strong>
+                                </div>
+						    </div>
+					    </div>
+
+					    <div class="line-items">
+						    <div class="headers clearfix">
+							    <div class="row">
+								    <div class="col-md-3">ပစ္စည်းအမည်</div>
+								    <div class="col-md-2 text-right">အရေ <br> အတွက်</div>
+                                    <div class="col-md-2 text-right">ကြာချိန်</div>
+                                    <div class="col-md-2 text-right">တစ်ရက်ငှားရမ်းနှုန်း/ <br> ပစ္စည်းတန်ဖိုး</div>
+								    <div class="col-md-3 text-right">ကုန်ကျငွေ</div>
+							    </div>
+						    </div>
+						    <div class="items" id="return_detail_table">
+                                <?php
+                                    $total_cost=0;
+                                    $query2="Select item.item_name as i,lent_detail.*,return_detail.* from 
+                                    item inner join lent_detail on lent_detail.item_id=item.id inner join return_detail
+                                    on lent_detail.id=return_detail.LentDetail_id where return_detail.return_id=".$id;
+                                    $query2_execute=mysqli_query($con,$query2);
+                                    while($result2 = mysqli_fetch_array($query2_execute)){
+                                        echo "<div class='row mb-3'>";
+                                        echo '<div class="col-md-3">'.$result2['i'].'</div>';
+                                        echo '<div class="col-md-2 text-right">'.$result2['return_qty'].'</div>';
+                                        echo '<div class="col-md-2 text-right">'.$duration.'</div>';
+                                        echo '<div class="col-md-2 text-right">'.$result2['unit_price'].'</div>';
+                                        $return_qty=intval($result2['return_qty']);
+                                        $unit_price=intval($result2['unit_price']);
+                                        $cost=$return_qty*$unit_price*$duration;
+                                        echo '<div class="col-md-3 text-right">'.$cost.'</div>';
+                                        echo '</div>';
+                                        $cost2=0;
+                                        if($result2['has_broken']==1){
+                                            $broken_qty=intval($result2['broken_qty']);
+                                            $price=intval($result2['price']);
+                                            $cost2=$broken_qty*$price;
+                                            echo "<div class='row mb-3'>";
+                                            echo "<div class='col-md-3'>ကျိုးပဲ့/ပျောက်ဆုံး</div>";
+                                            echo "<div class='col-md-2 text-right'>".$broken_qty."</div>";
+                                            echo "<div class='col-md-2 text-right'>-</div>";
+                                            echo "<div class='col-md-2 text-right'>".$price."</div>";
+                                            echo "<div class='col-md-3 text-right'>".$cost2."</div>";
+                                            echo "</div> <hr>";
+                                        }
+                                        $total_cost+=($cost+$cost2);
+                                    }
+
+                                ?>
+                            </div>
+                            <div class="row mb-3">
+                            <div class="col-md-9 text-right">
+                                စုစုပေါင်းကျသင့်ငွေ
+                            </div>
+                            <div class="col-md-3 text-right">
+                                  <?php echo $total_cost; ?>  
+                            </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-9 text-right">
+                                    စပေါ်ငွေ
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <?php echo $deposit; ?>  
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-    </div>
+                            <div class="row mb-3">
+                                <div class="col-md-9 text-right">
+                                    Discount
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <?php echo $discount; ?>  
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-9 text-right">
+                                   <h4>သင့်ငွေ</h4>
+                                </div>
+                                <?php
+                                    $final_cost=$total_cost-($deposit+$discount);
+                                    if($final_cost>0)
+                                        echo "<div class='col-md-3 text-success text-right'>+".$final_cost."</div>";
+                                    else
+                                        echo "<div class='col-md-3 text-danger text-right'><h4>".$final_cost."</h4></div>";
+                                ?>
+                            </div>
+						</div>
+                        
+						<div class="print">
+							<a href="#">
+								<i class="fa fa-print"></i>
+								Print this receipt
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+	</div>
+</div> 
+    
