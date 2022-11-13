@@ -3,7 +3,7 @@ include_once "includes/config.php";
 include_once "controller/ReturnController.php";
 $returnController = new ReturnController();
 $id=$_GET['id'];
-$query="Select customer.name,lent.*,return_tb.* from customer inner join lent on lent.customer_id=customer.id inner
+$query="Select customer.cus_name,lent.*,return_tb.* from customer inner join lent on lent.customer_id=customer.id inner
 join return_tb on return_tb.lent_id=lent.id where return_tb.id=".$id;
 $query_execute=mysqli_query($con,$query);
 while($result=mysqli_fetch_array($query_execute)){
