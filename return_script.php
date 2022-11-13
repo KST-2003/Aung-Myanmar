@@ -15,12 +15,12 @@ if(!empty($_POST['id'])){
 //item name and option value in selectbox
 if(!empty($_POST['lentdetail'])){
     $id = $_POST['lentdetail'];
-    $query = "SELECT lent_detail.item_id as i,item.item_name FROM item inner join lent_detail on lent_detail.item_id=item.id 
+    $query = "SELECT lent_detail.item_id as i,item.item_name,lent_detail.* FROM item inner join lent_detail on lent_detail.item_id=item.id 
     WHERE lent_detail.lent_id=".$id;
     $result = mysqli_query($con,$query);
     $option="<option>Choose Return Item</option>";
     while($outcome=mysqli_fetch_array($result,MYSQLI_ASSOC)):;
-        $option.="<option value = ".$outcome['i'].">".$outcome['item_name']."</option>";
+        $option.="<option value = ".$outcome['i']."_".$outcome['lent_id'].">".$outcome['item_name']."</option>";
     endwhile;
     echo $option; 
 }
@@ -28,7 +28,11 @@ if(!empty($_POST['lentdetail'])){
 //item_qty,unit price
 if(!empty($_POST['ld_id'])){
     $ld_id=$_POST['ld_id'];
-    $query = "Select lent_detail.item_qty, lent_detail.unit_price from lent_detail where lent_detail.id=".$ld_id;
+    $sent_data=explode('_',$ld_id);
+    $item_id=$sent_data[0];
+    $lent_id=$sent_data[1];
+    $query = "SELECT item.item_name,lent_detail.* FROM item INNER JOIN lent_detail on 
+    lent_detail.item_id=item.id WHERE lent_detail.lent_id=".$lent_id." and lent_detail.item_id=".$item_id;
     $result=mysqli_query($con,$query);
     while($outcome=mysqli_fetch_array($result,MYSQLI_ASSOC)){
         $qty=$outcome['item_qty'];
