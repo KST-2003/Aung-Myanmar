@@ -81,7 +81,7 @@ include_once 'layouts/header.php';
                   <div class="row">
                     <div class="col-12">
                       <div class="table-responsive">
-                        <table id="" class="display expandable-table" style="width:100%">
+                        <table id="datatable" class="display expandable-table" style="width:100%">
                           <thead>
 
                             <tr>
@@ -91,7 +91,7 @@ include_once 'layouts/header.php';
                               <th>အရေအတွက်</th>
                               <th>ကာလပေါက်ဈေး</th>
                               <th>လျော်ကြေးငွေ</th>
-                              <th>Action</th>
+                              <th>လုပ်ဆောင်ချက်</th>
                             </tr>
                           </thead>
                           <tbody id="broken_table">
@@ -99,7 +99,6 @@ include_once 'layouts/header.php';
                               
                               if(!empty($_GET['id'])){
                                 $id= $_GET['id'];
-                                echo "*************".$id;
                                 $query="select lent.*,return_detail.* from lent inner join return_detail on 
                                 lent.id=return_detail.lent_id where return_detail.return_id=".$id;;
                               }

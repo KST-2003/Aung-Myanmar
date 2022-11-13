@@ -38,12 +38,13 @@ class Returnn{
         else
         return false;
     }
-    public function changeChecker($id){
+    public function changeChecker($id,$val){
         $cont=Database::connect();
-        $sql = "update lent set checker = 1 where id=:id";
+        $sql = "update lent set checker = :val where id=:id";
         $statement=$cont->prepare($sql);
 
         $statement->bindParam(':id',$id);
+        $statement->bindParam(':val',$val);
         if($statement->execute())
         return true;
         else 
