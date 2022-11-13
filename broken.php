@@ -114,7 +114,7 @@ include_once 'layouts/header.php';
                                 echo "<td>".$result['invoice_number']."</td>";
                                 $ld_id=$result['LentDetail_id'];
                                 $query2="Select item.item_name from item inner join lent_detail on 
-                                lent_detail.item_name=item.id where lent_detail.id=".$ld_id;
+                                lent_detail.item_id=item.id where lent_detail.id=".$ld_id;
                                 $query2_execute=mysqli_query($con,$query2);
                                 while($response=mysqli_fetch_array($query2_execute)){
                                   echo "<td>".$response['item_name']."</td>";
