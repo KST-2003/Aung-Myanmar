@@ -69,7 +69,7 @@ include_once 'layouts/header.php';
                                 <?php
                                     $total_cost=0;
                                     $query2="Select item.item_name as i,lent_detail.*,return_detail.* from 
-                                    item inner join lent_detail on lent_detail.item_name=item.id inner join return_detail
+                                    item inner join lent_detail on lent_detail.item_id=item.id inner join return_detail
                                     on lent_detail.id=return_detail.LentDetail_id where return_detail.return_id=".$id;
                                     $query2_execute=mysqli_query($con,$query2);
                                     while($result2 = mysqli_fetch_array($query2_execute)){

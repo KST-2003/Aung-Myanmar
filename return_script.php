@@ -6,7 +6,7 @@ include_once "controller/ReturnController.php";
 if(!empty($_POST['id'])){
     $id = $_POST['id'];
     mysqli_select_db($con,"return_tb");
-    $query = "SELECT customer.name FROM customer JOIN lent ON customer.id=".$id;
+    $query = "SELECT customer.cus_name FROM customer JOIN lent ON customer.id=".$id;
     $result = mysqli_query($con,$query);
     $outcome = mysqli_fetch_row($result);
     echo $outcome[0];
@@ -15,7 +15,7 @@ if(!empty($_POST['id'])){
 //item name and option value in selectbox
 if(!empty($_POST['lentdetail'])){
     $id = $_POST['lentdetail'];
-    $query = "SELECT lent_detail.item_name as i,item.item_name FROM item inner join lent_detail on lent_detail.item_name=item.id 
+    $query = "SELECT lent_detail.item_id as i,item.item_name FROM item inner join lent_detail on lent_detail.item_id=item.id 
     WHERE lent_detail.lent_id=".$id;
     $result = mysqli_query($con,$query);
     $option="<option>Choose Return Item</option>";

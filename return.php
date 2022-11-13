@@ -220,7 +220,7 @@ include_once "layouts/header.php";
                                     while($outcome=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):;
                                 ?>
                                 <option value="<?php echo $outcome['id']; ?>">
-                                    <?php echo $outcome['name']; ?>
+                                    <?php echo $outcome['emp_name']; ?>
                                 </option>
                                 <?php endwhile; ?> 
                             </select>
@@ -267,7 +267,7 @@ include_once "layouts/header.php";
                                                 </thead>
                                                 <tbody q_id="return_table">
                                                 <?php
-                                                    $query1="Select customer.name,lent.*,return_tb.* from customer inner
+                                                    $query1="Select customer.cus_name,lent.*,return_tb.* from customer inner
                                                     join lent on customer.id=lent.customer_id inner join return_tb on 
                                                     lent.id=return_tb.lent_id";
                                                     $query1_execute=mysqli_query($con,$query1);
@@ -276,7 +276,7 @@ include_once "layouts/header.php";
                                                         echo "<tr>";
                                                         echo "<td>".$count."</td>";
                                                         echo "<td>".$result1['invoice_number']."</td>";
-                                                        echo "<td>".$result1['name']."</td>";
+                                                        echo "<td>".$result1['cus_name']."</td>";
                                                         echo "<td>".$result1['lent_date']."</td>";
                                                         echo "<td>".$result1['return_date']."</td>";
 
