@@ -6,7 +6,7 @@ public function createCustomer($name,$nrc,$add,$ph)
 {
     $cont=Database::connect();
 
-    $sql="insert into customer(name,NRC,address,phone_number) values(:name,:nrc,:add,:ph)";
+    $sql="insert into customer(cus_name,NRC,address,phone_number) values(:name,:nrc,:add,:ph)";
 
 
     $statement=$cont->prepare($sql);

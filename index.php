@@ -116,7 +116,7 @@ include_once __DIR__. "/layouts/header.php";
               <div class="card"> 
                 <div class="card-body"> 
                   <p class="card-title">Total Deposit(Monthly)</p> 
-                  <p class="font-weight-500">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p> 
+                  <p class="font-weight-500"></p> 
                   
                   <canvas id="monthly-deposit"></canvas> 
                 </div> 
@@ -126,10 +126,9 @@ include_once __DIR__. "/layouts/header.php";
               <div class="card"> 
                 <div class="card-body"> 
                  <div class="d-flex justify-content-between"> 
-                  <p class="card-title">Lent Qty(Month)</p> 
-                  <a href="#" class="text-info">View all</a> 
+                  <p class="card-title">Lent Qty(Month)</p>                   
                  </div> 
-                  <p class="font-weight-500">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p> 
+                  <p class="font-weight-500"></p> 
                   <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div> 
                   <canvas id="monthly-lent"></canvas> 
                 </div> 
@@ -140,12 +139,22 @@ include_once __DIR__. "/layouts/header.php";
               <div class="card"> 
                 <div class="card-body"> 
                   <p class="card-title">Total Price(Monthly)</p> 
-                  <p class="font-weight-500">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p> 
+                  <p class="font-weight-500"></p> 
                   
                   <canvas id="monthly-price"></canvas> 
                 </div> 
               </div> 
             </div> 
+
+            <div class="col-md-6 grid-margin stretch-card"> 
+              <div class="card"> 
+                <div class="card-body"> 
+                  <p class="card-title">Total Price(Monthly)</p> 
+                  <p class="font-weight-500"></p> 
+                  
+                  <canvas id=""></canvas> 
+                </div> 
+              </div> 
           </div> 
           
           
@@ -167,6 +176,7 @@ include_once __DIR__. "/layouts/footer.php";
             showGraph(); 
             showGraph2(); 
             showGraph3(); 
+
      
  
  
@@ -319,7 +329,7 @@ include_once __DIR__. "/layouts/footer.php";
                         datasets: [ 
                             { 
                                 label: 'Total Price(Monthly)', 
-                                backgroundColor: 'coral', 
+                                backgroundColor: 'transparent', 
                                 borderColor: '#46d5f1', 
                                 hoverBackgroundColor: 'aqua', 
                                 hoverBorderColor: 'yellow', 
@@ -331,7 +341,7 @@ include_once __DIR__. "/layouts/footer.php";
                     var graphTarget = $("#monthly-price"); 
  
                     var barGraph = new Chart(graphTarget, { 
-                        type: 'bar', 
+                        type: 'line', 
                         data: chartdata 
                     }); 
                 }); 
