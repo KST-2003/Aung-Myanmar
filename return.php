@@ -107,7 +107,7 @@ include_once "layouts/header.php";
      <!-- Form Modal Button -->
      <div class="row mb-4">
               <div class="col text-left">
-                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#largeModal"><b>Add Return Item</b></a>
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#largeModal"><b>ပြန်အပ်စာရင်းထည့်ရန်</b></a>
               </div>
               <!-- Search Button -->
               <div class="input-group col-md-4">
