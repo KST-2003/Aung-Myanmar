@@ -47,6 +47,8 @@ $('#invoice_no').change(function(e){
 $('#addbtn').click(function(e){
     console.log('ok');
     console.log('inside + button '+lent_id);
+
+
     //creating row
     var row=document.createElement('div');
     $(row).attr('class','row mt-3');
@@ -198,7 +200,7 @@ $('#addbtn').click(function(e){
         $.ajax({
             type:'Post',
             url: "return_script.php",
-            data:{ld_id:$(this).val()},
+            data:{ld_id:$(this).val(),l_id:$('#invoice_no').val()},
             success:function(result){
                 var splitt = result.split("_");
                 var r_qty = splitt[0];
@@ -206,7 +208,6 @@ $('#addbtn').click(function(e){
                 $(qty_input).val(r_qty);
                 $(qty_input).attr('max',r_qty);
                 $(price_input).val(r_price);
-                $(price_input).attr('max',r_price);
             }
         })
     })
@@ -234,7 +235,7 @@ $('#return_item').change(function(e){
     $.ajax({
         type:'Post',
         url: "return_script.php",
-        data:{ld_id:$('#return_item').val()},
+        data:{ld_id:$('#return_item').val() , l_id:$('#invoice_no').val()},
         success:function(result){
             var splitt = result.split("_");
             var qty = splitt[0];
@@ -242,7 +243,6 @@ $('#return_item').change(function(e){
             $("#return_qty").val(qty);
             $("#return_qty").attr('max',qty);
             $("#unit_price").val(price);
-            $("#unit_price").attr('max',price);
         }
     })
 })
