@@ -15,8 +15,8 @@ if(!empty($_POST['id'])){
 //item name and option value in selectbox
 if(!empty($_POST['lentdetail'])){
     $id = $_POST['lentdetail'];
-    $query = "SELECT lent_detail.item_id as i,item.item_name,lent_detail.* FROM item inner join lent_detail on lent_detail.item_id=item.id 
-    WHERE lent_detail.lent_id=".$id;
+    $query = "SELECT item.item_name,lent_detail.* FROM item inner join lent_detail on lent_detail.item_id=item.id 
+    WHERE lent_detail.give_back=0 and lent_detail.lent_id=".$id;
     $result = mysqli_query($con,$query);
     $option="<option>Choose Return Item</option>";
     while($outcome=mysqli_fetch_array($result,MYSQLI_ASSOC)):;
@@ -46,14 +46,13 @@ if(!empty($_POST['ld_id']) && !empty($_POST['l_id'])){
 
         }
         else{
-            $query2="Select lent_detail.*,return_detail.*,sum(return_qty),sum(broken_qty) from lent_detail inner join return_detail on
+            $query2="Select lent_detail.*,return_detail.*,sum(return_qty) from lent_detail inner join return_detail on
             lent_detail.id=return_detail.LentDetail_id where return_detail.LentDetail_id=".$ld_id;
             $result=mysqli_query($con,$query2);
             while($outcome2=mysqli_fetch_array($result,MYSQLI_ASSOC)){
                 $lent_qty= $outcome2['item_qty'];
                 $return_qty=intval($outcome2['sum(return_qty)']);
-                $broken_qty=intval($outcome2['sum(broken_qty)']);
-                $qty=$lent_qty-($return_qty+$broken_qty);
+                $qty=$lent_qty-$return_qty;
                 $price=$outcome2['unit_price'];
             }
         }
