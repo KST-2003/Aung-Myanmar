@@ -52,14 +52,14 @@ include_once 'layouts/header.php';
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#largeModal"><b>Add Lent Item</b></a>
               </div>
               <!-- Search Button -->
-              <div class="input-group col-md-4">
+              <!-- <div class="input-group col-md-4">
               <input type="text" class="form-control" name="" id="" placeholder="အမည်">
                 <div class="input-group-append">
                 <button class="btn btn-primary" type="button">
                 <i class="mdi mdi-magnify"></i>
                 </button>
                 </div>
-              </div>
+              </div> -->
               
 
             <!-- large modal for Lent Item Registration Form-->
@@ -67,20 +67,18 @@ include_once 'layouts/header.php';
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Lent Item Registration Form</h4>
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
                 <form action="" method="POST">
                 <div class="modal-body">
-                <h4>Lent</h4>
-                <p>ငှါးရမ်းခြင်း</p>
                            
                             <div class="row" id="content2">
 
                                 <div class="col-md-4 mt-3">
-                                <label for="">Customer Name</label>
+                                <label for="">ငှါးရမ်းသူအမည်</label>
                                 <select name="cus_name" id="" class="form-control">
                                 <?php 
                                     $selectquery1="select * from  customer "; 
@@ -98,22 +96,22 @@ include_once 'layouts/header.php';
                                 </div>
 
                                 <div class="col-md-4 mt-3">
-                                <label for="">Invoice No</label>
+                                <label for="">ဘောင်ချာနံပါတ်</label>
                                 <input type="text" class="form-control" name="inv_number" id="" placeholder="ဘောင်ချာနံပါတ်">
                                 </div>
 
                                 <div class="col-md-4 mt-3">
-                                <label for="">Lent Date</label>
+                                <label for="">ရက်စွဲ</label>
                                 <input type="date" class="form-control" name="lent_date">
                                 </div>
 
                                 <div class="col-md-6 mt-3">
-                                <label for="">Deposit</label>
-                                <input type="text" class="form-control" name="deposit" id="" placeholder="	စပေါ်ငွေ">
+                                <label for="">စပေါ်ငွေ</label>
+                                <input type="text" class="form-control" name="deposit" id="" placeholder="စပေါ်ငွေ">
                                 </div>
                                 
                                 <div class="col-md-6 mt-3">
-                                <label for="">Employee</label>
+                                <label for="">ဝန်ထမ်း</label>
                                 <select name="emp_name" id="" class="form-control">
                                 <?php 
                                     $selectquery="select * from  employee "; 
@@ -132,7 +130,7 @@ include_once 'layouts/header.php';
                                 <div class="container-fluid mt-3">
                                 <div class="row">
                                 <div class="col-md-4 mt-3">
-                                <label for="">Item Name</label>
+                                <label for="">ပစ္စည်းအမည်</label>
                                 <select name="item_name[]" id="" class="form-control" value="">
                                 <?php 
                                     $selectquery="select * from  item "; 
@@ -151,12 +149,12 @@ include_once 'layouts/header.php';
                                 </div>
 
                                 <div class="col-md-3 mt-3">
-                                <label for="">Qty</label>
+                                <label for="">အရေအတွက်</label>
                                 <input type="text" class="form-control" name="qty[]" id="" placeholder="အရေအတွက်">
                                 </div>
 
                                 <div class="col-md-4 mt-3">
-                                <label for="">Unit Price Per Day</label>
+                                <label for="">တစ်ရက်ငှါးရမ်းနှုန်း</label>
                                 <input type="text" class="form-control" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" value="700">
                                 </div>
                                 <div class="col-md-1 mt-3">
@@ -259,7 +257,7 @@ include_once 'layouts/header.php';
 
                           }
                           else{
-                            
+
                           }
                         ?>                                                       
                           </tbody>
@@ -394,9 +392,9 @@ include_once 'layouts/footer.php'
         var label2= document.createElement('label');
         var label3= document.createElement('label');
 
-        $(label1).html('Item name');
-        $(label2).html('Qty');
-        $(label3).html('Unit Price Per Day');
+        $(label1).html('ပစ္စည်းအမျိုးအမည်');
+        $(label2).html('အရေအတွက်');
+        $(label3).html('တစ်ရက်ငှါးရမ်းနှုန်း');
 
         $(label1).addClass('form-label');
         $(label2).addClass('form-label');

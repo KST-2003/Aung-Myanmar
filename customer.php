@@ -104,7 +104,6 @@ include_once "layouts/header.php";
       </div>
                     <form action="" method="post">
                     <div class="modal-body">
-                    <h4>ငှားရမ်းသူ</h4>
                    
                  
                     
@@ -151,7 +150,7 @@ include_once "layouts/header.php";
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <p class="card-title">Customer Table</p>
+
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
