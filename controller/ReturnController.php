@@ -27,5 +27,11 @@ class ReturnController extends Returnn{
         $duration = intval($duration);
         return $duration;
     }
+
+    //update function for give_back in lent_detail
+    public function updateGive_back($id){
+        $response = $this->changeGive_back($id);
+        return $response;
+    }
 }
 ?>
