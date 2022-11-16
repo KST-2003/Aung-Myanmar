@@ -1,18 +1,18 @@
 <?php
 include_once __DIR__."/../includes/db.php";
 class Returnn{
-    public function createReturn($lent_id,$return_date,$emp_id,$discount)
+    public function createReturn($lent_id,$return_date,$emp_id,$discount,$deposit)
     {
         $cont=Database::connect();
     
-        $sql="insert into return_tb(lent_id,return_date,emp_id,discount) values (:lent,:return_date,:emp_id,:discount)";
+        $sql="insert into return_tb(lent_id,return_date,emp_id,discount,deposit) values (:lent,:return_date,:emp_id,:discount,:deposit)";
         $statement=$cont->prepare($sql);
     
         $statement->bindParam(':lent',$lent_id);
         $statement->bindParam(':emp_id',$emp_id);
         $statement->bindParam(':discount',$discount);
         $statement->bindParam(':return_date',$return_date);
-    
+        $statement->bindParam(':deposit',$deposit);
         //$statement->execute();
         if($statement->execute())
         return true;
