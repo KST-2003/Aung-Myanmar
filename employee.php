@@ -6,8 +6,13 @@ if(isset($_POST['submit']))
 {
   if(!empty($_POST['name']))
   {
+
       $name=$_POST['name'];
+      if($name == 0){
+        echo"error";
+      }
   }
+
   if(!empty($_POST['add']))
   {
       $add=$_POST['add'];
@@ -71,15 +76,15 @@ include_once 'layouts/header.php';
                             <div class="row">
                                 <div class="col-md-6 mt-3">
                                 <label for="">Name</label>
-                                <input type="text" class="form-control" name="name" id="" placeholder="အမည်">
+                                <input type="text" class="form-control" name="name" id="" placeholder="အမည်" required>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                 <label for="">Address</label>
-                                <input type="" class="form-control" name="add" id="" placeholder="နေရပ်လိပ်စာ"> 
+                                <input type="" class="form-control" name="add" id="" placeholder="နေရပ်လိပ်စာ" required> 
                                 </div>
                                 <div class="col-md-12 mt-3">
                                 <label for="">Ph No</label>
-                                <input type="text" class="form-control" name="ph" id="" placeholder="ဖုန်းနံပတ်">  
+                                <input type="text" class="form-control" name="ph" id="" placeholder="ဖုန်းနံပတ်" required>  
                                 </div>
                             </div>
                         </div>

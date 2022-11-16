@@ -7,6 +7,7 @@ if(isset($_POST['upload'])){
   if(!empty($_POST['cus_name'])){
     $cus_name=$_POST['cus_name'];
   }
+
   if(!empty($_POST['inv_number'])){
     $inv_number=$_POST['inv_number'];
   }   
@@ -97,17 +98,17 @@ include_once 'layouts/header.php';
 
                                 <div class="col-md-4 mt-3">
                                 <label for="">ဘောင်ချာနံပါတ်</label>
-                                <input type="text" class="form-control" name="inv_number" id="" placeholder="ဘောင်ချာနံပါတ်">
+                                <input type="text" class="form-control" name="inv_number" id="" placeholder="ဘောင်ချာနံပါတ်" required>
                                 </div>
 
                                 <div class="col-md-4 mt-3">
                                 <label for="">ရက်စွဲ</label>
-                                <input type="date" class="form-control" name="lent_date">
+                                <input type="date" class="form-control" name="lent_date" required>
                                 </div>
 
                                 <div class="col-md-6 mt-3">
                                 <label for="">စပေါ်ငွေ</label>
-                                <input type="text" class="form-control" name="deposit" id="" placeholder="စပေါ်ငွေ">
+                                <input type="text" class="form-control" name="deposit" id="" placeholder="စပေါ်ငွေ" required>
                                 </div>
                                 
                                 <div class="col-md-6 mt-3">
@@ -150,12 +151,12 @@ include_once 'layouts/header.php';
 
                                 <div class="col-md-3 mt-3">
                                 <label for="">အရေအတွက်</label>
-                                <input type="text" class="form-control" name="qty[]" id="" placeholder="အရေအတွက်">
+                                <input type="text" class="form-control" name="qty[]" id="" placeholder="အရေအတွက်" required>
                                 </div>
 
                                 <div class="col-md-4 mt-3">
                                 <label for="">တစ်ရက်ငှါးရမ်းနှုန်း</label>
-                                <input type="text" class="form-control" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" value="700">
+                                <input type="text" class="form-control" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" required>
                                 </div>
                                 <div class="col-md-1 mt-3">
                                 <button  class="btn btn-outline-primary add mt-4" name="more">+</button>

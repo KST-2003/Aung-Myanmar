@@ -150,11 +150,6 @@ include_once "layouts/header.php";
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-<<<<<<< HEAD
-
-=======
-                              
->>>>>>> f6544b52ec8d8bb9147993bafe9a121cd97120ee
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
