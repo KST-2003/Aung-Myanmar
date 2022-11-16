@@ -5,11 +5,34 @@ include_once "controller/ReturnController.php";
 //customer name
 if(!empty($_POST['id'])){
     $id = $_POST['id'];
-    mysqli_select_db($con,"return_tb");
-    $query = "SELECT customer.cus_name FROM customer JOIN lent ON customer.id=".$id;
-    $result = mysqli_query($con,$query);
-    $outcome = mysqli_fetch_row($result);
-    echo $outcome[0];
+    $cus_query = "SELECT customer.cus_name FROM customer JOIN lent ON customer.id=lent.customer_id where lent.id=".$id;
+    $cus_result = mysqli_query($con,$cus_query);
+    while($cus_outcome=mysqli_fetch_array($cus_result)){
+        $cus_name=$cus_outcome['cus_name'];
+    }
+    $query="Select count(lent_id) from return_tb where return_tb.lent_id=".$id;
+    $query_execute=mysqli_query($con,$query);
+    while($result=mysqli_fetch_array($query_execute)){
+        $count_id=$result['count(lent_id)'];
+        if($count_id<1){
+            $query2="Select deposit from lent where lent.id=".$id;
+            $query2_execute=mysqli_query($con,$query2);
+            while($result2=mysqli_fetch_array($query2_execute)){
+                $deposit=$result2['deposit'];
+            }
+        }
+        else{
+            $query2="Select lent.deposit as l_depo,return.deposit from lent inner join return_tb on 
+            return_tb.lent_id= lent.id where return_tb.lent_id=".$id;
+            $query2_execute=mysqli_query($con,$query2_execute);
+            while($result2=mysqli_fetch_array($query2_execute)){
+                $lent_deposit=intval($result2['l_depo']);
+                $return_deposit=intval($result2['deposit']);
+                $deposit=$lent_deposit-$return_deposit;
+            }
+        }
+        echo $cus_name."_".$deposit;
+    }
 }
 
 //item name and option value in selectbox
@@ -28,9 +51,7 @@ if(!empty($_POST['lentdetail'])){
 //item_qty,unit price
 if(!empty($_POST['ld_id']) && !empty($_POST['l_id'])){
     $ld_id=$_POST['ld_id'];
-    $sent_id=$_POST['l_id'];
-    $explode_id=explode('_',$sent_id);
-    $lent_id=$explode_id[1];
+    $lent_id=$_POST['l_id'];
     $query= "Select count(lent_id) from return_detail where return_detail.lent_id=".$lent_id;
     $query_execute=mysqli_query($con,$query);
     while($outcome=mysqli_fetch_array($query_execute)){
