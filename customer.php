@@ -79,7 +79,7 @@ include_once "layouts/header.php";
                      <!-- Form Modal Button -->
             <div class="row mb-4">
               <div class="col text-left">
-                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#largeModal"><b> Add Customer</b></a>
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#largeModal"><b> ငှားရမ်းသူဖြည့်ရန်</b></a>
               </div>
               <!-- Search Button -->
               <div class="input-group col-md-4">
@@ -97,7 +97,7 @@ include_once "layouts/header.php";
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Customer Registration Form</h4>
+       
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -150,7 +150,11 @@ include_once "layouts/header.php";
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
+<<<<<<< HEAD
 
+=======
+                              
+>>>>>>> f6544b52ec8d8bb9147993bafe9a121cd97120ee
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
@@ -215,7 +219,7 @@ include_once "layouts/header.php";
   <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Customer Work Address</h4>
+       
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -234,7 +238,7 @@ include_once "layouts/header.php";
                       <form action="#" method="post">
                     <div class="row mb-3">
                     <div class="col-md-5">
-                    <label for="" class="form-label"><h4>Add Work Address</h4></label>
+                    <label for="" class="form-label"><h4>လုပ်ငန်းခွင်လိပ်စာ</h4></label>
                     <input type="text" name="new_work" id="newwork" placeholder="Work Address" class="form-control" required>                       
                     </div>
                     <div class="col-md-1 offset-md-3" >
