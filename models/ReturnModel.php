@@ -50,6 +50,18 @@ class Returnn{
         else 
         return false;
     }
+
+    public function changeGive_back($id){
+        $cont=Database::connect();
+        $sql = "update lent_detail set give_back = 1 where id=:id";
+        $statement=$cont->prepare($sql);
+
+        $statement->bindParam(':id',$id);
+        if($statement->execute())
+        return true;
+        else 
+        return false;
+    }
 }
 
 ?>
