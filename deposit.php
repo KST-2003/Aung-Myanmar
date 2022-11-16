@@ -120,7 +120,7 @@ include_once "layouts/header.php";
                                                   $query1="select lent.invoice_number , lent.deposit, dep.*from lent join dep on lent.id = dep.lent_id WHERE ranking=0";
                                                   $results = mysqli_query($con,$query1);
                                                   $count=1;
-                                                  if(is_array($results) || is_object($results) || is_bool($results)){
+                                                  if(!empty($results)){
                                                     foreach($results as $result){
                                                       $data_id=$result['id'];
                                                       $invoice_num=$result['invoice_number'];
@@ -138,7 +138,9 @@ include_once "layouts/header.php";
                                                   <?php  
                                                   $count++;
                                                   }
-                                                }
+                                              
+                                                 }
+                                                    
                                                   ?>                                              
                                                 </tbody>                                                                                                                                                                
                                             </table>
