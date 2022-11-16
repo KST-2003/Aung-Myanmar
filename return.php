@@ -5,10 +5,7 @@ $returnController = new ReturnController();
 if(isset($_POST['submit'])){
 
     if(!empty($_POST['lent_id'])){
-        $input = $_POST['lent_id'];
-        $explode_id=explode('_',$input);
-        $lent_id=$explode_id[1];
-        echo "lent id is ".$lent_id;
+        $lent_id = $_POST['lent_id'];
     }else{
         $error_invoice="Please select an invoice number";
     }
@@ -71,7 +68,7 @@ if(isset($_POST['submit'])){
             $checker_update = $returnController->updateChecker($lent_id,1);
         }
 
-        $addReturn= $returnController->addReturn($lent_id,$return_date,$emp_id,$discount);
+        $addReturn= $returnController->addReturn($lent_id,$return_date,$emp_id,$discount,$deposit);
         if($addReturn){
             $cuery = "select max(id) from return_tb";
             $outcome = mysqli_query($con,$cuery);
@@ -138,7 +135,7 @@ include_once "layouts/header.php";
                         <div class="col-md-4 mt-3">
                             <label for="">Invoice No</label>
                             <select name="lent_id" class='form-control' id='invoice_no' placeholder="ဘောင်ချာနံပါတ်">
-                                <option value="">Choose an Invoice Numver</option>
+                                <option value="">ဘောင်ချာနံပါတ်ကို ရွေးပါ</option>
                                 <?php
                                     $selectquery="select * from  lent where lent.checker<2";
                                     $select_result = mysqli_query($con,$selectquery);
@@ -147,7 +144,7 @@ include_once "layouts/header.php";
                                     while($outcome=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):;
                                     
                                 ?>
-                                <option value="<?php echo $outcome['customer_id']; ?>_<?php echo $ld_id=$outcome['id']; ?>"><?php echo $outcome['invoice_number']; ?>
+                                <option value="<?php echo $ld_id=$outcome['id']; ?>"><?php echo $outcome['invoice_number']; ?>
                                 </option>
                                 <?php 
                                     endwhile;
@@ -211,7 +208,7 @@ include_once "layouts/header.php";
                         <div class="container-fluid" id="return_form">
 
                         </div>
-                        <div class="col-md-6 mt-3">
+                        <div class="col-md-4 mt-3">
                             <label for="">Employee</label>
                             <select name="emp_id" class="form-control" id="employee" placeholder="လက်ခံပေးသည့်တာဝန်ခံ">
                                 <option>လက်ခံသူအမည်ကို ရွေးပါ</option>
@@ -227,9 +224,13 @@ include_once "layouts/header.php";
                             </select>
                             <span class='text-danger'><?php if(isset($error_emp)) echo $error_emp; ?></span>
                         </div>
-                        <div class="col-md-6 mt-3">
+                        <div class="col-md-4 mt-3">
                             <label for="">Discount</label>
-                            <input type="number" name="discount" class='form-control' placeholder='Discount'>
+                            <input type="number" id='discount' name="discount" class='form-control' placeholder='Discount'>
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            <label for="">စရန်ပြန်ပေးငွေ</label>
+                            <input type="number" name="deposit" min='0' id='deposit' class='form-control' placeholder='စရန်ပြန်ပေးငွေ'>
                         </div>
                     </div>
             </div>
@@ -260,9 +261,9 @@ include_once "layouts/header.php";
                                                         <th>ငှါးထားသည့် <br> ရက်စွဲ</th>
                                                         <th>ပြန်အပ်သည့် <br> ရက်စွဲ</th>
                                                         <th>ပြန်အပ်ပစ္စည်း</th>
-                                                        <th>စုစုပေါင်း <br> ကျသင့်ငွေ</th>
+                                                        <th>စပေါ်‌ပြန် <br>ပေးငွေ</th>
                                                         <th>ကျိုးပဲ့/ <br> ပျောက်ဆုံး</th>
-                                                        <th>စပေါ်‌ငွေ</th>
+                                                        <th>စုစုပေါင်း <br> ကျသင့်ငွေ</th>
                                                         <th>လုပ်ဆောင်ချက်</th>
                                                     </tr>
                                                 </thead>
@@ -324,13 +325,26 @@ include_once "layouts/header.php";
                                                                     $give_back_update=$returnController->updateGive_back($update_id);
                                                             }
                                                         }
+
+                                                        //for calculation of deposit
+                                                        $return_depo=0;
+                                                        $deposit_query="Select lent.deposit,return_tb.deposit as r_deposit from lent inner
+                                                        join return_tb on lent.id=return_tb.lent_id where return_tb.id=".$result1['id'];
+                                                        $depo_execute=mysqli_query($con,$deposit_query);
+                                                        while($depo_result=mysqli_fetch_array($depo_execute)){
+                                                            $r_deposit=intval($depo_result['r_deposit']);
+                                                            $cost-=$r_deposit;
+                                                        }
                                                         echo "<td>".$id_count." မျိုး</td>";
-                                                        echo "<td>".$cost."</td>";
+                                                        echo "<td>".$r_deposit."</td>";
                                                         if($has_broken>0)
                                                             echo "<td><a href='broken.php?id=".$ret_id."' class='text-black'>ရှိ</a></td>";
                                                         else
                                                             echo "<td>မရှိ</td>";
-                                                        echo "<td>".$result1['deposit']."</td>";
+                                                        if($cost>0)
+                                                            echo "<td class='text-success'><h4>".$cost."</h4></td>";
+                                                        else
+                                                            echo "<td class='text-danger'><h4>".$cost."</h4></td>";
                                                         echo "<td><a href='return_detail.php?id=".$ret_id."' class='btn btn-primary'>အသေးစိတ်</a></td>";
                                                         echo "</tr>";
                                                         $count++;
