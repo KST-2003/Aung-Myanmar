@@ -56,7 +56,9 @@ if(isset($_POST['submit'])){
     }else{
         $discount = 0;
     }
-
+    if(!empty($_POST['deposit'])){
+        $deposit = $_POST['deposit'];
+    }
     if(empty($error_invoice) && empty($error_date) && empty($error_item) && empty($error_qty) && empty($error_emp)){
 
         $checker_query="Select * from lent where lent.id=".$lent_id;
