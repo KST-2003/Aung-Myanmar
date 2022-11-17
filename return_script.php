@@ -22,9 +22,9 @@ if(!empty($_POST['id'])){
             }
         }
         else{
-            $query2="Select lent.deposit as l_depo,return.deposit from lent inner join return_tb on 
+            $query2="Select lent.deposit as l_depo,return_tb.deposit from lent inner join return_tb on 
             return_tb.lent_id= lent.id where return_tb.lent_id=".$id;
-            $query2_execute=mysqli_query($con,$query2_execute);
+            $query2_execute=mysqli_query($con,$query2);
             while($result2=mysqli_fetch_array($query2_execute)){
                 $lent_deposit=intval($result2['l_depo']);
                 $return_deposit=intval($result2['deposit']);
