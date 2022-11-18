@@ -203,7 +203,7 @@ include_once 'layouts/header.php';
                           <tbody id="lent_table">
                           <?php 
                           //asdasd
-                          $query = "select customer.cus_name, lent.* from customer join lent on customer.id = lent.customer_id";
+                          $query = "select customer.cus_name, lent.* from customer join lent on customer.id = lent.customer_id where lent.checker<2";
                           $result = mysqli_query($con,$query);
                           $count = 1;
                           if(!empty($result)){
