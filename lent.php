@@ -108,7 +108,7 @@ include_once 'layouts/header.php';
 
                                 <div class="col-md-6 mt-3">
                                 <label for="">စပေါ်ငွေ</label>
-                                <input type="text" class="form-control" name="deposit" id="" placeholder="စပေါ်ငွေ" required>
+                                <input type="number" class="form-control" name="deposit" id="" placeholder="စပေါ်ငွေ" required>
                                 </div>
                                 
                                 <div class="col-md-6 mt-3">
@@ -151,12 +151,12 @@ include_once 'layouts/header.php';
 
                                 <div class="col-md-3 mt-3">
                                 <label for="">အရေအတွက်</label>
-                                <input type="text" class="form-control" name="qty[]" id="" placeholder="အရေအတွက်" required>
+                                <input type="number" class="form-control" name="qty[]" id="" placeholder="အရေအတွက်" required>
                                 </div>
 
                                 <div class="col-md-4 mt-3">
                                 <label for="">တစ်ရက်ငှါးရမ်းနှုန်း</label>
-                                <input type="text" class="form-control" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" required>
+                                <input type="number" class="form-control" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" required>
                                 </div>
                                 <div class="col-md-1 mt-3">
                                 <button  class="btn btn-outline-primary add mt-4" name="more">+</button>
