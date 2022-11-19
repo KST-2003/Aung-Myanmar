@@ -317,13 +317,13 @@ else if($(this).val().trim().length!=null){
         var int  = parseInt($(this).val())
         console.log(int)
         console.log(Number.isInteger(int));
-        if(  $(this).val().length<8 && Number.isInteger(int) ==false )  //check only one
+        if(  $(this).val().length<8  || Number.isInteger(int) ==false)  //check only one 
         {
             $('#here').html('Please enter valid phone number');
             $(':input[type="submit"]').prop('disabled', true);
         }
 
-       else if($(this).val().length>=9 && Number.isInteger(int) ==true )
+       else 
         {
             $('#here').html('');
             $(':input[type="submit"]').prop('disabled', false);
