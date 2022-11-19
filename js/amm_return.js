@@ -2,6 +2,11 @@ var count = 1;
 $('#broken_qty').parent().hide();
 $('#actual_price').parent().hide();
 
+//setting default values in date and discount
+document.getElementById('return_date').valueAsDate = new Date();
+$('#discount').val(0);
+
+//display block or none according to ကျိုးပဲ့ရှိ/မရှိ
 $('#hasBroken').change(function(){
     console.log($('#hasBroken').val());
     if($('#hasBroken').val() == '0'){
@@ -14,29 +19,38 @@ $('#hasBroken').change(function(){
     }
 })
 
-console.log(count);
 
 var cus_id = null;
-var lent_id = null;
 
+//setting value in customer and deposit according to invoice number
 $('#invoice_no').change(function(e){
-    var id = ($('#invoice_no').val()).split('_');
-    cus_id= id[0];
-    lent_id=id[1];
-    console.log(cus_id);
-    console.log(lent_id);
+
+    //removing value in qty and unit price if invoice number is not selected
+    if($('#invoice_no :selected').text() == "ဘောင်ချာနံပါတ်ကို ရွေးပါ"){
+        console.log("inside invoice no is null");
+        $('#return_qty').val('');
+        $('#unit_price').val('');
+        $('#return_form').html('');
+    }
+
+    var id = $('#invoice_no').val();
     $.ajax({
         type:"post",
         url:'return_script.php',
-        data:{id:cus_id},
+        data:{id:id},
         success:function(response){
-            $('#customer').val(response);
+            var separate_response=response.split('_');
+            var cus_name=separate_response[0];
+            var deposit=separate_response[1];
+            $('#customer').val(cus_name);
+            $('#deposit').val(deposit);
+            $('#deposit').attr('max',deposit);
         }
     })
     $.ajax({
         type:"Post",
         url: "return_script.php",
-        data: {lentdetail:lent_id},
+        data: {lentdetail:id},
         success:function(result){
             $('#return_item').html(result);
             $('#broken_item').html(result);
@@ -46,7 +60,7 @@ $('#invoice_no').change(function(e){
 })
 $('#addbtn').click(function(e){
     console.log('ok');
-    console.log('inside + button '+lent_id);
+    console.log('inside + button '+$('#invoice_no').val());
 
 
     //creating row
@@ -140,7 +154,7 @@ $('#addbtn').click(function(e){
     $(actual_price).attr('placeholder','ကာလပေါက်စျေး');
 
     $(selectbox).attr('class','form-control');
-    $(selectbox).attr('lentdetail',lent_id);
+    $(selectbox).attr('lentdetail',$('#invoice_no').val());
     $(qty).attr('class','form-control');
     $(qty).attr("min",'0');
     $(return_date).attr('class','form-control');
@@ -155,7 +169,7 @@ $('#addbtn').click(function(e){
     $.ajax({
         type:"Post",
         url: "return_script.php",
-        data: {lentdetail:lent_id},
+        data: {lentdetail:$('#invoice_no').val()},
         success:function(result){
             $(selectbox).html(result);
         }
@@ -231,6 +245,7 @@ $('#addbtn').click(function(e){
     e.preventDefault();
 })
 
+//setting values in return-qty and unit price
 $('#return_item').change(function(e){
     $.ajax({
         type:'Post',
