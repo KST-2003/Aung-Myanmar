@@ -1,9 +1,9 @@
 <?php
 include_once __DIR__."/../models/ReturnModel.php";
 class ReturnController extends Returnn{
-    public function addReturn($lent_id,$return_date,$emp_id,$discount)
+    public function addReturn($lent_id,$return_date,$emp_id,$discount,$deposit)
     {
-        $result = $this->createReturn($lent_id,$return_date,$emp_id,$discount);
+        $result = $this->createReturn($lent_id,$return_date,$emp_id,$discount,$deposit);
         return $result;
     }
     public function addReturnDetail($return_id,$lent_id,$LentDetail_id,$return_qty,$has_broken,$broken_qty,$price)
@@ -26,6 +26,12 @@ class ReturnController extends Returnn{
         $duration = ($interval->y*365)+($interval->m*30)+($interval->d);
         $duration = intval($duration);
         return $duration;
+    }
+
+    //update function for give_back in lent_detail
+    public function updateGive_back($id){
+        $response = $this->changeGive_back($id);
+        return $response;
     }
 }
 ?>

@@ -5,7 +5,7 @@ public function createEmployee($name,$add,$ph)
 {
     $cont=Database::connect();
 
-    $sql="insert into employee(name,address,phone_number) values(:name,:add,:ph)";
+    $sql="insert into employee(emp_name,address,phone_number) values(:name,:add,:ph)";
     $statement=$cont->prepare($sql);
 
     $statement->bindParam(':name',$name);

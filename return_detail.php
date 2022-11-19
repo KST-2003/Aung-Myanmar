@@ -7,7 +7,7 @@ $query="Select customer.cus_name,lent.*,return_tb.* from customer inner join len
 join return_tb on return_tb.lent_id=lent.id where return_tb.id=".$id;
 $query_execute=mysqli_query($con,$query);
 while($result=mysqli_fetch_array($query_execute)){
-    $cus_name=$result['name'];
+    $cus_name=$result['cus_name'];
     $invoice_no = $result['invoice_number'];
     $lent_date = ($result['lent_date']);
     $return_date = ($result['return_date']);
@@ -17,6 +17,7 @@ while($result=mysqli_fetch_array($query_execute)){
     $deposit=intval($result['deposit']);
     $discount=intval($result['discount']);
 }
+
 include_once 'layouts/header.php';
 ?>
     <div class="main-panel">
@@ -125,9 +126,10 @@ include_once 'layouts/header.php';
                                     <?php echo $discount; ?>  
                                 </div>
                             </div>
+                            <br>
                             <div class="row mb-5">
                                 <div class="col-md-9 text-right">
-                                   <h4>သင့်ငွေ</h4>
+                                   ကျသင့်ငွေ/ပြန်အမ်းငွေ
                                 </div>
                                 <?php
                                     $final_cost=$total_cost-($deposit+$discount);

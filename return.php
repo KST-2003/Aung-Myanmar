@@ -5,10 +5,7 @@ $returnController = new ReturnController();
 if(isset($_POST['submit'])){
 
     if(!empty($_POST['lent_id'])){
-        $input = $_POST['lent_id'];
-        $explode_id=explode('_',$input);
-        $lent_id=$explode_id[1];
-        echo "lent id is ".$lent_id;
+        $lent_id = $_POST['lent_id'];
     }else{
         $error_invoice="Please select an invoice number";
     }
@@ -59,18 +56,21 @@ if(isset($_POST['submit'])){
     }else{
         $discount = 0;
     }
-    $checker_query="Select * from lent where lent.id=".$lent_id;
-    $query_execute = mysqli_query($con,$checker_query);
-    while($checker_result = mysqli_fetch_array($query_execute)){
-        $checker = $checker_result['checker'];
+    if(!empty($_POST['deposit'])){
+        $deposit = $_POST['deposit'];
     }
-    if($checker==0){
-        $checker_update = $returnController->updateChecker($lent_id,1);
-    }
-
     if(empty($error_invoice) && empty($error_date) && empty($error_item) && empty($error_qty) && empty($error_emp)){
 
-        $addReturn= $returnController->addReturn($lent_id,$return_date,$emp_id,$discount);
+        $checker_query="Select * from lent where lent.id=".$lent_id;
+        $query_execute = mysqli_query($con,$checker_query);
+        while($checker_result = mysqli_fetch_array($query_execute)){
+            $checker = $checker_result['checker'];
+        }
+        if($checker==0){
+            $checker_update = $returnController->updateChecker($lent_id,1);
+        }
+
+        $addReturn= $returnController->addReturn($lent_id,$return_date,$emp_id,$discount,$deposit);
         if($addReturn){
             $cuery = "select max(id) from return_tb";
             $outcome = mysqli_query($con,$cuery);
@@ -137,7 +137,7 @@ include_once "layouts/header.php";
                         <div class="col-md-4 mt-3">
                             <label for="">Invoice No</label>
                             <select name="lent_id" class='form-control' id='invoice_no' placeholder="ဘောင်ချာနံပါတ်">
-                                <option value="">Choose an Invoice Numver</option>
+                                <option value="">ဘောင်ချာနံပါတ်ကို ရွေးပါ</option>
                                 <?php
                                     $selectquery="select * from  lent where lent.checker<2";
                                     $select_result = mysqli_query($con,$selectquery);
@@ -146,7 +146,7 @@ include_once "layouts/header.php";
                                     while($outcome=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):;
                                     
                                 ?>
-                                <option value="<?php echo $outcome['customer_id']; ?>_<?php echo $ld_id=$outcome['id']; ?>"><?php echo $outcome['invoice_number']; ?>
+                                <option value="<?php echo $ld_id=$outcome['id']; ?>"><?php echo $outcome['invoice_number']; ?>
                                 </option>
                                 <?php 
                                     endwhile;
@@ -210,7 +210,7 @@ include_once "layouts/header.php";
                         <div class="container-fluid" id="return_form">
 
                         </div>
-                        <div class="col-md-6 mt-3">
+                        <div class="col-md-4 mt-3">
                             <label for="">Employee</label>
                             <select name="emp_id" class="form-control" id="employee" placeholder="လက်ခံပေးသည့်တာဝန်ခံ">
                                 <option>လက်ခံသူအမည်ကို ရွေးပါ</option>
@@ -226,9 +226,13 @@ include_once "layouts/header.php";
                             </select>
                             <span class='text-danger'><?php if(isset($error_emp)) echo $error_emp; ?></span>
                         </div>
-                        <div class="col-md-6 mt-3">
+                        <div class="col-md-4 mt-3">
                             <label for="">Discount</label>
-                            <input type="number" name="discount" class='form-control' placeholder='Discount'>
+                            <input type="number" id='discount' name="discount" class='form-control' placeholder='Discount'>
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            <label for="">စရန်ပြန်ပေးငွေ</label>
+                            <input type="number" name="deposit" min='0' id='deposit' class='form-control' placeholder='စရန်ပြန်ပေးငွေ'>
                         </div>
                     </div>
             </div>
@@ -259,15 +263,15 @@ include_once "layouts/header.php";
                                                         <th>ငှါးထားသည့် <br> ရက်စွဲ</th>
                                                         <th>ပြန်အပ်သည့် <br> ရက်စွဲ</th>
                                                         <th>ပြန်အပ်ပစ္စည်း</th>
-                                                        <th>စုစုပေါင်း <br> ကျသင့်ငွေ</th>
+                                                        <th>စပေါ်‌ပြန် <br>ပေးငွေ</th>
                                                         <th>ကျိုးပဲ့/ <br> ပျောက်ဆုံး</th>
-                                                        <th>စပေါ်‌ငွေ</th>
+                                                        <th>စုစုပေါင်း <br> ကျသင့်ငွေ</th>
                                                         <th>လုပ်ဆောင်ချက်</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody q_id="return_table">
                                                 <?php
-                                                    $query1="Select customer.cus_name,lent.*,return_tb.* from customer inner
+                                                    $query1="Select customer.cus_name,lent.*,lent.id as lid,return_tb.* from customer inner
                                                     join lent on customer.id=lent.customer_id inner join return_tb on 
                                                     lent.id=return_tb.lent_id";
                                                     $query1_execute=mysqli_query($con,$query1);
@@ -287,39 +291,80 @@ include_once "layouts/header.php";
 
                                                         //get id for 2nd query
                                                         $ret_id=$result1['id'];
+                                                        $id_count=0;
+                                                        $has_broken=0;
+                                                        $cost=0;
                                                         //2nd query
-                                                        $query2="Select return_detail.*,count(return_id),lent_detail.* from lent_detail inner 
+                                                        $query2="Select return_detail.id as rd,return_detail.*,lent_detail.*,
+                                                        lent_detail.id as ld_id from lent_detail inner 
                                                         join return_detail on lent_detail.id=return_detail.LentDetail_id 
                                                         where return_detail.return_id=".$ret_id;
                                                         $query2_execute=mysqli_query($con,$query2);
                                                         while($result2=mysqli_fetch_array($query2_execute)){
-                                                            echo "<td>".$result2['count(return_id)']." မျိုး</td>";
+                                                            if($result2['rd']){
+                                                                $id_count++;
+                                                            }
+                                                            $update_id=intval($result2['ld_id']);
                                                             //preparing for calTotalCost
                                                             $r_qty=intval($result2['return_qty']);
                                                             $price=intval($result2['unit_price']);
                                                             $broken_qty=intval($result2['broken_qty']);
                                                             $actual_price=intval($result2['price']);
-                                                            $cost=$returnController->calTotalCost($initial_date,$final_date,$r_qty,$price,$broken_qty,$actual_price,$dis);
-                                                            echo "<td>".$cost."</td>";
+                                                            $cost+=$returnController->calTotalCost($initial_date,$final_date,$r_qty,$price,$broken_qty,$actual_price,$dis);
+                                                            
                                                             if($result2['has_broken']==1)
-                                                            echo "<td><a href='broken.php?id=".$ret_id."' class='text-black'>ရှိ</a></td>";
-                                                            else
-                                                            echo "<td>မရှိ</td>";
+                                                                $has_broken++;
+                                                            $total_return_qty=0;
+                                                            $total_return_qty+=$r_qty;
 
-                                                            $return_qty=intval($result2['return_qty']);
+                                                            $update_query="Select lent_detail.*,return_detail.*,sum(return_qty) from lent_detail inner join return_detail on 
+                                                            lent_detail.id=return_detail.LentDetail_id where return_detail.LentDetail_id=".$update_id;
+                                                            $execute2=mysqli_query($con,$update_query);
+                                                            while($execution2=mysqli_fetch_array($execute2)){
+                                                                $lent_qty=intval($execution2['item_qty']);
+                                                                $give_back_qty=intval($execution2['sum(return_qty)']);
+                                                                if($lent_qty==$give_back_qty)
+                                                                    $give_back_update=$returnController->updateGive_back($update_id);
+                                                            }
                                                         }
-                                                        echo "<td>".$result1['deposit']."</td>";
+
+                                                        //for calculation of deposit
+                                                        $return_depo=0;
+                                                        $deposit_query="Select lent.deposit,return_tb.deposit as r_deposit from lent inner
+                                                        join return_tb on lent.id=return_tb.lent_id where return_tb.id=".$result1['id'];
+                                                        $depo_execute=mysqli_query($con,$deposit_query);
+                                                        while($depo_result=mysqli_fetch_array($depo_execute)){
+                                                            $r_deposit=intval($depo_result['r_deposit']);
+                                                            $cost-=$r_deposit;
+                                                        }
+                                                        echo "<td>".$id_count." မျိုး</td>";
+                                                        echo "<td>".$r_deposit."</td>";
+                                                        if($has_broken>0)
+                                                            echo "<td><a href='broken.php?id=".$ret_id."' class='text-black'>ရှိ</a></td>";
+                                                        else
+                                                            echo "<td>မရှိ</td>";
+                                                        if($cost>0)
+                                                            echo "<td class='text-success'><h4>".$cost."</h4></td>";
+                                                        else
+                                                            echo "<td class='text-danger'><h4>".$cost."</h4></td>";
                                                         echo "<td><a href='return_detail.php?id=".$ret_id."' class='btn btn-primary'>အသေးစိတ်</a></td>";
                                                         echo "</tr>";
                                                         $count++;
 
-                                                        //update checker if lent_qty=return_qty+broken_qty
-                                                        $lent_qty=intval($result1['total_qty']);
-                                                        $total_return_qty=$return_qty+$broken_qty;
-                                                        $l_id=$result1['lent_id'];
-                                                        if($total_return_qty > $lent_qty || $total_return_qty == $lent_qty){
-                                                            $checker_update2=$returnController->updateChecker($l_id,2);
+                                                        $id_checker=$result1['lid'];
+                                                        $total_return_qty=0;
+                                                        $kuery="SELECT return_detail.*,lent.* FROM lent INNER JOIN return_detail on 
+                                                        return_detail.lent_id=lent.id WHERE return_detail.lent_id=".$id_checker;
+                                                        $kuery_execute=mysqli_query($con,$kuery);
+                                                        while($final_outcome=mysqli_fetch_array($kuery_execute)){
+                                                            $lent_qty=$final_outcome['total_qty'];
+                                                            $return_qty=$final_outcome['return_qty'];
+                                                            $total_return_qty+=$return_qty;
+                                                            if($lent_qty==$total_return_qty){
+                                                                $checker2=$returnController->updateChecker($id_checker,2);
+                                                            }
                                                         }
+
                                                     }
                                                     
                                                 ?>
