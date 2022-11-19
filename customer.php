@@ -111,12 +111,12 @@ include_once "layouts/header.php";
                                         <div class="row" id="">
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">အမည်</label>
-                                                <input type="text" name="name" id="" class="form-control" placeholder="အမည်" required>
+                                                <input type="text" name="name" id="name" class="form-control" placeholder="အမည်" required>
                                                 <span class="text-danger" id="cus_name"></span>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">မှတ်ပုံတင်နံပါတ်</label>
-                                                <input type="text" name="nrc" id="" class="form-control" placeholder="မှတ်ပုံတင်နံပါတ်" required>
+                                                <input type="text" name="nrc" id="nrc" class="form-control" placeholder="မှတ်ပုံတင်နံပါတ်" required>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">ဖုန်းနံပါတ်</label>
@@ -125,11 +125,11 @@ include_once "layouts/header.php";
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">နေရပ်လိပ်စာ</label>
-                                                <input type="text" name="add" id="" class="form-control" placeholder="နေရပ်လိပ်စာ">
+                                                <input type="text" name="add" id="address" class="form-control" placeholder="နေရပ်လိပ်စာ" required>
                                             </div>
                                             <div class="col-md-11 mt-3">
                                                 <label for="" class="form-label">လုပ်ငန်းခွင်လိပ်စာ</label>
-                                                <input type="text" name="work_add[]" id="" class="form-control" placeholder="လုပ်ငန်းခွင်လိပ်စာ">
+                                                <input type="text" name="work_add[]" id="workplace" class="form-control" placeholder="လုပ်ငန်းခွင်လိပ်စာ" required>
                                             </div>
                                             <div class="col-md-1 mt-5">
                                                 <button  class="btn btn-outline-primary new" id="" >+</button>
@@ -302,7 +302,7 @@ include_once "layouts/footer.php";
 $(document).ready(function(){
 
     $(":input").keyup(function(){
-     if($(this).val().trim().length===0){
+     if($(this).val().trim().length===0 || $('#name').val().trim().length===0 || $("#phone").val().trim().length===0 || $("#nrc").val().trim().length===0 || $("#address").val().trim().length===0 || $("#workplace").val().trim().length===0){
         console.log('space')
         $(':input[type="submit"]').prop('disabled', true);
 
@@ -319,7 +319,7 @@ else if($(this).val().trim().length!=null){
         var int  = parseInt($(this).val())
         console.log(int)
         console.log(Number.isInteger(int));
-        if(  $(this).val().length<8  || Number.isInteger(int) ==false)  //check only one 
+        if(  $(this).val().length<8  )  //check only one || Number.isInteger(int) ==false
         {
             $('#here').html('Please enter valid phone number');
             $(':input[type="submit"]').prop('disabled', true);
@@ -328,7 +328,7 @@ else if($(this).val().trim().length!=null){
        else 
         {
             $('#here').html('');
-            $(':input[type="submit"]').prop('disabled', false);
+          
          }
      
     })
