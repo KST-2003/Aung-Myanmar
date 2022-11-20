@@ -54,7 +54,7 @@ include_once "layouts/header.php";
             <!-- Form Modal Button -->
             <div class="row mb-4">
               <div class="col text-left">
-                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#largeModal"><b>Add New Item</b></a>
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#largeModal"><b>ပစ္စည်းထည့်ရန်</b></a>
               </div>
               <!-- Search Button -->
               <div class="input-group col-md-4">
@@ -72,19 +72,19 @@ include_once "layouts/header.php";
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">New Item Registration Form</h4>
+        
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
                     <form action="" method="post">
                     <div class="modal-body">
-                    <h4>Add New Item</h4>
-                    <p>ထပ်ရောက်ပစ္စည်း</p>
+                    <h4>ထပ်ရောက်ပစ္စည်း</h4>
+               
                                                    
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="" class="form-label">Item Name</label><br>
+                                                <label for="" class="form-label">ပစ္စည်းအမည်</label><br>
                                                 <select name="item_id" id="" class="form-control" required >
                                                 <?php
                                                     $selectquery="select * from  item ";
@@ -102,25 +102,25 @@ include_once "layouts/header.php";
                                                                         
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="" class="form-label">Arrival Date</label>
+                                                <label for="" class="form-label">ရောက်ရှိသည့်ရက်စွဲ</label>
                                                 <input type="date" name="income_date" id="" class="form-control" value="yyyy-mm-dd" placeholder="yyyy-mm-dd" required>
                                                 
                                             </div>
                                         </div>        
                                         <div class="row mt-3" >
                                             <div class="col-md-6">
-                                                <label for="" class="form-label">New Qty</label>
-                                                <input type="text" name="qty" id="" class="form-control" placeholder="အသစ်ရောက်အရေအတွက်" required>
+                                                <label for="" class="form-label">အသစ်ရောက်အရေအတွက်</label>
+                                                <input type="text" name="qty" id="new_qty" class="form-control" placeholder="အသစ်ရောက်အရေအတွက်" required>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="" class="form-label">Item Value</label>
-                                                <input type="text" name="actual_price" id="" class="form-control" placeholder="ပစ္စည်းတန်ဖိုး" required>
+                                                <label for="" class="form-label">ပစ္စည်းတန်ဖိုး</label>
+                                                <input type="text" name="actual_price" id="item_value" class="form-control" placeholder="ပစ္စည်းတန်ဖိုး" required>
                                             </div>
                                         </div>      
                                         <div class="row mt-3">
                                         <div class="col-md-6">
-                                                <label for="" class="form-label">Rental Rate</label>
-                                                <input type="text" name="lent_price" id="" class="form-control" placeholder="၁ ရက်ငှားရမ်းနှုံး" required>
+                                                <label for="" class="form-label">၁ ရက်ငှားရမ်းနှုံး</label>
+                                                <input type="text" name="lent_price" id="rental_rate" class="form-control" placeholder="၁ ရက်ငှားရမ်းနှုံး" required>
                                             </div>
                                         </div>
                                             
@@ -166,6 +166,8 @@ include_once "layouts/header.php";
                                                    
                                                     $result = mysqli_query($con,$query);
                                                     $row= (mysqli_fetch_array($result));
+                                                    print_r($row);
+                                                    if(!empty($row)){
                                                     $item_name=$row['item_name'];
                                                  
                                                     $count = 1;
@@ -194,6 +196,10 @@ include_once "layouts/header.php";
                                                     <?php
                                                     $count ++;
                                                     }
+                                                }
+                                                else{
+                                                    
+                                                }
                                                 ?> 
                                                 </tbody>
                                                                     
@@ -216,3 +222,16 @@ include_once "layouts/header.php";
 <?php 
 include_once "layouts/footer.php";
 ?>
+<script>
+    $(":input").keyup(function(){
+     if($(this).val().trim().length===0 || $('#item_value').val().trim().length===0 ||  $('#rental_rate').val().trim().length===0 ||  $('#new_qty').val().trim().length===0){
+        console.log('space')
+        $(':input[type="submit"]').prop('disabled', true);
+
+}
+else if($(this).val().trim().length!=null){
+    $(':input[type="submit"]').prop('disabled',false);
+}
+
+    })
+</script>
