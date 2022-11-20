@@ -166,7 +166,7 @@ include_once "layouts/header.php";
                                                    
                                                     $result = mysqli_query($con,$query);
                                                     $row= (mysqli_fetch_array($result));
-                                                    print_r($row);
+                                                   // print_r($row);
                                                     if(!empty($row)){
                                                     $item_name=$row['item_name'];
                                                  
