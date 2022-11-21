@@ -76,7 +76,7 @@ include_once 'layouts/header.php';
                 <form action="" method="POST">
                 <div class="modal-body">
                            
-                            <div class="row" id="content2">
+                            <div class="row">
 
                                 <div class="col-md-4 mt-3">
                                 <label for="">ငှါးရမ်းသူအမည်</label>
@@ -128,11 +128,11 @@ include_once 'layouts/header.php';
                                     <?php endwhile;?>  
                                 </select>
                                 </div>
-                                <div class="container-fluid mt-3">
+                                <div class="container-fluid mt-3" id="content2">
                                 <div class="row">
                                 <div class="col-md-4 mt-3">
                                 <label for="">ပစ္စည်းအမည်</label>
-                                <select name="item_name[]" id="" class="form-control" value="">
+                                <select name="item_name[]" id="" class="form-control item1" value="">
                                 <?php 
                                     $selectquery="select * from  item "; 
                                     $select_result = mysqli_query($con,$selectquery); 
@@ -151,12 +151,12 @@ include_once 'layouts/header.php';
 
                                 <div class="col-md-3 mt-3">
                                 <label for="">အရေအတွက်</label>
-                                <input type="number" class="form-control" name="qty[]" id="" placeholder="အရေအတွက်" required>
+                                <input type="number" class="form-control qty1" name="qty[]" id="" placeholder="အရေအတွက်" required>
                                 </div>
 
                                 <div class="col-md-4 mt-3">
                                 <label for="">တစ်ရက်ငှါးရမ်းနှုန်း</label>
-                                <input type="number" class="form-control" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" required>
+                                <input type="number" class="form-control" max="1000" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" required>
                                 </div>
                                 <div class="col-md-1 mt-3">
                                 <button  class="btn btn-outline-primary add mt-4" name="more">+</button>
@@ -190,7 +190,6 @@ include_once 'layouts/header.php';
                       <div class="table-responsive">
                         <table id="datatable" class="display expandable-table" style="width:100%">
                           <thead>
-
                             <tr>
                               <th>စဥ်</th>
                               <th>ငှါးရမ်းသူအမည်</th>
@@ -366,13 +365,30 @@ include_once 'layouts/footer.php'
     if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
+$('.item1').change(first)
+$('.qty1').keyup(first)
+function first(){
+console.log('chggg')
+$item_id=$('.item1').val();
+$qty_control=$('.qty1').val();
+console.log($item_id,$qty_control)
+$.ajax({
+  url: 'check_stock.php',
+  type: 'post',
+  data: {item_name:$item_id,quantity:$qty_control},
+  success:function(response){
+    console.log(response)
+    $('.qty1').attr('value',response)
+  }
 
-    
+})
+}
+    $counter=2;
     $('.add').click(function(e){
         console.log('ok');
 
-        var div=document.createElement('div');
-        $(div).attr('class','container-fluid mt-3');
+        // var div=document.createElement('div');
+        // $(div).attr('class','container-fluid mt-3');
         var row=document.createElement('div');
         $(row).attr('class','row');
         var col1 = document.createElement('div');
@@ -421,8 +437,8 @@ include_once 'layouts/footer.php'
         $(qty).attr('placeholder','အရေအတွက်');
         $(unit_price).attr('placeholder','တစ်ရက်ငှါးရမ်းနှုန်း');
 
-        $(name).attr('class','form-control');
-        $(qty).attr('class','form-control');
+        $(name).attr('class','form-control item'+$counter+'');
+        $(qty).attr('class','form-control qty'+$counter+'');
         $(unit_price).attr('class','form-control');
 
         $(name).attr('name','item_name[]');
@@ -440,13 +456,15 @@ include_once 'layouts/footer.php'
 
 
         $(btn).click(function(){
-            $(this).parent().parent().parent().remove();
+            $(this).parent().parent().remove();
         });
 
 
         $(row).append(col1,col2,col3,col4);
-        $(div).append(row);
-        $('#content2').append(div);
+        // $(div).append(row);
+        $counter++;
+        $('#content2').append(row);
+
         e.preventDefault();
     })
     $('.delete_lent').click(function(event){
