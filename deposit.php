@@ -44,13 +44,19 @@ include_once "layouts/header.php";
                                                       lent_id";
                                                       $query_run= mysqli_query($con,$select_query);
                                                       $output=mysqli_fetch_array($query_run,MYSQLI_ASSOC);
-                                                      $last_dep= $data_dep - $output['dept'];
+                                                      if(!empty($output)){
+                                                        $last_dep= $data_dep - $output['dept'];
+                                                      }
+
                                                       ?>
                                                       <tr>
                                                         <td><div><?php echo $count?></div></td>
                                                         <td><div><?php echo $invoice_num?></div></td>
                                                         <td><div><?php echo $data_dep?></div></td>
-                                                        <td><div><?php print_r($output['dept'])?></div></td>
+                                                        <td><div><?php if(isset($output)){
+                                                          print_r($output['dept']);
+                                                        }else{echo 0;
+                                                        } ?></div></td>
                                                         <td><div><?php echo $last_dep ?></div></td>
                                                       </tr>
                                                       <?php
