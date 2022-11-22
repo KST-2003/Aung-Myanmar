@@ -366,18 +366,15 @@ include_once 'layouts/footer.php'
   window.history.replaceState( null, null, window.location.href );
 }
 $('.item1').change(first)
-$('.qty1').keyup(first)
 function first(){
 console.log('chggg')
 $item_id=$('.item1').val();
-$qty_control=$('.qty1').val();
-console.log($item_id,$qty_control)
+console.log($item_id)
 $.ajax({
   url: 'check_stock.php',
   type: 'post',
-  data: {item_name:$item_id,quantity:$qty_control},
+  data: {item_name:$item_id},
   success:function(response){
-    console.log(response)
     $('.qty1').attr('value',response)
   }
 
