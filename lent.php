@@ -370,12 +370,12 @@ include_once 'layouts/footer.php'
 $('.item1').change(first)
 function first(){
 console.log('chggg')
-$item_id=$('.item1').val();
-console.log($item_id)
+var item_id=$('.item1').val();
+console.log(item_id)
 $.ajax({
   url: 'check_stock.php',
   type: 'post',
-  data: {item_name:$item_id},
+  data: {item_name:item_id},
   success:function(response){
     $('.qty1').attr('value',response)
     // $('.qty1').attr('max',response)
@@ -386,10 +386,10 @@ $.ajax({
 }
 $('.qty1').focusout(fout)
 function fout(event){
-  $item_val=$('.qty1').val();
+  var item_val=$('.qty1').val();
   console.log(maximum)
-  console.log($item_val)
-  if($item_val>maximum){
+  console.log(item_val)
+  if(item_val>maximum){
     var message = document.getElementById('error_message');
     message.innerHTML="Out of maximum";
   }
@@ -478,29 +478,32 @@ function fout(event){
         // $(div).append(row);
         counting++;
         $('#content2').append(row);
-        for(var index = 1;index<=counting;index++){
+        for(var index = 2;index<=counting;index++){
           $('.item'+index+'').change(second)
           function second(){
           console.log('chggg')
-          $item_id=$('.item'+index+'').val();
-          console.log($item_id)
+          var item_id=$(this).val();
+          console.log(item_id)
           $.ajax({
             url: 'check_stock.php',
             type: 'post',
-            data: {item_name:$item_id},
+            data: {item_name:item_id},
             success:function(response){
-              $('.qty'+index+'').attr('value',response)
-              maximum = response;
+              $('.qty'+index+'').attr('value',response);
+              var maximum = response;
+              console.log(maximum);
+
             }
 
           })
           }
           $('.qty'+index+'').focusout(fout)
+         // console.log('oiii')
           function fout(event){
-            $item_val=$('.qty'+index+'').val();
+            var item_val=$(this).val();
             console.log(maximum)
-            console.log($item_val)
-            if($item_val>maximum){
+            console.log(item_val)
+            if(item_val>maximum){
               var message = document.getElementById('error_message');
               message.innerHTML="Out of maximum";
             }
