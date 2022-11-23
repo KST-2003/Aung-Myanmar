@@ -152,6 +152,7 @@ include_once 'layouts/header.php';
                                 <div class="col-md-3 mt-3">
                                 <label for="">အရေအတွက်</label>
                                 <input type="number" class="form-control qty1" name="qty[]" id="" placeholder="အရေအတွက်" required>
+                                <span id="error_message" style="color:red"></span>
                                 </div>
 
                                 <div class="col-md-4 mt-3">
@@ -362,6 +363,7 @@ include_once 'layouts/footer.php'
 <!--js file here!-->
 <script>
   $(document).ready(function () { 
+    var maximum=0;
     if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
@@ -376,11 +378,28 @@ $.ajax({
   data: {item_name:$item_id},
   success:function(response){
     $('.qty1').attr('value',response)
+    // $('.qty1').attr('max',response)
+    maximum = response;
   }
 
 })
 }
-    $counter=2;
+$('.qty1').focusout(fout)
+function fout(event){
+  $item_val=$('.qty1').val();
+  console.log(maximum)
+  console.log($item_val)
+  if($item_val>maximum){
+    var message = document.getElementById('error_message');
+    message.innerHTML="Out of maximum";
+  }
+  else{
+    var message = document.getElementById('error_message');
+    message.innerHTML="";
+  }
+  event.preventDefault();
+}
+    var counting =2;
     $('.add').click(function(e){
         console.log('ok');
 
@@ -434,8 +453,8 @@ $.ajax({
         $(qty).attr('placeholder','အရေအတွက်');
         $(unit_price).attr('placeholder','တစ်ရက်ငှါးရမ်းနှုန်း');
 
-        $(name).attr('class','form-control item'+$counter+'');
-        $(qty).attr('class','form-control qty'+$counter+'');
+        $(name).attr('class','form-control item'+counting+'');
+        $(qty).attr('class','form-control qty'+counting+'');
         $(unit_price).attr('class','form-control');
 
         $(name).attr('name','item_name[]');
@@ -455,12 +474,43 @@ $.ajax({
         $(btn).click(function(){
             $(this).parent().parent().remove();
         });
-
-
         $(row).append(col1,col2,col3,col4);
         // $(div).append(row);
-        $counter++;
+        counting++;
         $('#content2').append(row);
+        for(var index = 1;index<=counting;index++){
+          $('.item'+index+'').change(second)
+          function second(){
+          console.log('chggg')
+          $item_id=$('.item'+index+'').val();
+          console.log($item_id)
+          $.ajax({
+            url: 'check_stock.php',
+            type: 'post',
+            data: {item_name:$item_id},
+            success:function(response){
+              $('.qty'+index+'').attr('value',response)
+              maximum = response;
+            }
+
+          })
+          }
+          $('.qty'+index+'').focusout(fout)
+          function fout(event){
+            $item_val=$('.qty'+index+'').val();
+            console.log(maximum)
+            console.log($item_val)
+            if($item_val>maximum){
+              var message = document.getElementById('error_message');
+              message.innerHTML="Out of maximum";
+            }
+            else{
+              var message = document.getElementById('error_message');
+              message.innerHTML="";
+            }
+          }
+
+        }
 
         e.preventDefault();
     })
