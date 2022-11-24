@@ -480,9 +480,20 @@ function fout(event){
         $('#content2').append(row);
         for(var index = 2;index<=counting;index++){
           $('.item'+index+'').change(second)
-          function second(){
+       
+          $('.qty'+index+'').focusout(fout)
+          console.log($(this).val())
+ 
+
+        }
+
+        function second(){
           console.log('chggg')
           var item_id=$(this).val();
+          var item=$(this);
+          var nextitem=item.parent().next().children();
+          console.log(item)
+          console.log(nextitem[1])
           console.log(item_id)
           $.ajax({
             url: 'check_stock.php',
@@ -490,18 +501,18 @@ function fout(event){
             data: {item_name:item_id},
             success:function(response){
               console.log(response)
-            //  $('.qty'+index+'').attr('value',response);
-            var ans = $('.qty'+index+'').val();
-            console.log(ans)
+             // var ans=$(this).val().parent().parent()
+              nextitem.val(response);
+         //   var ans = $('.qty'+index+'').val();
+         //   console.log(ans)
               var maximum = response;
              // console.log(maximum);
 
             }
 
           })
-          }
-          $('.qty'+index+'').focusout(fout)
-          console.log($(this).val())
+
+
           function fout(event){
             var item_val=$(this).val();
             console.log(maximum)
@@ -515,8 +526,9 @@ function fout(event){
               message.innerHTML="";
             }
           }
+          }
 
-        }
+
 
         e.preventDefault();
     })
