@@ -385,20 +385,54 @@ $.ajax({
 })
 }
 $('.qty1').focusout(fout)
+/// fout function
 function fout(event){
-  var item_val=$('.qty1').val();
+  var item_val=$(this).val();
+  var message = $(this).next();
+  console.log(message)
   console.log(maximum)
   console.log(item_val)
   if(item_val>maximum){
-    var message = document.getElementById('error_message');
-    message.innerHTML="Out of maximum";
+    // var message = document.getElementById('error_message');
+    // message.innerHTML="";
+    message.html("Out of maximum")
+    $(':input[type="submit"]').prop('disabled',true);
   }
   else{
-    var message = document.getElementById('error_message');
-    message.innerHTML="";
+    // var message = document.getElementById('error_message');
+    message.html("")
+    $(':input[type="submit"]').prop('disabled',false);
   }
   event.preventDefault();
 }
+//second function
+function second(){
+          console.log('chggg')
+          var item_id=$(this).val();
+          var item=$(this);
+          var nextitem=item.parent().next().children();
+          console.log(item)
+          console.log(nextitem[1])
+          console.log(item_id)
+          $.ajax({
+            url: 'check_stock.php',
+            type: 'post',
+            data: {item_name:item_id},
+            success:function(response){
+              console.log(response)
+             // var ans=$(this).val().parent().parent()
+              nextitem.val(response);
+         //   var ans = $('.qty'+index+'').val();
+         //   console.log(ans)
+              maximum = response;
+             // console.log(maximum);
+
+            }
+
+          })         
+          }
+
+
     var counting =2;
     $('.add').click(function(e){
         console.log('ok');
@@ -444,6 +478,9 @@ function fout(event){
           <?php endwhile;?>
 
         // $(name).attr('type','text');
+        var message = document.createElement('span');
+        message.setAttribute('class','error_message');
+        message.setAttribute('style','color:red')
         var qty = document.createElement('input');
         $(qty).attr('type','number');
         var unit_price = document.createElement('input');
@@ -466,6 +503,7 @@ function fout(event){
 
         col2.appendChild(label2);
         col2.appendChild(qty);
+        col2.appendChild(message);
 
         col3.appendChild(label3);
         col3.appendChild(unit_price);
@@ -481,53 +519,13 @@ function fout(event){
         for(var index = 2;index<=counting;index++){
           $('.item'+index+'').change(second)
        
-          $('.qty'+index+'').focusout(fout)
+          $('.qty'+index+'').blur(fout)
           console.log($(this).val())
  
 
         }
 
-        function second(){
-          console.log('chggg')
-          var item_id=$(this).val();
-          var item=$(this);
-          var nextitem=item.parent().next().children();
-          console.log(item)
-          console.log(nextitem[1])
-          console.log(item_id)
-          $.ajax({
-            url: 'check_stock.php',
-            type: 'post',
-            data: {item_name:item_id},
-            success:function(response){
-              console.log(response)
-             // var ans=$(this).val().parent().parent()
-              nextitem.val(response);
-         //   var ans = $('.qty'+index+'').val();
-         //   console.log(ans)
-              var maximum = response;
-             // console.log(maximum);
-
-            }
-
-          })
-
-
-          function fout(event){
-            var item_val=$(this).val();
-            console.log(maximum)
-            console.log(item_val)
-            if(item_val>maximum){
-              var message = document.getElementById('error_message');
-              message.innerHTML="Out of maximum";
-            }
-            else{
-              var message = document.getElementById('error_message');
-              message.innerHTML="";
-            }
-          }
-          }
-
+       
 
 
         e.preventDefault();
