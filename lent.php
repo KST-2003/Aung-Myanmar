@@ -489,16 +489,19 @@ function fout(event){
             type: 'post',
             data: {item_name:item_id},
             success:function(response){
-              $('.qty'+index+'').attr('value',response);
+              console.log(response)
+            //  $('.qty'+index+'').attr('value',response);
+            var ans = $('.qty'+index+'').val();
+            console.log(ans)
               var maximum = response;
-              console.log(maximum);
+             // console.log(maximum);
 
             }
 
           })
           }
           $('.qty'+index+'').focusout(fout)
-         // console.log('oiii')
+          console.log($(this).val())
           function fout(event){
             var item_val=$(this).val();
             console.log(maximum)
