@@ -16,7 +16,7 @@ if($result){
     $count=0;
     foreach($result as $data){
         $count++;
-        $output.="<tr id=".$id.">";
+        $output.="<tr detail_id=".$id.">";
         $output.="<td>".$count."</td>";        
         $output.="<td><div contentEditable='true' class='cust_edit' id='work_address_".$data['id']."' >".$data['work_address']."</div></td>";
         $output.="<td  detail=".$data['id']."><a class='btn btn-danger btn-sm ddetail  '> Delete</a></td>";

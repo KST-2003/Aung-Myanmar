@@ -102,32 +102,34 @@ include_once "layouts/header.php";
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-                    <form action="" method="post">
+                    <form action="" method="post" >
                     <div class="modal-body">
+                    <h4>ငှားရမ်းသူ</h4>
                    
                  
                     
                                         <div class="row" id="">
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">အမည်</label>
-                                                <input type="text" name="name" id="" class="form-control" placeholder="အမည်" required>
+                                                <input type="text" name="name" id="name" class="form-control" placeholder="အမည်" required>
+                                                <span class="text-danger" id="cus_name"></span>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">မှတ်ပုံတင်နံပါတ်</label>
-                                                <input type="text" name="nrc" id="" class="form-control" placeholder="မှတ်ပုံတင်နံပါတ်" required>
+                                                <input type="text" name="nrc" id="nrc" class="form-control" placeholder="မှတ်ပုံတင်နံပါတ်" required>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">ဖုန်းနံပါတ်</label>
                                                 <input type="text" name="ph" id="phone" class="form-control" placeholder="ဖုန်းနံပါတ်" required>
-                                                <!-- <span class="text-danger" id="here"><?php //if(isset($ph_error)) {echo $ph_error;} ?>  </span> -->
+                                                <span class="text-danger" id="here"><?php //if(isset($ph_error)) {echo $ph_error;} ?>  </span>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">နေရပ်လိပ်စာ</label>
-                                                <input type="text" name="add" id="" class="form-control" placeholder="နေရပ်လိပ်စာ">
+                                                <input type="text" name="add" id="address" class="form-control" placeholder="နေရပ်လိပ်စာ" required>
                                             </div>
                                             <div class="col-md-11 mt-3">
                                                 <label for="" class="form-label">လုပ်ငန်းခွင်လိပ်စာ</label>
-                                                <input type="text" name="work_add[]" id="" class="form-control" placeholder="လုပ်ငန်းခွင်လိပ်စာ">
+                                                <input type="text" name="work_add[]" id="workplace" class="form-control" placeholder="လုပ်ငန်းခွင်လိပ်စာ" required>
                                             </div>
                                             <div class="col-md-1 mt-5">
                                                 <button  class="btn btn-outline-primary new" id="" >+</button>
@@ -137,7 +139,7 @@ include_once "layouts/header.php";
                     </div>     
     <div class="modal-footer mt-3">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="submit" name="detail" class="btn btn-primary">Submit</button>
+        <button type="submit" name="detail" id="cus_form" class="btn btn-primary">Submit</button>
       </div>
                 </form>
                 </div>
@@ -238,7 +240,7 @@ include_once "layouts/header.php";
                     </div>
                     <div class="col-md-1 offset-md-3" >
                    
-                    <button style="margin-top:35px" type="submit" name="work_detail" class="btn btn-outline-primary btn-md " id="workdetail">Submit</button>
+                    <button style="margin-top:35px" type="submit" name="work_detail" class="btn btn-primary btn-md " id="workdetail">Submit</button>
                     </div>
                     </div>
                    
@@ -299,14 +301,39 @@ include_once "layouts/footer.php";
  
 $(document).ready(function(){
 
+    $(":input").keyup(function(){
+     if($(this).val().trim().length===0 || $('#name').val().trim().length===0 || $("#phone").val().trim().length===0 || $("#nrc").val().trim().length===0 || $("#address").val().trim().length===0 || $("#workplace").val().trim().length===0){
+        console.log('space')
+        $(':input[type="submit"]').prop('disabled', true);
+
+}
+else if($(this).val().trim().length!=null){
+    $(':input[type="submit"]').prop('disabled',false);
+}
+
+    })
+    
+
     $('#phone').keyup(function(){
-        if($(this).val().length<9){
-       $('#here').html('Please enter valid phone number');}
+        console.log('okay')
+        var int  = parseInt($(this).val())
+        console.log(int)
+        console.log(Number.isInteger(int));
+        if(  $(this).val().length<8  )  //check only one || Number.isInteger(int) ==false
+        {
+            $('#here').html('Please enter valid phone number');
+            $(':input[type="submit"]').prop('disabled', true);
+        }
+
        else 
-       $('#here').remove();
-       
+        {
+            $('#here').html('');
+          
+         }
      
     })
+
+
         
     
 
@@ -393,7 +420,7 @@ $('.deleteCustomer').click(function(){
             url:'customer_delete.php',
             data:{cid:id},
             success:function(response){
-                alert(response);
+              //  alert(response);
                 row.fadeOut('slow');
                 location.reload();
             }
@@ -447,7 +474,7 @@ $('.deleteCustomer').click(function(){
      })
 
      $('.detail').click(function(){
-
+       
             var id=$(this).attr('id');
 
             console.log(id);
@@ -456,7 +483,7 @@ $('.deleteCustomer').click(function(){
                     url:   'cus_detail.php',
                     data: {did:id},                         // did = key, id= value;
                     success: function (response){
-                        console.log(response);
+                       // console.log(response);
                     
                     $('#cusdetail').html(response);
                     },
@@ -464,24 +491,30 @@ $('.deleteCustomer').click(function(){
                         console.log(error);
                     }
                 })
-
+            //     var id=undefined;
+            // delete(id);
+        })
 
 $('#workdetail').click(function(){
+    var not_id=document.querySelector('[id="cusdetail"]');
+    var id = not_id.firstChild.getAttribute('detail_id');
     var newwork = $('#newwork').val();
-console.log(id);
+    console.log(newwork);
+    console.log(id);
+console.log(not_id);
 $.ajax({
     type: 'post',
     url:  'cus.php',
     data:  {newid:id,newwork:newwork},
     success:function(response){
-      alert(response);
+     // alert(response);
       
     }
 })
 })
 
   
-});
+;
 
 
 

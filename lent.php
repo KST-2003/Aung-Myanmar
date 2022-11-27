@@ -76,7 +76,7 @@ include_once 'layouts/header.php';
                 <form action="" method="POST">
                 <div class="modal-body">
                            
-                            <div class="row" id="content2">
+                            <div class="row">
 
                                 <div class="col-md-4 mt-3">
                                 <label for="">ငှါးရမ်းသူအမည်</label>
@@ -108,7 +108,7 @@ include_once 'layouts/header.php';
 
                                 <div class="col-md-6 mt-3">
                                 <label for="">စပေါ်ငွေ</label>
-                                <input type="text" class="form-control" name="deposit" id="" placeholder="စပေါ်ငွေ" required>
+                                <input type="number" class="form-control" name="deposit" id="" placeholder="စပေါ်ငွေ" required>
                                 </div>
                                 
                                 <div class="col-md-6 mt-3">
@@ -128,11 +128,11 @@ include_once 'layouts/header.php';
                                     <?php endwhile;?>  
                                 </select>
                                 </div>
-                                <div class="container-fluid mt-3">
+                                <div class="container-fluid mt-3" id="content2">
                                 <div class="row">
                                 <div class="col-md-4 mt-3">
                                 <label for="">ပစ္စည်းအမည်</label>
-                                <select name="item_name[]" id="" class="form-control" value="">
+                                <select name="item_name[]" id="" class="form-control item1" value="">
                                 <?php 
                                     $selectquery="select * from  item "; 
                                     $select_result = mysqli_query($con,$selectquery); 
@@ -151,12 +151,13 @@ include_once 'layouts/header.php';
 
                                 <div class="col-md-3 mt-3">
                                 <label for="">အရေအတွက်</label>
-                                <input type="text" class="form-control" name="qty[]" id="" placeholder="အရေအတွက်" required>
+                                <input type="number" class="form-control qty1" name="qty[]" id="" placeholder="အရေအတွက်" required>
+                                <span id="error_message" style="color:red"></span>
                                 </div>
 
                                 <div class="col-md-4 mt-3">
                                 <label for="">တစ်ရက်ငှါးရမ်းနှုန်း</label>
-                                <input type="text" class="form-control" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" required>
+                                <input type="number" class="form-control" max="1000" name="unit_price[]" id="" placeholder="တစ်ရက်ငှါးရမ်းနှုန်း" required>
                                 </div>
                                 <div class="col-md-1 mt-3">
                                 <button  class="btn btn-outline-primary add mt-4" name="more">+</button>
@@ -190,7 +191,6 @@ include_once 'layouts/header.php';
                       <div class="table-responsive">
                         <table id="datatable" class="display expandable-table" style="width:100%">
                           <thead>
-
                             <tr>
                               <th>စဥ်</th>
                               <th>ငှါးရမ်းသူအမည်</th>
@@ -363,16 +363,82 @@ include_once 'layouts/footer.php'
 <!--js file here!-->
 <script>
   $(document).ready(function () { 
+    var maximum=0;
     if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
+$('.item1').change(first)
+function first(){
+console.log('chggg')
+var item_id=$('.item1').val();
+console.log(item_id)
+$.ajax({
+  url: 'check_stock.php',
+  type: 'post',
+  data: {item_name:item_id},
+  success:function(response){
+    $('.qty1').attr('value',response)
+    // $('.qty1').attr('max',response)
+    maximum = response;
+  }
 
-    
+})
+}
+$('.qty1').focusout(fout)
+/// fout function
+function fout(event){
+  var item_val=$(this).val();
+  var message = $(this).next();
+  console.log(message)
+  console.log(maximum)
+  console.log(item_val)
+  if(item_val>maximum){
+    // var message = document.getElementById('error_message');
+    // message.innerHTML="";
+    message.html("Out of maximum")
+    $(':input[type="submit"]').prop('disabled',true);
+  }
+  else{
+    // var message = document.getElementById('error_message');
+    message.html("")
+    $(':input[type="submit"]').prop('disabled',false);
+  }
+  event.preventDefault();
+}
+//second function
+function second(){
+          console.log('chggg')
+          var item_id=$(this).val();
+          var item=$(this);
+          var nextitem=item.parent().next().children();
+          console.log(item)
+          console.log(nextitem[1])
+          console.log(item_id)
+          $.ajax({
+            url: 'check_stock.php',
+            type: 'post',
+            data: {item_name:item_id},
+            success:function(response){
+              console.log(response)
+             // var ans=$(this).val().parent().parent()
+              nextitem.val(response);
+         //   var ans = $('.qty'+index+'').val();
+         //   console.log(ans)
+              maximum = response;
+             // console.log(maximum);
+
+            }
+
+          })         
+          }
+
+
+    var counting =2;
     $('.add').click(function(e){
         console.log('ok');
 
-        var div=document.createElement('div');
-        $(div).attr('class','container-fluid mt-3');
+        // var div=document.createElement('div');
+        // $(div).attr('class','container-fluid mt-3');
         var row=document.createElement('div');
         $(row).attr('class','row');
         var col1 = document.createElement('div');
@@ -412,6 +478,9 @@ include_once 'layouts/footer.php'
           <?php endwhile;?>
 
         // $(name).attr('type','text');
+        var message = document.createElement('span');
+        message.setAttribute('class','error_message');
+        message.setAttribute('style','color:red')
         var qty = document.createElement('input');
         $(qty).attr('type','number');
         var unit_price = document.createElement('input');
@@ -421,8 +490,8 @@ include_once 'layouts/footer.php'
         $(qty).attr('placeholder','အရေအတွက်');
         $(unit_price).attr('placeholder','တစ်ရက်ငှါးရမ်းနှုန်း');
 
-        $(name).attr('class','form-control');
-        $(qty).attr('class','form-control');
+        $(name).attr('class','form-control item'+counting+'');
+        $(qty).attr('class','form-control qty'+counting+'');
         $(unit_price).attr('class','form-control');
 
         $(name).attr('name','item_name[]');
@@ -434,19 +503,31 @@ include_once 'layouts/footer.php'
 
         col2.appendChild(label2);
         col2.appendChild(qty);
+        col2.appendChild(message);
 
         col3.appendChild(label3);
         col3.appendChild(unit_price);
 
 
         $(btn).click(function(){
-            $(this).parent().parent().parent().remove();
+            $(this).parent().parent().remove();
         });
-
-
         $(row).append(col1,col2,col3,col4);
-        $(div).append(row);
-        $('#content2').append(div);
+        // $(div).append(row);
+        counting++;
+        $('#content2').append(row);
+        for(var index = 2;index<=counting;index++){
+          $('.item'+index+'').change(second)
+       
+          $('.qty'+index+'').blur(fout)
+          console.log($(this).val())
+ 
+
+        }
+
+       
+
+
         e.preventDefault();
     })
     $('.delete_lent').click(function(event){
@@ -581,3 +662,4 @@ event.preventDefault();
 
  })
 </script>
+

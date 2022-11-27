@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `category` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `parent_name` varchar(255) NOT NULL
+  `parent_name` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -52,7 +52,7 @@ CREATE TABLE `customer` (
   `cus_name` varchar(255) NOT NULL,
   `NRC` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
-  `phone_number` int(11) NOT NULL
+  `phone_number` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
