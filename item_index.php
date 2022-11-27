@@ -66,7 +66,7 @@ include_once "layouts/header.php";
                                                 <label for="" class="form-label">Item Type</label>
                                                 <select name="category_id" class="form-control" id="">
                                                     <?php
-                                                        $selectquery="select * from  category ";
+                                                        $selectquery="select * from  category";
                                                         $select_result = mysqli_query($con,$selectquery);
                                                         while($outcome=mysqli_fetch_array($select_result,MYSQLI_ASSOC)):;
                                                     ?>
