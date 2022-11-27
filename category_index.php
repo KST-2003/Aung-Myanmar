@@ -8,11 +8,17 @@ if(isset($_POST['submit'])){
   {
       $name=$_POST['name'];
   }
+  else{
+    $error_name="This box can't be empty";
+  }
   if(!empty($_POST['pname']))
   {
       $pname=$_POST['pname'];
   }
-
+  else{
+    $error_msg="Hey you forgot to select";
+  }
+  if(empty($error_msg) && empty($error_name)){
   $addCategories = $cController->addCategory($name,$pname);
   if($addCategories){
     header('location:category_index.php');
@@ -20,6 +26,7 @@ if(isset($_POST['submit'])){
   }else{
     echo "error";
   }
+}
 }
 include_once "layouts/header.php";
 ?>
@@ -61,10 +68,29 @@ include_once "layouts/header.php";
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">Items Name</label>
                                                 <input type="text" name="name" id="" class="form-control" placeholder="ပစ္စည်းအမျိုးအမည်">
+                                                <span class='text-danger'><?php if(isset($error_name)) echo $error_name; ?></span>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label for="" class="form-label">Item Type</label>
-                                                <input type="text" name="pname" id="" class="form-control" placeholder="ပစ္စည်းအမျိုးအစား">
+                                                <select class='form-control' name="pname" id="">
+                                                    <option value="-1">_</option>
+                                                    <?php
+                                                    $check_query="Select count(id) from category";
+                                                    $cquery_execute=mysqli_query($con,$check_query);
+                                                    while($check_result=mysqli_fetch_array($cquery_execute)){
+                                                        $checker=$check_result['count(id)'];
+                                                    }
+                                                    if($checker>0){
+                                                        $query="Select * from category where category.parent_name=-1";
+                                                        $query_execute=mysqli_query($con,$query);
+                                                        while($query_result=mysqli_fetch_array($query_execute)){
+                                                            echo "<option value='".$query_result['id']."'>".$query_result['name']."</option>";
+                                                        }
+                                                    }
+                                                    
+                                                    ?>
+                                                </select>
+                                                <span class='text-danger'><?php if(isset($error_msg)) echo $error_msg; ?></span>
                                             </div>
                                         </div>   
                     </div>     
@@ -117,12 +143,21 @@ include_once "layouts/header.php";
                                                       while($row = mysqli_fetch_array($result) ){
                                                           $dataid = $row['id'];
                                                           $edit_name = $row['name'];
-                                                          $edit_pname = $row['parent_name'];
+                                                          $id=$row['parent_name'];
+                                                          if($id > 0){
+                                                            $parent_query="Select name from category where category.id=".$id;
+                                                            $pQuery_execute=mysqli_query($con,$parent_query);
+                                                            while($pResult=mysqli_fetch_array($pQuery_execute)){
+                                                            $edit_pname = $pResult['name'];
+                                                            }
+                                                          }else{
+                                                            $edit_pname="_";
+                                                          }
                                                   ?>
                                                            <tr>
                                                                <td><?php echo $count; ?></td>
                                                                <td> <div contentEditable='true' class='category_edit' id='name_<?php echo $dataid; ?>'> <?php echo $edit_name; ?></div> </td>
-                                                               <td> <div contentEditable='true' class='category_edit' id='parent_name_<?php echo $dataid; ?>'><?php echo $edit_pname; ?> </div> </td>
+                                                               <td> <div contentEditable='false' class='category_edit' id='parent_name_<?php echo $dataid; ?>'><?php echo $edit_pname; ?> </div> </td>
                                                                <td cid="<?php echo $dataid ?>"> <a href="" class="btn btn-danger m-2 category_delete" >Delete</a>
                                                            </tr>
                                                    <?php
